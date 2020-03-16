@@ -1,0 +1,86 @@
+# Node.js Express Web App to Linux on Azure
+# Build a Node.js Express app and deploy it to Azure as a Linux web app.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+
+variables:
+  
+  # Environment name
+  environmentName: 'testsnake'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:  
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+      
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        npm install -g typescript ts-node ts-lint
+        npm install
+        tsc
+        npm run build --if-present
+        # npm run test --if-present
+      displayName: 'npm install, build and test'
+      
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/dist'
+        Contents: '**'
+        TargetFolder: '$(System.DefaultWorkingDirectory)/deploy'
+    
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**'
+        TargetFolder: '$(System.DefaultWorkingDirectory)/deploy'
+
+    - task: DeleteFiles@1
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/deploy'
+        Contents: 'deploy'
+        RemoveSourceFolder: false
+
+    - task: DeleteFiles@1
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/deploy'
+        Contents: 'dist'
+        RemoveSourceFolder: false
+
+    - task: DeleteFiles@1
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/deploy'
+        Contents: 'src'
+        RemoveSourceFolder: false
+
+    - task: DeleteFiles@1
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/deploy'
+        Contents: '.git'
+        RemoveSourceFolder: false
+
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: 'deploy'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
