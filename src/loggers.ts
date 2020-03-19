@@ -16,11 +16,11 @@ export const getLogger = (tag: string) => {
         ),
         transports: [
             new (winston.transports.File)({
-                filename: 'dist/logs/filelog-info.log',
+                filename: 'filelog-info.log',
                 level: 'info',
             }),
             new (winston.transports.File)({
-                filename: 'dist/logs/filelog-error.log',
+                filename: 'filelog-error.log',
                 level: 'error'
             }),
             new (winston.transports.Console)
