@@ -1,5 +1,5 @@
-import { IComponent } from "./Components/IComponent";
+import { IComponent } from "./components/component-interfaces";
 
-export class Entity{
+export class Entity {
     Components: IComponent[]
 }

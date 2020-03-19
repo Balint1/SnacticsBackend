@@ -7,8 +7,8 @@ import { useExpressServer } from 'routing-controllers';
 import { createServer, Server } from 'http';
 
 import { SocketServce } from './socket/socket-service';
-import { RoomController } from './RoomController';
-import { getLogger } from './logger'
+import { RoomController } from './room-controller';
+import { getLogger } from './loggers'
 
 const logger = getLogger('http')
 const PORT: number = 5000
@@ -21,7 +21,7 @@ server.listen(port, () => {
     logger.info(`Running server on port ${port}`);
 });
 
-let sockets = new SocketServce(app, server)
+let sockets = new SocketServce(server)
 
 app.use(loggerMiddleware);
 app.use(bodyParser.json());

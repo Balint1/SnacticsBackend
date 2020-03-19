@@ -7,20 +7,16 @@ import { SocketEvents } from '../constants'
 import { GameManager } from '../game-manager'
 import { IActionResult } from '../game-interfaces';
 import { IJoinResult, INewPlayerJoined } from './socket-interfaces'
-import { getLogger } from '../logger'
+import { getLogger } from '../loggers'
 
 const logger = getLogger('socket')
 
 export class SocketServce {
-    private app: express.Application
-    private server: Server
     private io: socketIo.Server
     private gameManager: GameManager = GameManager.getInstance()
 
-    constructor(app: express.Application, server: Server) {
-        this.app = app
-        this.server = server
-        this.io = socketIo(this.server)
+    constructor(server: Server) {
+        this.io = socketIo(server)
         this.listen()
     }
 

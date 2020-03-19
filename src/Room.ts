@@ -1,5 +1,5 @@
-import { EntityPool } from "./EntityPool";
+import { EntityPool } from "./entity-pool";
 
-export class Room{
+export class Room {
     players: string[]
 }

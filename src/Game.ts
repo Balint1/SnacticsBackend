@@ -1,14 +1,14 @@
-import { EntityPool } from "./EntityPool";
-import { ISystem } from "./Systems/ISystem";
+import { EntityPool } from "./entity-pool";
+import { ISystem } from "./systems/system-interfaces";
 import { GameConstants } from "./constants";
 
-export class Game{
+export class Game {
     entityPool: EntityPool
     systems: ISystem[]
     private timer: NodeJS.Timeout
     counter: number = 0
 
-    startGame(){
+    startGame() {
         this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
     }
 
@@ -19,7 +19,7 @@ export class Game{
         this.counter++
     }
 
-    endGame(){
+    endGame() {
         clearTimeout(this.timer)
         this.counter = 0
     }
