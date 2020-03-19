@@ -15,14 +15,14 @@ export const getLogger = (tag: string) => {
             myFormat
         ),
         transports: [
-            // new (winston.transports.File)({
-            //     filename: 'logs/filelog-info.log',
-            //     level: 'info',
-            // }),
-            // new (winston.transports.File)({
-            //     filename: 'logs/filelog-error.log',
-            //     level: 'error'
-            // }),
+            new (winston.transports.File)({
+                filename: 'dist/logs/filelog-info.log',
+                level: 'info',
+            }),
+            new (winston.transports.File)({
+                filename: 'dist/logs/filelog-error.log',
+                level: 'error'
+            }),
             new (winston.transports.Console)
         ]
     });
