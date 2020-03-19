@@ -1,55 +1,68 @@
 import * as express from 'express';
 import * as socketIo from 'socket.io';
-import { createServer, Server } from 'http';
+import { Server } from 'http';
 
-import { ChatEvent } from '../Constants'
+import { SocketEvents } from '../constants'
+import { GameManager } from '../game-manager'
+import { IActionResult } from '../game-interfaces';
+import { IJoinResult, INewPlayerJoined } from './socket-interfaces'
+import { SocketLogger } from '../logger'
 
-import { ISocketId } from './socket-interfaces'
 
 export class SocketServce {
-
-    public static readonly PORT: number = 5000
     private app: express.Application
-    private port: string | number = process.env.PORT || SocketServce.PORT
     private server: Server
     private io: socketIo.Server
-    private socketsArray = [];
+    private gameManager: GameManager = GameManager.getInstance()
 
-    constructor() {
-        this.createApp()
-        this.createServer()
-        this.createSocket()
+    constructor(app: express.Application, server: Server) {
+        this.app = app
+        this.server = server
+        this.io = socketIo(this.server)
         this.listen()
     }
 
-    private createApp(): void {
-        this.app = express()
-        this.app.use(express.static('public'));
-    }
-    private createServer(): void {
-        this.server = createServer(this.app)
-    }
-
-    private createSocket(): void {
-        this.io = socketIo(this.server)
-    }
-
     private listen(): void {
-        this.server.listen(this.port, () => {
-            console.log('Running server on port %s', this.port);
-        });
-        this.io.on(ChatEvent.CONNECT, (socket) => {
-            console.log("new connection")
-            socket.emit('socket-id', { id: socket.id } as ISocketId)
-            socket.broadcast.emit('new-player', { id: socket.id } as ISocketId)
-            socket.on(ChatEvent.DISCONNECT, () => {
-                console.log("client disconected")
-            });
-
-        });
+        this.io.on(SocketEvents.CONNECT, (socket) => {
+            SocketLogger.info(`New socket connected. id: ${socket.id}`)
+            socket.on(SocketEvents.JOIN_REQUEST, ({ nickname, room_id }) => this.joinHandler(socket, nickname, room_id))
+            socket.on(SocketEvents.DISCONNECT, () => this.disconnectHandler(socket))
+        })
     }
 
-    public getApp(): express.Application {
-        return this.app;
+    private joinHandler(socket: socketIo.Socket, nickname: string, room_id: string) {
+        SocketLogger.info(`New join room request from '${nickname}' id: '${socket.id}'`)
+        const { succes, error }: IActionResult = this.gameManager.joinRoom(socket.id, nickname, room_id)
+        if (succes) {
+            socket.join(room_id, (err) => {
+                if (error) {
+                    SocketLogger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${err}`)
+                    socket.emit(SocketEvents.JOIN_FAILED, {
+                        id: socket.id,
+                        message: err
+                    } as IJoinResult)
+                } else {
+                    SocketLogger.info(`Join room request from '${nickname}' id: '${socket.id} succeeded.`)
+                    socket.emit(SocketEvents.JOIN_SUCCEEDED, {
+                        id: socket.id,
+                        message: `You successfully joined room ${room_id}`
+                    } as IJoinResult)
+                    socket.broadcast.to(room_id).emit(SocketEvents.NEW_PLAYER, {
+                        nickname,
+                        id: socket.id
+                    } as INewPlayerJoined)
+                }
+            })
+        } else {
+            SocketLogger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${error}`)
+            socket.emit(SocketEvents.JOIN_FAILED, {
+                id: socket.id,
+                message: error
+            } as IJoinResult)
+        }
+    }
+    private disconnectHandler(socket: socketIo.Socket, ) {
+        SocketLogger.info(`id: '${socket.id} disconnected.`)
+        this.gameManager.leaveRoom(socket.id, socket.rooms)
     }
 }
