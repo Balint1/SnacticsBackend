@@ -68,6 +68,5 @@ export class GameManager {
     }
 
     public leaveRoom = (id: string, rooms: any) => {
-        console.log(rooms)
     }
 }

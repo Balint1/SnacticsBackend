@@ -1,13 +1,15 @@
 import * as express from 'express';
 import * as socketIo from 'socket.io';
+
 import { Server } from 'http';
 
 import { SocketEvents } from '../constants'
 import { GameManager } from '../game-manager'
 import { IActionResult } from '../game-interfaces';
 import { IJoinResult, INewPlayerJoined } from './socket-interfaces'
-import { SocketLogger } from '../logger'
+import { getLogger } from '../logger'
 
+const logger = getLogger('socket')
 
 export class SocketServce {
     private app: express.Application
@@ -24,25 +26,25 @@ export class SocketServce {
 
     private listen(): void {
         this.io.on(SocketEvents.CONNECT, (socket) => {
-            SocketLogger.info(`New socket connected. id: ${socket.id}`)
+            logger.info(`New socket connected. id: ${socket.id}`)
             socket.on(SocketEvents.JOIN_REQUEST, ({ nickname, room_id }) => this.joinHandler(socket, nickname, room_id))
             socket.on(SocketEvents.DISCONNECT, () => this.disconnectHandler(socket))
         })
     }
 
     private joinHandler(socket: socketIo.Socket, nickname: string, room_id: string) {
-        SocketLogger.info(`New join room request from '${nickname}' id: '${socket.id}'`)
+        logger.info(`New join room request from '${nickname}' id: '${socket.id}'`)
         const { succes, error }: IActionResult = this.gameManager.joinRoom(socket.id, nickname, room_id)
         if (succes) {
             socket.join(room_id, (err) => {
                 if (error) {
-                    SocketLogger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${err}`)
+                    logger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${err}`)
                     socket.emit(SocketEvents.JOIN_FAILED, {
                         id: socket.id,
                         message: err
                     } as IJoinResult)
                 } else {
-                    SocketLogger.info(`Join room request from '${nickname}' id: '${socket.id} succeeded.`)
+                    logger.info(`Join room request from '${nickname}' id: '${socket.id} succeeded.`)
                     socket.emit(SocketEvents.JOIN_SUCCEEDED, {
                         id: socket.id,
                         message: `You successfully joined room ${room_id}`
@@ -54,7 +56,7 @@ export class SocketServce {
                 }
             })
         } else {
-            SocketLogger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${error}`)
+            logger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${error}`)
             socket.emit(SocketEvents.JOIN_FAILED, {
                 id: socket.id,
                 message: error
@@ -62,7 +64,7 @@ export class SocketServce {
         }
     }
     private disconnectHandler(socket: socketIo.Socket, ) {
-        SocketLogger.info(`id: '${socket.id} disconnected.`)
+        logger.info(`id: '${socket.id} disconnected.`)
         this.gameManager.leaveRoom(socket.id, socket.rooms)
     }
 }
