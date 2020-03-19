@@ -44,6 +44,12 @@ stages:
         Contents: '**'
         TargetFolder: '$(System.DefaultWorkingDirectory)/deploy'
     
+    - task: CmdLine@2
+      inputs:
+        script: |
+          echo some-text  > filelog-error.log
+          echo some-text  > filelog-info.log
+
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
