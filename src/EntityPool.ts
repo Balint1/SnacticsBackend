@@ -2,6 +2,6 @@ import { Entity } from "./Entity";
 import { PositionComponent } from "./Components/PositionComponent";
 
 export class EntityPool{
-    entities: Entity
+    entities: Entity[]
     positions: PositionComponent[]
 }

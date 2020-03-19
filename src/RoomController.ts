@@ -1,9 +1,24 @@
-import { GameManager } from "./GameManager";
+import { JsonController, OnUndefined, Param, Body, Get, Post, Put, Delete } from "routing-controllers";
 
-export class RoomController{
-    gameManager: GameManager;
+@JsonController("/Rooms")
+export class RoomController {
 
-    createRoom(userId: string,roomname: string,options:object) {
-        return "roomName"
-    }
+  constructor() {
+    
+  }
+  @Post("/create")
+  createRoom() {
+    console.log("Room creation")
+    return "Implement it"
+  }
+
+  @Get()
+  getAllRooms() {
+    console.log("ListRooms")
+    return "Implement it"
+  }
+
+
+
+ 
 }

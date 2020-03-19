@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as socketIo from 'socket.io';
 import { createServer, Server } from 'http';
 
-import { ChatEvent } from '../constants'
+import { ChatEvent } from '../Constants'
 
 import { ISocketId } from './socket-interfaces'
 
