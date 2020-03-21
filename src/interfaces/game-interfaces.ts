@@ -13,7 +13,7 @@ export interface IPlayer {
 }
 
 export interface IGameState {
-    snakes: ISnake[]
+    entities: object[]
 }
 
 export interface ISnake {
