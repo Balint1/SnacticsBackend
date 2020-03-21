@@ -1,10 +1,17 @@
 import * as winston from "winston";
 
 const { combine, timestamp, label, printf } = winston.format;
+const MAX_LABLE_LENGTH = 12
 
+const center_label = (label: string) => {
+    return label
+        .padStart(label.length + Math.floor((MAX_LABLE_LENGTH - label.length) / 2), ' ')
+        .padEnd(MAX_LABLE_LENGTH, ' ')
+}
 const myFormat = printf(({ level, message, label, timestamp }) => {
-    return `${timestamp} [${label}] ${level}: ${message}`;
+    return `${timestamp} [${center_label(label)}] ${level}: ${message}`;
 });
+
 
 
 export const getLogger = (tag: string) => {

@@ -5,9 +5,10 @@ export enum SocketEvents {
     NEW_PLAYER = 'new-player',
     JOIN_REQUEST = 'join-request',
     JOIN_SUCCEEDED = 'join-succeeded',
-    JOIN_FAILED = 'join-failed'
+    JOIN_FAILED = 'join-failed',
+    UPDATE = 'update-state'
 }
 
-export class GameConstants{
+export class GameConstants {
     static timerInterval: number = 1000;
 }

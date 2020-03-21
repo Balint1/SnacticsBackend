@@ -1,4 +1,4 @@
-import { ComponentType } from "../enums/componentType";
+import { ComponentType } from "../enums/component-type";
 
 export interface IComponent {
   getComponentType: () => ComponentType;

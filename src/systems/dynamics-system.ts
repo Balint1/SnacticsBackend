@@ -1,6 +1,6 @@
-import { ISystem } from "./system-interfaces";
-import { Entity } from "../entity";
-import { ComponentType } from "../enums/componentType";
+import { ISystem } from "../interfaces/system-interfaces";
+import { Entity } from "../entities/entity";
+import { ComponentType } from "../enums/component-type";
 
 export class DynamicsSystem implements ISystem {
     calculateNextState: (entities: Entity[]) => {

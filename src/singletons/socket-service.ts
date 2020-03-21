@@ -1,27 +1,25 @@
-import * as express from 'express';
 import * as socketIo from 'socket.io';
 
 import { Server } from 'http';
 
 import { SocketEvents } from '../constants'
-import { GameManager } from '../game-manager'
-import { IActionResult } from '../game-interfaces';
-import { IJoinResult, INewPlayerJoined } from './socket-interfaces'
+import { GameManager } from './game-manager'
+import { IJoinResult, INewPlayerJoined, IActionResult } from '../interfaces/socket-interfaces'
 import { getLogger } from '../loggers'
 
 const logger = getLogger('socket')
 
-export class SocketServce {
-    private io: socketIo.Server
+export class SocketService {
+    private static instance: SocketService
+    private static _io: socketIo.Server
     private gameManager: GameManager = GameManager.getInstance()
 
-    constructor(server: Server) {
-        this.io = socketIo(server)
-        this.listen()
+    private constructor(server: Server) {
+        SocketService._io = socketIo(server)
     }
 
-    private listen(): void {
-        this.io.on(SocketEvents.CONNECT, (socket) => {
+    public listen(): void {
+        SocketService._io.on(SocketEvents.CONNECT, (socket) => {
             logger.info(`New socket connected. id: ${socket.id}`)
             socket.on(SocketEvents.JOIN_REQUEST, ({ nickname, room_id }) => this.joinHandler(socket, nickname, room_id))
             socket.on(SocketEvents.DISCONNECT, () => this.disconnectHandler(socket))
@@ -62,5 +60,17 @@ export class SocketServce {
     private disconnectHandler(socket: socketIo.Socket, ) {
         logger.info(`id: '${socket.id} disconnected.`)
         this.gameManager.leaveRoom(socket.id, socket.rooms)
+    }
+
+    public static io(): socketIo.Server {
+        return SocketService._io
+    }
+
+    public static getInstance(server: Server): SocketService {
+        if (!SocketService.instance) {
+            SocketService.instance = new SocketService(server);
+        }
+
+        return SocketService.instance;
     }
 }

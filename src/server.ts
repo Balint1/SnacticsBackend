@@ -1,12 +1,12 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 
-//import "reflect-metadata";
+import "reflect-metadata";
 
 import { useExpressServer } from 'routing-controllers';
 import { createServer, Server } from 'http';
 
-import { SocketServce } from './socket/socket-service';
+import { SocketService } from './singletons/socket-service';
 import { RoomController } from './room-controller';
 import { getLogger } from './loggers'
 
@@ -21,7 +21,7 @@ server.listen(port, () => {
     logger.info(`Running server on port ${port}`);
 });
 
-let sockets = new SocketServce(server)
+SocketService.getInstance(server).listen()
 
 app.use(loggerMiddleware);
 app.use(bodyParser.json());
