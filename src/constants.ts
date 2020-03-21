@@ -12,3 +12,7 @@ export enum SocketEvents {
 export class GameConstants {
     static timerInterval: number = 1000;
 }
+
+export class HelperConstants{
+    static SocketData = "SocketData"
+}

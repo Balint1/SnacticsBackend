@@ -1,7 +1,17 @@
-import { IComponent } from "../interfaces/component-interfaces";
 import { ComponentType } from "../enums/component-type";
+import { jsonIgnoreReplacer, jsonIgnore } from 'json-ignore';
+import { SocketData } from "../helpers/decorators";
+import { BaseComponent } from "./base-component";
 
-export class PositionComponent implements IComponent {
-    getComponentType: () => ComponentType.Position;
+export class PositionComponent extends BaseComponent {
+    constructor(){
+        super()
+        this.componentType = ComponentType.Position 
+    }
+
+    @SocketData
+    x: number
+    @SocketData
+    y: number
 
 }

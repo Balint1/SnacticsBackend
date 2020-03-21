@@ -2,6 +2,7 @@ import { JsonController, QueryParams, QueryParam, Param, Body, Get, Post, Put, D
 import { Game } from "./game";
 import { GameManager } from './singletons/game-manager'
 import { getLogger } from './loggers'
+import { PositionComponent } from "./components/position-component";
 
 const logger = getLogger('http')
 
@@ -59,5 +60,10 @@ export class RoomController {
   removeRoom(@QueryParam("id") room_id: string) {
     this.gameManager.removeRoom(room_id)
     return { response: `Removed room with id: ${room_id}` }
+  }
+  @Get("/test")
+  test() {
+    
+    return {test:"test"}
   }
 }
