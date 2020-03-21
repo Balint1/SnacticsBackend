@@ -1,12 +1,11 @@
 import { ComponentType } from "../enums/component-type";
-import { jsonIgnoreReplacer, jsonIgnore } from 'json-ignore';
 import { SocketData } from "../helpers/decorators";
 import { BaseComponent } from "./base-component";
 
 export class PositionComponent extends BaseComponent {
-    constructor(){
+    constructor() {
         super()
-        this.componentType = ComponentType.Position 
+        this.componentType = ComponentType.Position
     }
 
     @SocketData
