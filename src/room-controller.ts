@@ -1,8 +1,13 @@
-import { JsonController, QueryParams, QueryParam, Get, Post } from "routing-controllers";
+import { JsonController, Param, Body, Get, Post } from "routing-controllers";
 import { GameManager } from './singletons/game-manager'
 import { getLogger } from './loggers'
 
 const logger = getLogger('http')
+
+class IStartGameBody {
+  roomId: any
+  playerId: string
+}
 
 @JsonController("/Rooms")
 export class RoomController {
@@ -17,26 +22,27 @@ export class RoomController {
   }
 
   @Post("/start")
-  startGame(@QueryParam("id") room_id: string) {
+  startGame(@Body() params: IStartGameBody) {
     let message: string
-    this.gameManager.startGame(room_id, (error: string) => {
+    this.gameManager.startGame(params.roomId, (error: string) => {
       if (error) {
         message = error
       }
       else {
-        message = `Started game  in room with id ${room_id}`
+        message = `Started game in room with id ${params.roomId}, by player: ${params.playerId}:`
       }
     })
     return { response: message }
   }
+
 
   @Get()
   getAllRooms() {
     return { response: this.gameManager.rooms.length }
   }
 
-  @Post("/endgame")
-  endStop(@QueryParam("id") room_id: string) {
+  @Post("/endgame/:id")
+  endStop(@Param("id") room_id: string) {
     let message: string
     this.gameManager.endGame(room_id, (error: string) => {
       if (error) {
@@ -49,8 +55,8 @@ export class RoomController {
     return { response: message }
   }
 
-  @Post("/remove-room")
-  removeRoom(@QueryParam("id") room_id: string) {
+  @Post("/remove-room/:id")
+  removeRoom(@Param("id") room_id: string) {
     this.gameManager.removeRoom(room_id)
     return { response: `Removed room with id: ${room_id}` }
   }
