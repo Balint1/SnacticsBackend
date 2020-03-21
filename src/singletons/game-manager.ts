@@ -1,6 +1,7 @@
-
+import { Guid } from 'guid-typescript'
 import { IRoom, IPlayer } from '../interfaces/game-interfaces'
 import { IActionResult } from '../interfaces/socket-interfaces'
+import { Game } from '../game'
 import { getLogger } from '../loggers'
 
 const logger = getLogger('game manager')
@@ -33,9 +34,16 @@ export class GameManager {
         return this._rooms
     }
 
-    public createRoom(room: IRoom): void {
-        this._rooms.push(room)
-        logger.info(`Created new room with id ${room.id}`)
+    public createRoom(): string {
+        let roomId = "835aee55-3274-9f4f-dac5-87fb41f276f7" //Guid.raw()
+        this._rooms.push({
+            id: roomId,
+            capacity: 4,
+            players: [],
+            game: new Game(roomId)
+        })
+        logger.info(`Created new room with id ${roomId}`)
+        return roomId
     }
 
     public startGame(room_id: string, callback): void {
