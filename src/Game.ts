@@ -7,29 +7,40 @@ import { Entity } from "./entities/entity";
 import { PositionComponent } from "./components/position-component";
 import { SnakeFactory } from "./factory/SnakeFactory";
 import { FoodFactory } from "./factory/FoodFactory";
+import { DynamicsSystem } from "./systems/dynamics-system";
 
 
 
 export class Game {
     private entityPool: EntityPool = new EntityPool()
-    private systems: ISystem[]
+    private systems: ISystem[] = []
     private state: IGameState = { entities: [] }
     private players: IPlayer[]
     private room_id: string
     private timer: NodeJS.Timeout
     private io = SocketService.io()
 
+    //Temporary solution:
+    private spawningPlaces:[
+        [10, 10],
+        [10, 290],
+        [290, 10],
+        [290, 290],
+]
+
     constructor(room_id: string) {
         this.room_id = room_id
+        this.systems.push(new DynamicsSystem(this.entityPool))
     }
 
     startGame(players: IPlayer[]) {
         this.players = players
         this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
         //initialize here
+        var i = 0
         players.forEach(p => {
             //TODO random position?
-            var snake = SnakeFactory.create(11,11)
+            var snake = SnakeFactory.create(this.spawningPlaces[i][0],this.spawningPlaces[i++][1])
             this.entityPool.addEntity(snake)
         });
 
@@ -37,9 +48,11 @@ export class Game {
     }
 
     updateState() {
-       
+        
+        this.systems.forEach(s => {
+            s.calculateNextState()
+        });
         this.state.entities = this.entityPool.entities.map(e => e.components.map(c => c.serialize()))
-        console.log(this.state)
         return this.state
         this.io.to(this.room_id).emit(SocketEvents.UPDATE, { state: this.state.entities })
 

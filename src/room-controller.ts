@@ -68,6 +68,9 @@ export class RoomController {
   @Get("/test")
   test() {
 
+    var g = new Game("dsfds")
+    g.startGame([{id:"dsa", nickname:"fds"}, {id:"dsa", nickname:"fds"}, {id:"dsa", nickname:"fds"}])
+
     return {test:"test"}
   }
 }

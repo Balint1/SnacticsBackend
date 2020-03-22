@@ -10,13 +10,14 @@ export enum SocketEvents {
 }
 
 export class GameConstants {
-    static timerInterval: number = 1000;
+    static readonly timerInterval: number = 1000;
     //TODO maybe it should be modifiable
-    static fieldWidth = 1000;
-    static fieldHeight = 1000;
+    static  fieldWidth = 300;
+    static fieldHeight = 300;
 
 }
 
 export class HelperConstants{
-    static SocketData = "SocketData"
+    static readonly SocketData = "SocketData"
 }
+

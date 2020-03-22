@@ -1,6 +1,7 @@
 import { ISystem } from "../interfaces/system-interfaces";
+import { BaseSystem } from "./base-system";
 
-export class UserInputSystem implements ISystem {
-    calculateNextState: (entity: import("../entities/entity").Entity[]) => void;
+export class UserInputSystem extends BaseSystem {
+    calculateNextState: () => void;
 
 }
