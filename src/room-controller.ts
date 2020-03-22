@@ -2,6 +2,10 @@ import { JsonController, Param, Body, Get, Post } from "routing-controllers";
 import { GameManager } from './singletons/game-manager'
 import { getLogger } from './loggers'
 import { PositionComponent } from "./components/position-component";
+import { EntityPool } from "./entities/entity-pool";
+import { MovementComponent } from "./components/movement-component";
+import { Entity } from "./entities/entity";
+import { Game } from "./Game";
 
 const logger = getLogger('http')
 
@@ -63,7 +67,7 @@ export class RoomController {
   }
   @Get("/test")
   test() {
-    
+
     return {test:"test"}
   }
 }

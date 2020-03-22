@@ -5,11 +5,13 @@ import { SocketService } from './singletons/socket-service'
 import { IGameState, IPlayer } from './interfaces/game-interfaces'
 import { Entity } from "./entities/entity";
 import { PositionComponent } from "./components/position-component";
+import { SnakeFactory } from "./factory/SnakeFactory";
+import { FoodFactory } from "./factory/FoodFactory";
 
 
 
 export class Game {
-    private entityPool: EntityPool = { entities: [], positions: []}
+    private entityPool: EntityPool = new EntityPool()
     private systems: ISystem[]
     private state: IGameState = { entities: [] }
     private players: IPlayer[]
@@ -24,11 +26,19 @@ export class Game {
     startGame(players: IPlayer[]) {
         this.players = players
         this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
+        //initialize here
+        players.forEach(p => {
+            //TODO random position?
+            var snake = SnakeFactory.create(11,11)
+            this.entityPool.addEntity(snake)
+        });
+
+        this.entityPool.addEntity(new FoodFactory().create())
     }
 
     updateState() {
        
-        this.state.entities = this.entityPool.entities.map(e => e.Components.map(c => c.serialize()))
+        this.state.entities = this.entityPool.entities.map(e => e.components.map(c => c.serialize()))
         console.log(this.state)
         return this.state
         this.io.to(this.room_id).emit(SocketEvents.UPDATE, { state: this.state.entities })
