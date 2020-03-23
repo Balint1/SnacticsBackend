@@ -21,12 +21,12 @@ export class Game {
     private io = SocketService.io()
 
     //Temporary solution:
-    private spawningPlaces:[
+    private spawningPlaces = [
         [10, 10],
         [10, 290],
         [290, 10],
         [290, 290],
-]
+    ]
 
     constructor(room_id: string) {
         this.room_id = room_id
@@ -40,7 +40,7 @@ export class Game {
         var i = 0
         players.forEach(p => {
             //TODO random position?
-            var snake = SnakeFactory.create(this.spawningPlaces[i][0],this.spawningPlaces[i++][1])
+            var snake = SnakeFactory.create(this.spawningPlaces[i][0], this.spawningPlaces[i++][1])
             this.entityPool.addEntity(snake)
         });
 
@@ -48,14 +48,14 @@ export class Game {
     }
 
     updateState() {
-        
+
         this.systems.forEach(s => {
             s.calculateNextState()
         });
         this.state.entities = this.entityPool.entities.map(e => e.components.map(c => c.serialize()))
-        return this.state
         this.io.to(this.room_id).emit(SocketEvents.UPDATE, { state: this.state.entities })
-
+        console.log(this.state.entities)
+        return this.state
     }
 
     endGame() {

@@ -23,6 +23,7 @@ export class SocketService {
             logger.info(`New socket connected. id: ${socket.id}`)
             socket.on(SocketEvents.JOIN_REQUEST, ({ nickname, room_id }) => this.joinHandler(socket, nickname, room_id))
             socket.on(SocketEvents.DISCONNECT, () => this.disconnectHandler(socket))
+            socket.on(SocketEvents.SLIDER_CHANGE, ({ value }) => console.log(value))
         })
     }
 

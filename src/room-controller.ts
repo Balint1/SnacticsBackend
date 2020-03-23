@@ -5,7 +5,7 @@ import { PositionComponent } from "./components/position-component";
 import { EntityPool } from "./entities/entity-pool";
 import { MovementComponent } from "./components/movement-component";
 import { Entity } from "./entities/entity";
-import { Game } from "./Game";
+import { Game } from "./game";
 
 const logger = getLogger('http')
 
@@ -69,8 +69,8 @@ export class RoomController {
   test() {
 
     var g = new Game("dsfds")
-    g.startGame([{id:"dsa", nickname:"fds"}, {id:"dsa", nickname:"fds"}, {id:"dsa", nickname:"fds"}])
+    g.startGame([{ id: "dsa", nickname: "fds" }, { id: "dsa", nickname: "fds" }, { id: "dsa", nickname: "fds" }])
 
-    return {test:"test"}
+    return { test: "test" }
   }
 }
