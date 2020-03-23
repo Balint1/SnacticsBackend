@@ -3,6 +3,7 @@ import { IRoom, IPlayer } from '../interfaces/game-interfaces'
 import { IActionResult } from '../interfaces/socket-interfaces'
 import { Game } from '../game'
 import { getLogger } from '../loggers'
+import * as socketIo from 'socket.io';
 
 const logger = getLogger('game manager')
 
@@ -46,41 +47,41 @@ export class GameManager {
         return roomId
     }
 
-    public startGame(room_id: string, callback): void {
-        let gameRoom = this._rooms.find(room => room.id == room_id)
+    public startGame(roomId: string, callback): void {
+        let gameRoom = this._rooms.find(room => room.id == roomId)
         if (gameRoom) {
-            logger.info(`Started game in room with id ${room_id}`)
+            logger.info(`Started game in room with id ${roomId}`)
             gameRoom.game.startGame(gameRoom.players)
             callback()
         } else {
-            logger.error(`Room with id: ${room_id} doesn't exists`)
-            callback(`Room with id: ${room_id} doesn't exists`)
+            logger.error(`Room with id: ${roomId} doesn't exists`)
+            callback(`Room with id: ${roomId} doesn't exists`)
         }
     }
 
-    public endGame(room_id: string, callback): void {
-        let gameRoom = this._rooms.find(room => room.id == room_id)
+    public endGame(roomId: string, callback): void {
+        let gameRoom = this._rooms.find(room => room.id == roomId)
         if (gameRoom) {
-            logger.info(`Ended game in room with id ${room_id}`)
+            logger.info(`Ended game in room with id ${roomId}`)
             gameRoom.game.endGame()
             callback()
         } else {
-            logger.error(`Room with id: ${room_id} doesn't exists`)
-            callback(`Room with id: ${room_id} doesn't exists`)
+            logger.error(`Room with id: ${roomId} doesn't exists`)
+            callback(`Room with id: ${roomId} doesn't exists`)
         }
     }
 
-    public removeRoom(room_id: string, ): void {
-        this._rooms = this._rooms.filter(room => room.id != room_id)
-        logger.info(`Removed room with id: ${room_id}`)
+    public removeRoom(roomId: string, ): void {
+        this._rooms = this._rooms.filter(room => room.id != roomId)
+        logger.info(`Removed room with id: ${roomId}`)
     }
 
     /**
     * Add new user to room
     * Check if nickname is available in specified room
     */
-    public joinRoom = (id: string, nickname: string, room_id: string): IActionResult => {
-        const room = this._rooms.find(room => room.id == room_id)
+    public joinRoom = (socket: socketIo.Socket, nickname: string, roomId: string): IActionResult => {
+        const room = this._rooms.find(room => room.id == roomId)
         if (room) {
             if (room.players.length < room.capacity) {
                 const nicknameTaken = room.players.find(player => player.nickname == nickname)
@@ -90,7 +91,7 @@ export class GameManager {
                         error: `Nickname: ${nickname} is already taken`
                     }
                 } else {
-                    room.players.push({ id, nickname } as IPlayer)
+                    room.players.push({ id: socket.id, nickname, socket } as IPlayer)
                     return {
                         succes: true,
                         error: null
@@ -99,17 +100,24 @@ export class GameManager {
             } else {
                 return {
                     succes: false,
-                    error: `Room ${room_id} is full, can't join`
+                    error: `Room ${roomId} is full, can't join`
                 }
             }
         } else {
             return {
                 succes: false,
-                error: `Room ${room_id} not found`
+                error: `Room ${roomId} not found`
             }
         }
     }
 
-    public leaveRoom = (id: string, rooms: any) => {
+    public leaveRoom = (roomId: string, playerId: string) => {
+        let gameRoom = this._rooms.find(room => room.id == roomId)
+        if (gameRoom) {
+            gameRoom.players = gameRoom.players.filter(player => player.id != playerId)
+            logger.info(`${playerId} left room with id ${roomId}`)
+        } else {
+            logger.error(`Room with id: ${roomId} doesn't exists`)
+        }
     }
 }

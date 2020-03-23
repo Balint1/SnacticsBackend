@@ -1,4 +1,5 @@
 import { Game } from '../game'
+import * as socketIo from 'socket.io';
 
 export interface IRoom {
     id: string
@@ -10,6 +11,7 @@ export interface IRoom {
 export interface IPlayer {
     id: string
     nickname: string
+    socket: socketIo.Socket
 }
 
 export interface IGameState {

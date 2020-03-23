@@ -65,11 +65,12 @@ export class RoomController {
     this.gameManager.removeRoom(room_id)
     return { response: `Removed room with id: ${room_id}` }
   }
+
   @Get("/test")
   test() {
 
     var g = new Game("dsfds")
-    g.startGame([{ id: "dsa", nickname: "fds" }, { id: "dsa", nickname: "fds" }, { id: "dsa", nickname: "fds" }])
+    g.startGame([{ id: "dsa", nickname: "fds", socket: null }, { id: "dsa", nickname: "fds", socket: null }, { id: "dsa", nickname: "fds", socket: null }])
 
     return { test: "test" }
   }

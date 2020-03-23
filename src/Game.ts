@@ -8,15 +8,17 @@ import { PositionComponent } from "./components/position-component";
 import { SnakeFactory } from "./factory/SnakeFactory";
 import { FoodFactory } from "./factory/FoodFactory";
 import { DynamicsSystem } from "./systems/dynamics-system";
+import { GameManager } from './singletons/game-manager'
 
 
 
 export class Game {
+    private gameManager: GameManager = GameManager.getInstance()
     private entityPool: EntityPool = new EntityPool()
     private systems: ISystem[] = []
     private state: IGameState = { entities: [] }
     private players: IPlayer[]
-    private room_id: string
+    private roomId: string
     private timer: NodeJS.Timeout
     private io = SocketService.io()
 
@@ -28,13 +30,14 @@ export class Game {
         [290, 290],
     ]
 
-    constructor(room_id: string) {
-        this.room_id = room_id
+    constructor(roomId: string) {
+        this.roomId = roomId
         this.systems.push(new DynamicsSystem(this.entityPool))
     }
 
     startGame(players: IPlayer[]) {
         this.players = players
+        this.addListeners()
         this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
         //initialize here
         var i = 0
@@ -47,19 +50,26 @@ export class Game {
         this.entityPool.addEntity(new FoodFactory().create())
     }
 
-    updateState() {
+    private updateState() {
 
         this.systems.forEach(s => {
             s.calculateNextState()
         });
         this.state.entities = this.entityPool.entities.map(e => e.components.map(c => c.serialize()))
-        this.io.to(this.room_id).emit(SocketEvents.UPDATE, { state: this.state.entities })
+        this.io.to(this.roomId).emit(SocketEvents.UPDATE, { state: this.state.entities })
         console.log(this.state.entities)
         return this.state
     }
 
     endGame() {
         clearTimeout(this.timer)
+    }
+
+    private addListeners = () => {
+        this.players.map(player => {
+            player.socket.on(SocketEvents.SLIDER_CHANGE, ({ value }) => console.log(value))
+            player.socket.on(SocketEvents.DISCONNECT, () => this.gameManager.leaveRoom(this.roomId, player.id))
+        })
     }
 
 }

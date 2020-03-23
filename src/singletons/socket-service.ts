@@ -22,14 +22,12 @@ export class SocketService {
         SocketService._io.on(SocketEvents.CONNECT, (socket) => {
             logger.info(`New socket connected. id: ${socket.id}`)
             socket.on(SocketEvents.JOIN_REQUEST, ({ nickname, room_id }) => this.joinHandler(socket, nickname, room_id))
-            socket.on(SocketEvents.DISCONNECT, () => this.disconnectHandler(socket))
-            socket.on(SocketEvents.SLIDER_CHANGE, ({ value }) => console.log(value))
         })
     }
 
     private joinHandler(socket: socketIo.Socket, nickname: string, room_id: string) {
         logger.info(`New join room request from '${nickname}' id: '${socket.id}'`)
-        const { succes, error }: IActionResult = this.gameManager.joinRoom(socket.id, nickname, room_id)
+        const { succes, error }: IActionResult = this.gameManager.joinRoom(socket, nickname, room_id)
         if (succes) {
             socket.join(room_id, (err) => {
                 if (error) {
@@ -57,10 +55,6 @@ export class SocketService {
                 message: error
             } as IJoinResult)
         }
-    }
-    private disconnectHandler(socket: socketIo.Socket, ) {
-        logger.info(`id: '${socket.id} disconnected.`)
-        this.gameManager.leaveRoom(socket.id, socket.rooms)
     }
 
     public static io(): socketIo.Server {
