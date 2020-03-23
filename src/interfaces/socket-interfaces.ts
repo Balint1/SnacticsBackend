@@ -1,8 +1,3 @@
-
-export interface ISocketId {
-    id: string
-}
-
 export interface IJoinResult {
     id: string
     message: string
@@ -14,6 +9,6 @@ export interface INewPlayerJoined {
 }
 
 export interface IActionResult {
-    succes: boolean
+    success: boolean
     error: string
 }

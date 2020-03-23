@@ -3,12 +3,12 @@ import * as bodyParser from 'body-parser';
 
 import "reflect-metadata";
 
-import { useExpressServer } from 'routing-controllers';
-import { createServer, Server } from 'http';
+import {useExpressServer} from 'routing-controllers';
+import {createServer, Server} from 'http';
 
-import { SocketService } from './singletons/socket-service';
-import { RoomController } from './room-controller';
-import { getLogger } from './loggers'
+import {SocketService} from './singletons/socket-service';
+import {RoomController} from './room-controller';
+import {getLogger} from './loggers'
 
 const logger = getLogger('http')
 const PORT: number = 5000
@@ -25,7 +25,7 @@ SocketService.getInstance(server).listen()
 
 app.use(loggerMiddleware);
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 useExpressServer(app, {
     // register created express server in routing-controllers
@@ -39,4 +39,4 @@ function loggerMiddleware(request: express.Request, response: express.Response, 
     next();
 }
 
-export { app }
+export {app}

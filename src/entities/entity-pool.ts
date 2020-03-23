@@ -1,14 +1,14 @@
-import { Entity } from "./entity";
-import { PositionComponent } from "../components/position-component";
-import { CollisionComponent } from "../components/collision-component";
-import { MovementComponent } from "../components/movement-component";
-import { IComponent } from "../interfaces/component-interfaces";
-
+import {Entity} from "./entity";
+import {PositionComponent} from "../components/position-component";
+import {CollisionComponent} from "../components/collision-component";
+import {MovementComponent} from "../components/movement-component";
+import {IComponent} from "../interfaces/component-interfaces";
 
 
 export class EntityPool {
 
-    constructor(){}
+    constructor() {
+    }
 
     entities: Entity[] = []
     positionManager: PositionComponent[] = []
@@ -20,21 +20,21 @@ export class EntityPool {
         this.movementManager
     ]
 
-    addEntity(entity: Entity){
+    addEntity(entity: Entity) {
         this.entities.push(entity)
-        
-        
+
+
         entity.components.forEach(c => {
-            var manager = c.componentType.toString() + "Manager"
+            let manager = c.componentType.toString() + "Manager"
             this[manager].push(c)
         });
     }
 
-    removeEntity(entityId: string){
+    removeEntity(entityId: string) {
         delete this.entities[this.entities.findIndex(e => e.id == entityId)]
         this.managers.forEach(m => {
             delete m[m.findIndex(e => e.entityId == entityId)]
-            
+
         });
 
     }

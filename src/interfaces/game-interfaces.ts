@@ -1,4 +1,4 @@
-import { Game } from '../game'
+import {Game} from '../game'
 import * as socketIo from 'socket.io';
 
 export interface IRoom {
@@ -16,10 +16,4 @@ export interface IPlayer {
 
 export interface IGameState {
     entities: object[]
-}
-
-export interface ISnake {
-    id: string,
-    x: number,
-    y: number
 }

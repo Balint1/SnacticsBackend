@@ -1,12 +1,12 @@
-import { EntityFactory } from "./EntityFactory";
-import { BaseComponent } from "../components/base-component";
-import { Entity } from "../entities/entity";
-import { MovementComponent } from "../components/movement-component";
-import { PositionComponent } from "../components/position-component";
+import {EntityFactory} from "./EntityFactory";
+import {BaseComponent} from "../components/base-component";
+import {Entity} from "../entities/entity";
+import {MovementComponent} from "../components/movement-component";
+import {PositionComponent} from "../components/position-component";
 
-export class SnakeFactory{
+export class SnakeFactory {
     public static create(x: number, y: number): Entity {
-        var mc = new MovementComponent()
+        let mc = new MovementComponent()
         mc.x = 17
         mc.y = 23
 
@@ -14,7 +14,7 @@ export class SnakeFactory{
         pc.x = x
         pc.y = y
 
-        var snake = new Entity()
+        let snake = new Entity()
         snake.addComponent(mc)
         snake.addComponent(pc)
 

@@ -1,8 +1,8 @@
-import { Guid } from 'guid-typescript'
-import { IRoom, IPlayer } from '../interfaces/game-interfaces'
-import { IActionResult } from '../interfaces/socket-interfaces'
-import { Game } from '../game'
-import { getLogger } from '../loggers'
+import {Guid} from 'guid-typescript'
+import {IRoom, IPlayer} from '../interfaces/game-interfaces'
+import {IActionResult} from '../interfaces/socket-interfaces'
+import {Game} from '../game'
+import {getLogger} from '../loggers'
 import * as socketIo from 'socket.io';
 
 const logger = getLogger('game manager')
@@ -18,7 +18,8 @@ export class GameManager {
      * Private constructior to prevent direct
      * construction calls with the `new` operator.
      */
-    private constructor() { }
+    private constructor() {
+    }
 
     /**
      * The static method that controls the access to the singleton instance.
@@ -71,15 +72,15 @@ export class GameManager {
         }
     }
 
-    public removeRoom(roomId: string, ): void {
+    public removeRoom(roomId: string,): void {
         this._rooms = this._rooms.filter(room => room.id != roomId)
         logger.info(`Removed room with id: ${roomId}`)
     }
 
     /**
-    * Add new user to room
-    * Check if nickname is available in specified room
-    */
+     * Add new user to room
+     * Check if nickname is available in specified room
+     */
     public joinRoom = (socket: socketIo.Socket, nickname: string, roomId: string): IActionResult => {
         const room = this._rooms.find(room => room.id == roomId)
         if (room) {
@@ -87,25 +88,25 @@ export class GameManager {
                 const nicknameTaken = room.players.find(player => player.nickname == nickname)
                 if (nicknameTaken) {
                     return {
-                        succes: false,
+                        success: false,
                         error: `Nickname: ${nickname} is already taken`
                     }
                 } else {
-                    room.players.push({ id: socket.id, nickname, socket } as IPlayer)
+                    room.players.push({id: socket.id, nickname, socket} as IPlayer)
                     return {
-                        succes: true,
+                        success: true,
                         error: null
                     } as IActionResult
                 }
             } else {
                 return {
-                    succes: false,
+                    success: false,
                     error: `Room ${roomId} is full, can't join`
                 }
             }
         } else {
             return {
-                succes: false,
+                success: false,
                 error: `Room ${roomId} not found`
             }
         }

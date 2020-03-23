@@ -1,11 +1,11 @@
 import * as socketIo from 'socket.io';
 
-import { Server } from 'http';
+import {Server} from 'http';
 
-import { SocketEvents } from '../constants'
-import { GameManager } from './game-manager'
-import { IJoinResult, INewPlayerJoined, IActionResult } from '../interfaces/socket-interfaces'
-import { getLogger } from '../loggers'
+import {SocketEvents} from '../constants'
+import {GameManager} from './game-manager'
+import {IJoinResult, INewPlayerJoined, IActionResult} from '../interfaces/socket-interfaces'
+import {getLogger} from '../loggers'
 
 const logger = getLogger('socket')
 
@@ -21,14 +21,14 @@ export class SocketService {
     public listen(): void {
         SocketService._io.on(SocketEvents.CONNECT, (socket) => {
             logger.info(`New socket connected. id: ${socket.id}`)
-            socket.on(SocketEvents.JOIN_REQUEST, ({ nickname, room_id }) => this.joinHandler(socket, nickname, room_id))
+            socket.on(SocketEvents.JOIN_REQUEST, ({nickname, room_id}) => this.joinHandler(socket, nickname, room_id))
         })
     }
 
     private joinHandler(socket: socketIo.Socket, nickname: string, room_id: string) {
         logger.info(`New join room request from '${nickname}' id: '${socket.id}'`)
-        const { succes, error }: IActionResult = this.gameManager.joinRoom(socket, nickname, room_id)
-        if (succes) {
+        const {success, error}: IActionResult = this.gameManager.joinRoom(socket, nickname, room_id)
+        if (success) {
             socket.join(room_id, (err) => {
                 if (error) {
                     logger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${err}`)
