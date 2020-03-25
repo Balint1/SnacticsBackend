@@ -16,10 +16,21 @@ export class RoomController {
     @Post("/create")
     createRoom(@Body() params: ICreateRoomBody) {
         let roomId = this.gameManager.createRoom(params.name, params.capacity, params.ownerId)
-        return {
-            message: "created room",
-            name: params.name,
-            id: roomId
+
+        if(roomId){
+            return {
+                success: true,
+                message: "created room",
+                name: params.name,
+                id: roomId
+            }
+        }else {
+            return {
+                success: false,
+                message: "Failed to create room",
+                name: "",
+                id: ""
+            }
         }
     }
 

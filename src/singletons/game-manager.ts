@@ -46,7 +46,7 @@ export class GameManager {
             players: [],
             game: new Game(roomId)
         })
-        logger.info(`Created new room with id ${roomId}`)
+        logger.info(`${ownerId} created new room with id ${roomId}`)
         return roomId
     }
 
