@@ -33,12 +33,12 @@ export class Game {
 
     constructor(roomId: string) {
         this.roomId = roomId
-        this.systems.push(new InputSystem(this.players, this.entityPool))
-        this.systems.push(new DynamicsSystem(this.entityPool))
     }
-
+    
     startGame(players: IPlayer[]) {
         this.players = players
+        this.systems.push(new InputSystem(this.players, this.entityPool))
+        this.systems.push(new DynamicsSystem(this.entityPool))
         // this.addListeners()
         this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
         //initialize here
@@ -62,6 +62,7 @@ export class Game {
         this.state.entities = []
         this.entityPool.entities.forEach(e => this.state.entities.push(e.components.map(c => c.serialize())))
         this.io.to(this.roomId).emit(SocketEvents.UPDATE, { state: this.state.entities })
+        console.log(this.entityPool.positionManager)
         return this.state
     }
 

@@ -43,8 +43,8 @@ export class SnakeFactory {
         if (tag == TagType.SnakeHead) {
             let mc = new MovementComponent();
             mc.speed = 3
-            mc.direction.x = SnakeSpeed.speeds[1].x
-            mc.direction.y = SnakeSpeed.speeds[1].y
+            mc.direction.x = SnakeSpeed.speeds[2].x
+            mc.direction.y = SnakeSpeed.speeds[2].y
             snakePiece.addComponent(mc)
         }
         var snakeComponent = new SnakeComponent()
