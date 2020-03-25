@@ -3,38 +3,41 @@ import {PositionComponent} from "../components/position-component";
 import {CollisionComponent} from "../components/collision-component";
 import {MovementComponent} from "../components/movement-component";
 import {IComponent} from "../interfaces/component-interfaces";
-
+import { SnakeComponent } from "../components/snake-component";
+import { TagComponent } from "../components/tag-component";
 
 export class EntityPool {
 
     constructor() {
     }
 
-    entities: Entity[] = []
-    positionManager: PositionComponent[] = []
-    collisionManager: CollisionComponent[] = []
-    movementManager: MovementComponent[] = []
-    managers: IComponent[][] = [
+    entities: Map<string, Entity> = new Map()
+    positionManager: Map<string, PositionComponent> = new Map()
+    collisionManager: Map<string, CollisionComponent> = new Map()
+    movementManager: Map<string, MovementComponent> = new Map()
+    snakeManager: Map<string, SnakeComponent> = new Map()
+    tagManager: Map<string, TagComponent> = new Map()
+    managers: Map<string, IComponent>[] = [
         this.positionManager,
         this.collisionManager,
-        this.movementManager
+        this.movementManager,
+        this.snakeManager,
+        this.tagManager
     ]
 
     addEntity(entity: Entity) {
-        this.entities.push(entity)
-
+        this.entities.set(entity.id, entity)
 
         entity.components.forEach(c => {
             let manager = c.componentType.toString() + "Manager"
-            this[manager].push(c)
+            this[manager].set(c.entityId, c)
         });
     }
 
     removeEntity(entityId: string) {
-        delete this.entities[this.entities.findIndex(e => e.id == entityId)]
+        this.entities.delete(entityId)
         this.managers.forEach(m => {
-            delete m[m.findIndex(e => e.entityId == entityId)]
-
+            m.delete(entityId)
         });
 
     }

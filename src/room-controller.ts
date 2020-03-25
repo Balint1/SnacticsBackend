@@ -69,7 +69,8 @@ export class RoomController {
     test() {
 
         let g = new Game("dsfds")
-        g.startGame([{id: "dsa", nickname: "fds", socket: null}, {id: "dsa", nickname: "fds", socket: null}, {
+        g.startGame([
+            {
             id: "dsa",
             nickname: "fds",
             socket: null
