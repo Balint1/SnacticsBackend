@@ -1,3 +1,6 @@
+import { EntityPool } from "./entities/entity-pool";
+import { Vector2 } from "./models/position";
+
 export enum SocketEvents {
     CONNECT = 'connect',
     DISCONNECT = 'disconnect',
@@ -15,10 +18,25 @@ export class GameConstants {
     //TODO maybe it should be modifiable
     static fieldWidth = 300;
     static fieldHeight = 300;
+    static snakeLength = 4;
+    static blockLength = 20;
 
 }
 
 export class HelperConstants {
     static readonly SocketData = "SocketData"
+}
+
+export class SnakeSpeed{
+    static readonly speeds = [
+        new Vector2(0, GameConstants.blockLength),
+        new Vector2(GameConstants.blockLength / Math.sqrt(2), GameConstants.blockLength / Math.sqrt(2)),
+        new Vector2(GameConstants.blockLength, 0),
+        new Vector2(GameConstants.blockLength / Math.sqrt(2), - GameConstants.blockLength / Math.sqrt(2)),
+        new Vector2(0, - GameConstants.blockLength),
+        new Vector2( - GameConstants.blockLength / Math.sqrt(2), - GameConstants.blockLength / Math.sqrt(2)),
+        new Vector2( - GameConstants.blockLength, 0 ),
+        new Vector2( - GameConstants.blockLength / Math.sqrt(2), GameConstants.blockLength / Math.sqrt(2)),
+    ]
 }
 

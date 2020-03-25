@@ -36,14 +36,16 @@ export class Game {
 
     startGame(players: IPlayer[]) {
         this.players = players
-        this.addListeners()
+        // this.addListeners()
         this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
         //initialize here
         let i = 0;
         players.forEach(p => {
             //TODO random position?
             let snake = SnakeFactory.create(this.spawningPlaces[i][0], this.spawningPlaces[i++][1]);
-            this.entityPool.addEntity(snake)
+            snake.forEach(s => {
+                this.entityPool.addEntity(s)
+            });
         });
 
         this.entityPool.addEntity(new FoodFactory().create())
@@ -54,9 +56,9 @@ export class Game {
         this.systems.forEach(s => {
             s.calculateNextState()
         });
-        this.state.entities = this.entityPool.entities.map(e => e.components.map(c => c.serialize()))
-        this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
-        console.log(this.state.entities)
+        this.state.entities = []
+        this.entityPool.entities.forEach(e => this.state.entities.push(e.components.map(c => c.serialize())))
+        this.io.to(this.roomId).emit(SocketEvents.UPDATE, { state: this.state.entities })
         return this.state
     }
 
