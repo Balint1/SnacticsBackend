@@ -36,7 +36,6 @@ export class Game {
 
     startGame(players: IPlayer[]) {
         this.players = players
-        // this.addListeners()
         this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
         //initialize here
         let i = 0;
