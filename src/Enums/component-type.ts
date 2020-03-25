@@ -1,4 +1,4 @@
-export enum ComponentType{
+export enum ComponentType {
     Collision = "collision",
     Movement = "movement",
     Position = "position"

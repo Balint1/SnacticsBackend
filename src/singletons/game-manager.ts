@@ -36,11 +36,13 @@ export class GameManager {
         return this._rooms
     }
 
-    public createRoom(): string {
+    public createRoom(name: string, capacity: number, ownerId: string): string {
         let roomId = "835aee55-3274-9f4f-dac5-87fb41f276f7" //Guid.raw()
         this._rooms.push({
             id: roomId,
-            capacity: 4,
+            name: name,
+            capacity: capacity,
+            ownerId: ownerId,
             players: [],
             game: new Game(roomId)
         })
@@ -53,28 +55,45 @@ export class GameManager {
         if (gameRoom) {
             logger.info(`Started game in room with id ${roomId}`)
             gameRoom.game.startGame(gameRoom.players)
-            callback()
+            callback(true)
         } else {
             logger.error(`Room with id: ${roomId} doesn't exists`)
-            callback(`Room with id: ${roomId} doesn't exists`)
+            callback(false)
         }
     }
 
-    public endGame(roomId: string, callback): void {
+    public endGame(roomId: string, playerId: string, callback): void {
         let gameRoom = this._rooms.find(room => room.id == roomId)
         if (gameRoom) {
-            logger.info(`Ended game in room with id ${roomId}`)
-            gameRoom.game.endGame()
-            callback()
+            if (gameRoom.ownerId == playerId) {
+                logger.info(`Player ${playerId} ended game in room with id ${roomId}`)
+                gameRoom.game.endGame()
+                callback(true)
+            } else {
+                logger.error(`Player with id: ${playerId} doesn't have permission to end game in room ${roomId}`)
+                callback(false)
+            }
         } else {
             logger.error(`Room with id: ${roomId} doesn't exists`)
-            callback(`Room with id: ${roomId} doesn't exists`)
+            callback(false)
         }
     }
 
-    public removeRoom(roomId: string,): void {
-        this._rooms = this._rooms.filter(room => room.id != roomId)
-        logger.info(`Removed room with id: ${roomId}`)
+    public removeRoom(roomId: string, playerId: string, callback): void {
+        let gameRoom = this._rooms.find(room => room.id == roomId)
+        if (gameRoom) {
+            if (gameRoom.ownerId == playerId) {
+                logger.info(`Player ${playerId} removed room ${roomId}`)
+                this._rooms = this._rooms.filter(room => room.id != roomId)
+                callback(true)
+            } else {
+                logger.error(`Player with id: ${playerId} doesn't have permission to remove room ${roomId}`)
+                callback(false)
+            }
+        } else {
+            logger.error(`Room with id: ${roomId} doesn't exists`)
+            callback(false)
+        }
     }
 
     /**
