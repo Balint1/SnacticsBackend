@@ -1,14 +1,15 @@
-import {EntityPool} from "./entities/entity-pool";
-import {ISystem} from "./interfaces/system-interfaces";
-import {GameConstants, SocketEvents} from "./constants";
-import {SocketService} from './singletons/socket-service'
-import {IGameState, IPlayer} from './interfaces/game-interfaces'
-import {Entity} from "./entities/entity";
-import {PositionComponent} from "./components/position-component";
-import {SnakeFactory} from "./factory/SnakeFactory";
-import {FoodFactory} from "./factory/FoodFactory";
-import {DynamicsSystem} from "./systems/dynamics-system";
-import {GameManager} from './singletons/game-manager'
+import { EntityPool } from "./entities/entity-pool";
+import { ISystem } from "./interfaces/system-interfaces";
+import { GameConstants, SocketEvents } from "./constants";
+import { SocketService } from './singletons/socket-service'
+import { IGameState, IPlayer } from './interfaces/game-interfaces'
+import { Entity } from "./entities/entity";
+import { PositionComponent } from "./components/position-component";
+import { SnakeFactory } from "./factory/SnakeFactory";
+import { FoodFactory } from "./factory/FoodFactory";
+import { DynamicsSystem } from "./systems/dynamics-system";
+import { GameManager } from './singletons/game-manager'
+import { InputSystem } from "./systems/input-system";
 
 
 export class Game {
@@ -31,11 +32,13 @@ export class Game {
 
     constructor(roomId: string) {
         this.roomId = roomId
-        this.systems.push(new DynamicsSystem(this.entityPool))
     }
 
     startGame(players: IPlayer[]) {
         this.players = players
+        this.systems.push(new InputSystem(this.players, this.entityPool))
+        this.systems.push(new DynamicsSystem(this.entityPool))
+        // this.addListeners()
         this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
         //initialize here
         let i = 0;
@@ -58,6 +61,7 @@ export class Game {
         this.state.entities = []
         this.entityPool.entities.forEach(e => this.state.entities.push(e.components.map(c => c.serialize())))
         this.io.to(this.roomId).emit(SocketEvents.UPDATE, { state: this.state.entities })
+        console.log(this.entityPool.positionManager)
         return this.state
     }
 
@@ -65,11 +69,11 @@ export class Game {
         clearTimeout(this.timer)
     }
 
-    private addListeners = () => {
-        this.players.map(player => {
-            player.socket.on(SocketEvents.SLIDER_CHANGE, ({value}) => console.log(value))
-            player.socket.on(SocketEvents.DISCONNECT, () => this.gameManager.leaveRoom(this.roomId, player.id))
-        })
-    }
+    // private addListeners = () => {
+    //     this.players.map(player => {
+    //         player.socket.on(SocketEvents.SLIDER_CHANGE, ({ value }) => console.log(value))
+    //         player.socket.on(SocketEvents.DISCONNECT, () => this.gameManager.leaveRoom(this.roomId, player.id))
+    //     })
+    // }
 
 }
