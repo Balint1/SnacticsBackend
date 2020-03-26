@@ -38,13 +38,13 @@ export class Game {
         this.players = players
         this.systems.push(new InputSystem(this.players, this.entityPool))
         this.systems.push(new DynamicsSystem(this.entityPool))
-        // this.addListeners()
+        this.addListeners()
         this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
         //initialize here
         let i = 0;
         players.forEach(p => {
             //TODO random position?
-            let snake = SnakeFactory.create(this.spawningPlaces[i][0], this.spawningPlaces[i++][1]);
+            var snake = SnakeFactory.create(p.id, this.spawningPlaces[i][0], this.spawningPlaces[i++][1])
             snake.forEach(s => {
                 this.entityPool.addEntity(s)
             });
@@ -69,11 +69,10 @@ export class Game {
         clearTimeout(this.timer)
     }
 
-    // private addListeners = () => {
-    //     this.players.map(player => {
-    //         player.socket.on(SocketEvents.SLIDER_CHANGE, ({ value }) => console.log(value))
-    //         player.socket.on(SocketEvents.DISCONNECT, () => this.gameManager.leaveRoom(this.roomId, player.id))
-    //     })
-    // }
+    private addListeners = () => {
+        this.players.map(player => {
+            player.socket.on(SocketEvents.DISCONNECT, () => this.gameManager.leaveRoom(this.roomId, player.id))
+        })
+    }
 
 }

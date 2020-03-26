@@ -4,10 +4,10 @@ import {Vector2} from "../models/position";
 import {BaseComponent} from "./base-component";
 
 export class PositionComponent extends BaseComponent {
-    constructor() {
+    constructor(x:number, y:number) {
         super()
         this.componentType = ComponentType.Position
-        this.position = new Vector2(0,0)
+        this.position = new Vector2(x,y)
     }
 
     @SocketData

@@ -6,9 +6,10 @@ import {GameConstants} from "../constants";
 export class FoodFactory extends EntityFactory {
     public create(): Entity {
 
-        let positionComponent = new PositionComponent()
-        positionComponent.position.x = Math.floor(Math.random() * GameConstants.fieldWidth)
-        positionComponent.position.y = Math.floor(Math.random() * GameConstants.fieldHeight)
+        let positionComponent = new PositionComponent(
+            Math.floor(Math.random() * GameConstants.fieldWidth),
+            Math.floor(Math.random() * GameConstants.fieldHeight)
+        )
 
         let food = new Entity()
         food.addComponent(positionComponent)

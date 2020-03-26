@@ -42,6 +42,7 @@ export class DynamicsSystem extends BaseSystem {
 
             }
             
+            //Sometimes we have to reset the counter, this number won't break the rest ( % ) operation 
             this.counter = this.counter == 362880 ? 0 : this.counter + 1
         });
     }

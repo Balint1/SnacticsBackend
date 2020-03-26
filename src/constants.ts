@@ -27,8 +27,10 @@ export class HelperConstants {
     static readonly SocketData = "SocketData"
 }
 
-export class SnakeSpeed{
-    static readonly speeds = [
+export class SnakeConstants{
+    static readonly speed = 3;
+
+    static readonly directions = [
         new Vector2(0, GameConstants.blockLength),
         new Vector2(GameConstants.blockLength / Math.sqrt(2), GameConstants.blockLength / Math.sqrt(2)),
         new Vector2(GameConstants.blockLength, 0),

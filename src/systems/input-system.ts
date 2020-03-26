@@ -2,10 +2,12 @@ import { ISystem } from "../interfaces/system-interfaces";
 import { IPlayer } from "../interfaces/game-interfaces";
 import { SocketEvents, GameConstants } from "../constants";
 import { EntityPool } from "../entities/entity-pool";
+import { GameManager } from "../singletons/game-manager";
 
 export class InputSystem implements ISystem{
     private players: IPlayer[];
     private entityPool: EntityPool;
+    private gameManager = GameManager.getInstance()
     
     deltaDirections:Map<string, number> = new Map()
     
@@ -15,7 +17,6 @@ export class InputSystem implements ISystem{
         this.players.map(player => {
             this.deltaDirections.set(player.id, 0)
             player.socket.on(SocketEvents.SLIDER_CHANGE, ({ value }) => this.onValueChange(player.id, value))
-            player.socket.on(SocketEvents.DISCONNECT, () => console.log("Leave room"))
         })
     }
     calculateNextState(): void {
