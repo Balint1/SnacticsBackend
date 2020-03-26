@@ -1,4 +1,4 @@
-import {JsonController, Param, Body, Get, Post} from "routing-controllers";
+import {JsonController, Body, Get, Post} from "routing-controllers";
 import {GameManager} from './singletons/game-manager'
 import {getLogger} from './loggers'
 import {Game} from "./game"
@@ -18,6 +18,7 @@ export class RoomController {
         let roomId = this.gameManager.createRoom(params.name, params.capacity, params.ownerId)
 
         if(roomId){
+            logger.info("CREATE ROOM request SUCCEEDED")
             return {
                 success: true,
                 message: "created room",
@@ -25,6 +26,7 @@ export class RoomController {
                 id: roomId
             }
         }else {
+            logger.error("CREATE ROOM request FAILED")
             return {
                 success: false,
                 message: "Failed to create room",
@@ -37,7 +39,7 @@ export class RoomController {
     @Post("/start")
     startGame(@Body() params: IStartGameBody) {
         let result = false
-        this.gameManager.startGame(params.roomId, (success: boolean) => {
+        this.gameManager.startGame(params.roomId, params.playerId,(success: boolean) => {
             result = success;
         })
         return {success: result}
@@ -63,6 +65,12 @@ export class RoomController {
         this.gameManager.endGame(params.roomId, params.playerId, (success: boolean) => {
             result = success;
         })
+
+        if(result){
+            logger.info("CREATE ROOM request SUCCEEDED")
+        }else {
+            logger.error("CREATE ROOM request FAILED")
+        }
         return {success: result}
     }
 
@@ -72,6 +80,13 @@ export class RoomController {
         this.gameManager.removeRoom(params.roomId, params.playerId, (success: boolean) =>{
             result = success;
         })
+
+        if(result){
+            logger.info("CREATE ROOM request SUCCEEDED")
+        }else {
+            logger.error("CREATE ROOM request FAILED")
+        }
+
         return {success: result}
     }
 
