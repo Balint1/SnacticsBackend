@@ -3,7 +3,7 @@ import {ComponentType} from "../enums/component-type";
 import {BaseComponent} from "./base-component";
 import {SocketData} from "../helpers/decorators";
 import {Vector2} from "../models/position";
-import { GameConstants, SnakeSpeed } from "../constants";
+import { GameConstants, SnakeConstants } from "../constants";
 
 export class MovementComponent extends BaseComponent {
     constructor() {
@@ -18,7 +18,7 @@ export class MovementComponent extends BaseComponent {
 
     setDeltaDirection(delta:number){
         this.directionValue += delta
-        this.direction = SnakeSpeed.speeds[this.directionValue]
+        this.direction = SnakeConstants.directions[this.directionValue]
     }
 
     // ( tick / block )
