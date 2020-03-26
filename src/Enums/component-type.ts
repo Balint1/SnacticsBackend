@@ -3,5 +3,6 @@ export enum ComponentType{
     Movement = "movement",
     Position = "position",
     Snake = "snake",
-    Tag = "tag"
+    Tag = "tag",
+    Player = "player"
 }
