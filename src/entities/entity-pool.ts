@@ -18,14 +18,14 @@ export class EntityPool {
     movementManager: Map<string, MovementComponent> = new Map()
     snakeManager: Map<string, SnakeComponent> = new Map()
     tagManager: Map<string, TagComponent> = new Map()
-    playeerManager: Map<string, PlayerComponent> = new Map()
+    playerManager: Map<string, PlayerComponent> = new Map()
     managers: Map<string, IComponent>[] = [
         this.positionManager,
         this.collisionManager,
         this.movementManager,
         this.snakeManager,
         this.tagManager,
-        this.playeerManager
+        this.playerManager
     ]
 
     addEntity(entity: Entity) {
