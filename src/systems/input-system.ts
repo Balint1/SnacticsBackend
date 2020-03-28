@@ -28,7 +28,6 @@ export class InputSystem implements ISystem{
     }
 
     onValueChange(playerId:string, value:any){
-        console.log(value)
         this.deltaDirections.set(playerId, value)
     }
 

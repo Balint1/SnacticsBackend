@@ -15,7 +15,10 @@ export class MovementComponent extends BaseComponent {
     direction: Vector2
 
     setDeltaDirection(delta: number) {
-        this.directionValue = (this.directionValue + delta) % 8
+        this.directionValue = Number(this.directionValue) + Number(delta)
+        this.directionValue = this.directionValue < 0 ?
+            7 - ((-1 * this.directionValue) % 8)
+            : (this.directionValue) % 8
         this.direction = SnakeConstants.directions[this.directionValue]
     }
 

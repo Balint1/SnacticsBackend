@@ -38,7 +38,6 @@ export class GameManager {
 
     public createRoom(name: string, capacity: number, ownerId: string): {roomId: string, message: string} {
         let nameTaken = this._rooms.find(room => room.name == name)
-        console.log(nameTaken)
         if (nameTaken) {
             logger.error(`Couldn't CREATE new room: ${name}, name already taken`)
             return {
