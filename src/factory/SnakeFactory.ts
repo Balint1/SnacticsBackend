@@ -6,6 +6,7 @@ import { TagType } from "../Enums/tag-type";
 import { GameConstants, SnakeConstants } from "../constants";
 import { SnakeComponent } from "../components/snake-component";
 import { PlayerComponent } from "../components/player-component";
+import { ColliderComponent } from "../components/collider-component";
 
 export class SnakeFactory {
     public static create(playerId: string, x: number, y: number): Entity[] {
@@ -35,6 +36,7 @@ export class SnakeFactory {
         let snakePiece = new Entity()
         let positionComponent = new PositionComponent(x, y);
         let tagComponent = new TagComponent(tag);
+        let colliderComponent = new ColliderComponent(SnakeConstants.colliderRadius)
         if (tag == TagType.SnakeHead) {
             let playerComponent = new PlayerComponent(playerId)
             let movementComponent = new MovementComponent();
@@ -50,6 +52,7 @@ export class SnakeFactory {
         snakePiece.addComponent(positionComponent)
         snakePiece.addComponent(tagComponent)
         snakePiece.addComponent(snakeComponent)
+        snakePiece.addComponent(colliderComponent)
         return { snakePiece, nextSnakeComponent: snakeComponent }
     }
 }

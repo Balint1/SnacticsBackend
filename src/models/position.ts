@@ -12,4 +12,10 @@ export class Vector2{
         this.y += p.y
         return this
     }
+
+    public distance(point:Vector2){
+        let xDelta = this.x - point.x
+        let yDelta = this.y - point.y
+        return Math.sqrt( Math.pow(xDelta, 2) + Math.pow(yDelta, 2))
+    }
 }

@@ -5,4 +5,5 @@ export enum ComponentType {
     Snake = "snake",
     Tag = "tag",
     Player = "player"
+    Collider = "collider"
 }

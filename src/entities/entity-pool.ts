@@ -1,6 +1,6 @@
 import {Entity} from "./entity";
 import {PositionComponent} from "../components/position-component";
-import {CollisionComponent} from "../components/collision-component";
+import {ColliderComponent} from "../components/collider-component";
 import {MovementComponent} from "../components/movement-component";
 import {IComponent} from "../interfaces/component-interfaces";
 import { SnakeComponent } from "../components/snake-component";
@@ -14,14 +14,14 @@ export class EntityPool {
 
     entities: Map<string, Entity> = new Map()
     positionManager: Map<string, PositionComponent> = new Map()
-    collisionManager: Map<string, CollisionComponent> = new Map()
+    colliderManager: Map<string, ColliderComponent> = new Map()
     movementManager: Map<string, MovementComponent> = new Map()
     snakeManager: Map<string, SnakeComponent> = new Map()
     tagManager: Map<string, TagComponent> = new Map()
     playerManager: Map<string, PlayerComponent> = new Map()
     managers: Map<string, IComponent>[] = [
         this.positionManager,
-        this.collisionManager,
+        this.colliderManager,
         this.movementManager,
         this.snakeManager,
         this.tagManager,
