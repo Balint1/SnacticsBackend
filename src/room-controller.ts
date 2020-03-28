@@ -3,6 +3,12 @@ import {GameManager} from './singletons/game-manager'
 import {getLogger} from './loggers'
 import {Game} from "./game"
 import {ICreateRoomBody, IStartGameBody, IEndGameBody, IRemoveRoomBody} from './interfaces/http-request-interfaces'
+import {
+    ICreateRoomResponse,
+    IStartGameResponse,
+    IEndGameResponse,
+    IRemoveRoomResponse, IGetRoomsResponse
+} from './interfaces/http-response-interfaces'
 
 const logger = getLogger('http')
 
@@ -15,34 +21,45 @@ export class RoomController {
 
     @Post("/create")
     createRoom(@Body() params: ICreateRoomBody) {
+        let response: ICreateRoomResponse
         let roomId = this.gameManager.createRoom(params.name, params.capacity, params.ownerId)
-
-        if(roomId){
+        if (roomId) {
             logger.info("CREATE ROOM request SUCCEEDED")
-            return {
+            response = {
                 success: true,
                 message: "created room",
                 name: params.name,
-                id: roomId
+                id: roomId,
+                ownerId: params.ownerId
             }
-        }else {
+        } else {
             logger.error("CREATE ROOM request FAILED")
-            return {
+            response = {
                 success: false,
                 message: "Failed to create room",
                 name: "",
-                id: ""
+                id: "",
+                ownerId: ""
             }
         }
+        return response
     }
 
     @Post("/start")
     startGame(@Body() params: IStartGameBody) {
-        let result = false
-        this.gameManager.startGame(params.roomId, params.playerId,(success: boolean) => {
-            result = success;
+        let response: IStartGameResponse = {
+            success: true,
+            message: ''
+        }
+        this.gameManager.startGame(params.roomId, params.playerId, (error: string) => {
+            if (error) {
+                response = {
+                    success: false,
+                    message: error
+                }
+            }
         })
-        return {success: result}
+        return response
     }
 
 
@@ -56,38 +73,47 @@ export class RoomController {
             }
         })
 
-        return {rooms: roomList}
+        return {success: true, message: '', rooms: roomList} as IGetRoomsResponse
     }
 
     @Post("/endgame")
-    endStop(@Body() params: IEndGameBody) {
-        let result: boolean = false
-        this.gameManager.endGame(params.roomId, params.playerId, (success: boolean) => {
-            result = success;
+    endGame(@Body() params: IEndGameBody) {
+        let response: IEndGameResponse = {
+            success: true,
+            message: ''
+        }
+        this.gameManager.endGame(params.roomId, params.playerId, (error: string) => {
+            if (error) {
+                logger.error("CREATE ROOM request FAILED")
+                response = {
+                    success: false,
+                    message: error
+                }
+            }
         })
 
-        if(result){
-            logger.info("CREATE ROOM request SUCCEEDED")
-        }else {
-            logger.error("CREATE ROOM request FAILED")
-        }
-        return {success: result}
+        logger.info("CREATE ROOM request SUCCEEDED")
+        return response
     }
 
     @Post("/remove")
     removeRoom(@Body() params: IRemoveRoomBody) {
-        let result: boolean = false
-        this.gameManager.removeRoom(params.roomId, params.playerId, (success: boolean) =>{
-            result = success;
+        let response: IRemoveRoomResponse = {
+            success: true,
+            message: ''
+        }
+        this.gameManager.removeRoom(params.roomId, params.playerId, (error: string) => {
+            if (error) {
+                logger.error("CREATE ROOM request FAILED")
+                response = {
+                    success: false,
+                    message: error
+                }
+            }
         })
 
-        if(result){
-            logger.info("CREATE ROOM request SUCCEEDED")
-        }else {
-            logger.error("CREATE ROOM request FAILED")
-        }
-
-        return {success: result}
+        logger.info("CREATE ROOM request SUCCEEDED")
+        return response
     }
 
     @Get("/test")
@@ -96,10 +122,10 @@ export class RoomController {
         let g = new Game("dsfds")
         g.startGame([
             {
-            id: "dsa",
-            nickname: "fds",
-            socket: null
-        }])
+                id: "dsa",
+                nickname: "fds",
+                socket: null
+            }])
 
         return {test: "test"}
     }

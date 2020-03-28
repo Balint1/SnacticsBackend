@@ -3,8 +3,6 @@ import { ISystem } from "./interfaces/system-interfaces";
 import { GameConstants, SocketEvents } from "./constants";
 import { SocketService } from './singletons/socket-service'
 import { IGameState, IPlayer } from './interfaces/game-interfaces'
-import { Entity } from "./entities/entity";
-import { PositionComponent } from "./components/position-component";
 import { SnakeFactory } from "./factory/SnakeFactory";
 import { FoodFactory } from "./factory/FoodFactory";
 import { DynamicsSystem } from "./systems/dynamics-system";
@@ -44,7 +42,7 @@ export class Game {
         let i = 0;
         players.forEach(p => {
             //TODO random position?
-            var snake = SnakeFactory.create(p.id, this.spawningPlaces[i][0], this.spawningPlaces[i++][1])
+            let snake = SnakeFactory.create(p.id, this.spawningPlaces[i][0], this.spawningPlaces[i++][1]);
             snake.forEach(s => {
                 this.entityPool.addEntity(s)
             });

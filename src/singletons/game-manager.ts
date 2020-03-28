@@ -53,17 +53,20 @@ export class GameManager {
     public startGame(roomId: string, playerId: string, callback): void {
         let gameRoom = this._rooms.find(room => room.id == roomId)
         if (gameRoom) {
-            if(gameRoom.ownerId == playerId){
-                logger.info(`${gameRoom.ownerId} STARTED game in room: ${gameRoom.name} id ${roomId}`)
+            if (gameRoom.ownerId == playerId) {
+                let message = `${gameRoom.ownerId} STARTED game in room: ${gameRoom.name} id ${roomId}`
+                logger.info(message)
                 gameRoom.game.startGame(gameRoom.players)
-                callback(true)
-            }else {
-                logger.error(`Player with id: ${playerId} doesn't have permission to end START in room: ${gameRoom.name}`)
-                callback(false)
+                callback()
+            } else {
+                let message = `Player with id: ${playerId} doesn't have permission to end START in room: ${gameRoom.name}`
+                logger.error(message)
+                callback(message)
             }
         } else {
-            logger.error(`Room with id: ${roomId} doesn't exists`)
-            callback(false)
+            let message = `Room with id: ${roomId} doesn't exists`
+            logger.error(message)
+            callback(message)
         }
     }
 
@@ -71,16 +74,19 @@ export class GameManager {
         let gameRoom = this._rooms.find(room => room.id == roomId)
         if (gameRoom) {
             if (gameRoom.ownerId == playerId) {
-                logger.info(`${playerId} ENDED game in room with id ${roomId}`)
+                let message = `${playerId} ENDED game in room with id ${roomId}`
+                logger.info(message)
                 gameRoom.game.endGame()
-                callback(true)
+                callback()
             } else {
-                logger.error(`Player with id: ${playerId} doesn't have permission to END game in room: ${gameRoom.name}`)
-                callback(false)
+                let message = `Player with id: ${playerId} doesn't have permission to END game in room: ${gameRoom.name}`
+                logger.error(message)
+                callback(message)
             }
         } else {
-            logger.error(`Room with id: ${roomId} doesn't exists`)
-            callback(false)
+            let message = `Room with id: ${roomId} doesn't exists`
+            logger.error(message)
+            callback(message)
         }
     }
 
@@ -88,16 +94,19 @@ export class GameManager {
         let gameRoom = this._rooms.find(room => room.id == roomId)
         if (gameRoom) {
             if (gameRoom.ownerId == playerId) {
-                logger.info(`Player ${playerId} REMOVED room: ${gameRoom.name} id: ${roomId}`)
+                let message = `Player ${playerId} REMOVED room: ${gameRoom.name} id: ${roomId}`
+                logger.info(message)
                 this._rooms = this._rooms.filter(room => room.id != roomId)
-                callback(true)
+                callback()
             } else {
-                logger.error(`Player with id: ${playerId} doesn't have permission to REMOVE room: ${gameRoom.name}`)
-                callback(false)
+                let message = `Player with id: ${playerId} doesn't have permission to REMOVE room: ${gameRoom.name}`
+                logger.error(message)
+                callback(message)
             }
         } else {
-            logger.error(`Room with id: ${roomId} doesn't exists`)
-            callback(false)
+            let message = `Room with id: ${roomId} doesn't exists`
+            logger.error(message)
+            callback(message)
         }
     }
 
