@@ -1,6 +1,6 @@
 import { ISystem } from "../interfaces/system-interfaces";
 import { IPlayer } from "../interfaces/game-interfaces";
-import { SocketEvents, GameConstants } from "../constants";
+import { SocketEvents } from "../constants";
 import { EntityPool } from "../entities/entity-pool";
 import { GameManager } from "../singletons/game-manager";
 

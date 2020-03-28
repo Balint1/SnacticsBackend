@@ -1,4 +1,3 @@
-import {IComponent} from "../interfaces/component-interfaces";
 import {BaseComponent} from "../components/base-component";
 import {Guid} from "guid-typescript";
 

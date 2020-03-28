@@ -1,4 +1,3 @@
-import { EntityPool } from "./entities/entity-pool";
 import { Vector2 } from "./models/position";
 
 export enum SocketEvents {

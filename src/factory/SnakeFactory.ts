@@ -1,5 +1,3 @@
-import { EntityFactory } from "./EntityFactory";
-import { BaseComponent } from "../components/base-component";
 import { Entity } from "../entities/entity";
 import { MovementComponent } from "../components/movement-component";
 import { PositionComponent } from "../components/position-component";
@@ -12,9 +10,9 @@ import { PlayerComponent } from "../components/player-component";
 export class SnakeFactory {
     public static create(playerId: string, x: number, y: number): Entity[] {
 
-        var snake: Entity[] = []
+        let snake: Entity[] = [];
 
-        var tail = SnakeFactory.createSnakePiece(playerId, x, y, TagType.SnakeBody, null);
+        let tail = SnakeFactory.createSnakePiece(playerId, x, y, TagType.SnakeBody, null);
 
         snake.push(tail.snakePiece)
 
@@ -35,8 +33,8 @@ export class SnakeFactory {
 
     private static createSnakePiece(playerId: string, x: number, y: number, tag: TagType, next: SnakeComponent) {
         let snakePiece = new Entity()
-        var positionComponent = new PositionComponent(x, y);
-        var tagComponent = new TagComponent(tag);
+        let positionComponent = new PositionComponent(x, y);
+        let tagComponent = new TagComponent(tag);
         if (tag == TagType.SnakeHead) {
             let playerComponent = new PlayerComponent(playerId)
             let movementComponent = new MovementComponent();
@@ -46,7 +44,7 @@ export class SnakeFactory {
             snakePiece.addComponent(movementComponent)
             snakePiece.addComponent(playerComponent)
         }
-        var snakeComponent = new SnakeComponent()
+        let snakeComponent = new SnakeComponent();
         snakeComponent.next = next
 
         snakePiece.addComponent(positionComponent)

@@ -1,9 +1,7 @@
-import { IComponent } from "../interfaces/component-interfaces";
 import { ComponentType } from "../enums/component-type";
 import { BaseComponent } from "./base-component";
-import { SocketData } from "../helpers/decorators";
 import { Vector2 } from "../models/position";
-import { GameConstants, SnakeConstants } from "../constants";
+import { SnakeConstants } from "../constants";
 
 export class MovementComponent extends BaseComponent {
     constructor() {

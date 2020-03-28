@@ -15,7 +15,7 @@ export class GameManager {
     private _rooms: IRoom[] = []
 
     /**
-     * Private constructior to prevent direct
+     * Private constructor to prevent direct
      * construction calls with the `new` operator.
      */
     private constructor() {
@@ -37,7 +37,7 @@ export class GameManager {
     }
 
     public createRoom(name: string, capacity: number, ownerId: string): string {
-        let roomId = Guid.raw() //"835aee55-3274-9f4f-dac5-87fb41f276f7"
+        let roomId = Guid.raw()
         this._rooms.push({
             id: roomId,
             name: name,
