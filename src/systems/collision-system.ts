@@ -1,5 +1,8 @@
 import { ISystem } from "../interfaces/system-interfaces";
 import { EntityPool } from "../entities/entity-pool";
+import { TagType } from "../Enums/tag-type";
+import { Vector2 } from "../models/position";
+import { GameConstants } from "../constants";
 
 export class CollisionSystem implements ISystem{
     entityPool: EntityPool;
@@ -16,9 +19,30 @@ export class CollisionSystem implements ISystem{
             this.entityPool.colliderManager.forEach(collider => {
                 let colliderPosition = this.entityPool.positionManager.get(collider.entityId)
                 let distance = headPosition.position.distance(colliderPosition.position)
-                if(distance < headCollider.colliderRadius + collider.colliderRadius){
+                
+                if(colliderPosition.entityId != headCollider.entityId && distance < headCollider.colliderRadius + collider.colliderRadius){
                     //Collision detected
-                    console.log("Collision DETECTED!!!!!")
+                    
+                    let colliderEntity = this.entityPool.tagManager.get(collider.entityId)
+
+                    switch (colliderEntity?.tag) {
+                        case TagType.Food:
+                            //Maybe move to a function or function to food component
+                            console.log("Change")
+                            colliderPosition.position.x = Math.floor(Math.random() * GameConstants.fieldWidth)
+                            colliderPosition.position.y = Math.floor(Math.random() * GameConstants.fieldHeight)
+                            
+                            break;
+                        case TagType.SnakeHead:
+                            
+                            break;
+                        case TagType.SnakeBody:
+                            
+                            break;
+                    
+                        default:
+                            break;
+                    }
                 }
             });
         });

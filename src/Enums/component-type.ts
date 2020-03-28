@@ -4,6 +4,6 @@ export enum ComponentType {
     Position = "position",
     Snake = "snake",
     Tag = "tag",
-    Player = "player"
+    Player = "player",
     Collider = "collider"
 }

@@ -8,6 +8,7 @@ import { FoodFactory } from "./factory/FoodFactory";
 import { DynamicsSystem } from "./systems/dynamics-system";
 import { GameManager } from './singletons/game-manager'
 import { InputSystem } from "./systems/input-system";
+import { CollisionSystem } from "./systems/collision-system";
 
 
 export class Game {
@@ -36,6 +37,7 @@ export class Game {
         this.players = players
         this.systems.push(new InputSystem(this.players, this.entityPool))
         this.systems.push(new DynamicsSystem(this.entityPool))
+        this.systems.push(new CollisionSystem(this.entityPool))
         this.addListeners()
         this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
         //initialize here
@@ -59,7 +61,10 @@ export class Game {
         this.state.entities = []
         this.entityPool.entities.forEach(e => this.state.entities.push(e.components.map(c => c.serialize())))
         this.io.to(this.roomId).emit(SocketEvents.UPDATE, { state: this.state.entities })
-        console.log(this.entityPool.positionManager)
+        console.log("UPDATE:")
+        this.entityPool.positionManager.forEach(element => {
+            console.log("X: " + element.position.x + " Y : " + element.position.y + " ID : " + element.entityId)
+        });
         return this.state
     }
 

@@ -6,6 +6,7 @@ export class TagComponent extends BaseComponent{
         constructor(tag:TagType) {
             super()
             this.componentType = ComponentType.Tag
+            this.tag = tag
         }
         tag:TagType
 }

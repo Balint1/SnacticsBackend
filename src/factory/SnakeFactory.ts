@@ -17,13 +17,13 @@ export class SnakeFactory {
 
         snake.push(tail.snakePiece)
 
-        for (let index = 1; index <= GameConstants.snakeLength; index++) {
+        for (let index = 1; index <= SnakeConstants.snakeLength; index++) {
 
             var { snakePiece, nextSnakeComponent } = SnakeFactory.createSnakePiece(
                 playerId,
                 (x + GameConstants.blockLength * index) % GameConstants.fieldWidth,
                 y,
-                index == GameConstants.snakeLength ? TagType.SnakeHead : TagType.SnakeBody,
+                index == SnakeConstants.snakeLength ? TagType.SnakeHead : TagType.SnakeBody,
                 nextSnakeComponent ? nextSnakeComponent : tail.nextSnakeComponent);
 
             snake.push(snakePiece)

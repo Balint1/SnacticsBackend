@@ -17,7 +17,6 @@ export class GameConstants {
     //TODO maybe it should be modifiable
     static fieldWidth = 300;
     static fieldHeight = 300;
-    static snakeLength = 4;
     static blockLength = 20;
     static readonly foodColliderRadius = 6
 
@@ -28,8 +27,9 @@ export class HelperConstants {
 }
 
 export class SnakeConstants{
-    static readonly speed = 3;
-    static readonly colliderRadius = 3;
+    static readonly speed = 1;
+    static readonly colliderRadius = 8;
+    static readonly snakeLength = 4;
 
 
     static readonly directions = [
