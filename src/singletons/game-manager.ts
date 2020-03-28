@@ -36,18 +36,31 @@ export class GameManager {
         return this._rooms
     }
 
-    public createRoom(name: string, capacity: number, ownerId: string): string {
-        let roomId = Guid.raw()
-        this._rooms.push({
-            id: roomId,
-            name: name,
-            capacity: capacity,
-            ownerId: ownerId,
-            players: [],
-            game: new Game(roomId)
-        })
-        logger.info(`${ownerId} CREATED new room: ${name} id: ${roomId}`)
-        return roomId
+    public createRoom(name: string, capacity: number, ownerId: string): {roomId: string, message: string} {
+        let nameTaken = this._rooms.find(room => room.name == name)
+        console.log(nameTaken)
+        if (nameTaken) {
+            logger.error(`Couldn't CREATE new room: ${name}, name already taken`)
+            return {
+                roomId: null,
+                message: "Room with this name already exists"
+            }
+        } else {
+            let roomId = Guid.raw()
+            this._rooms.push({
+                id: roomId,
+                name: name,
+                capacity: capacity,
+                ownerId: ownerId,
+                players: [],
+                game: new Game(roomId)
+            })
+            logger.info(`${ownerId} CREATED new room: ${name} id: ${roomId}`)
+            return {
+                roomId: roomId,
+                message: `Successfully created room ${name}`
+            }
+        }
     }
 
     public startGame(roomId: string, playerId: string, callback): void {
