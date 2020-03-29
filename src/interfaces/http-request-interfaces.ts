@@ -19,3 +19,8 @@ export interface IRemoveRoomBody {
     roomId: string,
     playerId: string
 }
+
+export interface ILeaveRoomBody {
+    roomId: string,
+    playerId: string
+}

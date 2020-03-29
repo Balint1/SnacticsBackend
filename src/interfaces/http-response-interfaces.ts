@@ -44,3 +44,8 @@ export interface IRemoveRoomResponse {
     success: boolean
     message: string
 }
+
+export interface ILeaveRoomResponse {
+    success: boolean
+    message: string
+}

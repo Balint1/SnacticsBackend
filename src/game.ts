@@ -9,7 +9,9 @@ import { DynamicsSystem } from "./systems/dynamics-system";
 import { GameManager } from './singletons/game-manager'
 import { InputSystem } from "./systems/input-system";
 import { CollisionSystem } from "./systems/collision-system";
+import {getLogger} from './loggers'
 
+const logger = getLogger('game')
 
 export class Game {
     private readonly roomId: string
@@ -74,7 +76,11 @@ export class Game {
 
     private addListeners = () => {
         this.players.map(player => {
-            player.socket.on(SocketEvents.DISCONNECT, () => this.gameManager.leaveRoom(this.roomId, player.id))
+            player.socket.on(SocketEvents.DISCONNECT, () => this.gameManager.leaveRoom(this.roomId, player.id, (error)=>{
+                if (error) {
+                    logger.error("LEAVE ROOM request FAILED")
+                }
+            }))
         })
     }
 

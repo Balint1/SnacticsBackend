@@ -1,6 +1,6 @@
 export interface IJoinResult {
     success: boolean
-    id: string
+    roomId: string
     isOwner: boolean
     message: string
 }

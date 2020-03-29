@@ -35,7 +35,7 @@ export class SocketService {
                     socket.emit(SocketEvents.JOIN_RESPONSE, {
                         success: false,
                         isOwner: null,
-                        id: socket.id,
+                        roomId: null,
                         message: err
                     } as IJoinResult)
                 } else {
@@ -43,7 +43,7 @@ export class SocketService {
                     socket.emit(SocketEvents.JOIN_RESPONSE, {
                         success: true,
                         isOwner: isOwner,
-                        id: socket.id,
+                        roomId: roomId,
                         message: `You successfully joined room ${roomId}`
                     } as IJoinResult)
                     socket.broadcast.to(roomId).emit(SocketEvents.NEW_PLAYER, {
@@ -57,7 +57,7 @@ export class SocketService {
             socket.emit(SocketEvents.JOIN_RESPONSE, {
                 success: false,
                 isOwner: null,
-                id: socket.id,
+                roomId: null,
                 message: error
             } as IJoinResult)
         }

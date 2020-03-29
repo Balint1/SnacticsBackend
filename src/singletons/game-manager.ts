@@ -170,13 +170,16 @@ export class GameManager {
         }
     }
 
-    public leaveRoom = (roomId: string, playerId: string) => {
+    public leaveRoom = (roomId: string, playerId: string, callback) => {
         let gameRoom = this._rooms.find(room => room.id == roomId)
         if (gameRoom) {
             gameRoom.players = gameRoom.players.filter(player => player.id != playerId)
             logger.info(`${playerId} left room ${gameRoom.name} with id: ${roomId}`)
+            callback()
         } else {
-            logger.error(`Room with id: ${roomId} doesn't exists`)
+            let message = `Room with id: ${roomId} doesn't exists`
+            logger.error(message)
+            callback(message)
         }
     }
 }

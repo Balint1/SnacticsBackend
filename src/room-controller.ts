@@ -2,12 +2,19 @@ import {JsonController, Body, Get, Post} from "routing-controllers";
 import {GameManager} from './singletons/game-manager'
 import {getLogger} from './loggers'
 import {Game} from "./game"
-import {ICreateRoomBody, IStartGameBody, IEndGameBody, IRemoveRoomBody} from './interfaces/http-request-interfaces'
+import {
+    ICreateRoomBody,
+    IStartGameBody,
+    IEndGameBody,
+    IRemoveRoomBody,
+    ILeaveRoomBody
+} from './interfaces/http-request-interfaces'
 import {
     ICreateRoomResponse,
     IStartGameResponse,
     IEndGameResponse,
-    IRemoveRoomResponse, IGetRoomsResponse
+    IRemoveRoomResponse,
+    IGetRoomsResponse, ILeaveRoomResponse
 } from './interfaces/http-response-interfaces'
 
 const logger = getLogger('http')
@@ -122,6 +129,26 @@ export class RoomController {
         })
 
         logger.info("CREATE ROOM request SUCCEEDED")
+        return response
+    }
+
+    @Post("/leave")
+    leaveRoom(@Body() params: ILeaveRoomBody) {
+        let response: ILeaveRoomResponse = {
+            success: true,
+            message: null
+        }
+        this.gameManager.leaveRoom(params.roomId, params.playerId, (error: string) => {
+            if (error) {
+                logger.error("LEAVE ROOM request FAILED")
+                response = {
+                    success: false,
+                    message: error
+                }
+            }
+        })
+
+        logger.info("LEAVE ROOM request SUCCEEDED")
         return response
     }
 
