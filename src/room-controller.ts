@@ -10,6 +10,8 @@ import {
     IRemoveRoomResponse, IGetRoomsResponse
 } from './interfaces/http-response-interfaces'
 
+import {config} from 'node-config-ts'
+
 const logger = getLogger('http')
 
 @JsonController("/Rooms")
@@ -128,5 +130,11 @@ export class RoomController {
             }])
 
         return {test: "test"}
+    }
+
+    @Get("/config")
+    config(){
+        var a = config.Name
+        return { config: a}
     }
 }

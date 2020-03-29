@@ -5,7 +5,8 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "tsc && nodemon server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node-config-ts"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "class-validator": "^0.11.1",
     "express": "^4.16.4",
     "guid-typescript": "^1.0.9",
+    "node-config-ts": "^3.0.4",
     "nodemon": "^2.0.2",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.1-alpha.2",
