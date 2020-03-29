@@ -1,5 +1,6 @@
 export interface ICreateRoomBody {
     name: string
+    password: string
     capacity: number
     ownerId: string
 }

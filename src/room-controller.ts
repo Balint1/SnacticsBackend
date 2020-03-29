@@ -22,13 +22,19 @@ export class RoomController {
     @Post("/create")
     createRoom(@Body() params: ICreateRoomBody) {
         let response: ICreateRoomResponse
-        let {roomId, message} = this.gameManager.createRoom(params.name, params.capacity, params.ownerId)
+        let {roomId, message} = this.gameManager.createRoom(
+            params.name,
+            params.password,
+            params.capacity,
+            params.ownerId
+        )
         if (roomId) {
             logger.info("CREATE ROOM request SUCCEEDED")
             response = {
                 success: true,
                 message: message,
                 name: params.name,
+                password: params.password,
                 id: roomId,
                 ownerId: params.ownerId
             }
@@ -37,9 +43,10 @@ export class RoomController {
             response = {
                 success: false,
                 message: message,
-                name: "",
-                id: "",
-                ownerId: ""
+                name: null,
+                password: null,
+                id: null,
+                ownerId: null
             }
         }
         return response
@@ -49,7 +56,7 @@ export class RoomController {
     startGame(@Body() params: IStartGameBody) {
         let response: IStartGameResponse = {
             success: true,
-            message: ''
+            message: null
         }
         this.gameManager.startGame(params.roomId, params.playerId, (error: string) => {
             if (error) {
@@ -68,6 +75,8 @@ export class RoomController {
         let roomList = this.gameManager.rooms.map(room => {
             return {
                 id: room.id,
+                name: room.name,
+                hasPassword: room.password != "",
                 capacity: room.capacity,
                 players: room.players.length
             }
@@ -80,7 +89,7 @@ export class RoomController {
     endGame(@Body() params: IEndGameBody) {
         let response: IEndGameResponse = {
             success: true,
-            message: ''
+            message: null
         }
         this.gameManager.endGame(params.roomId, params.playerId, (error: string) => {
             if (error) {
@@ -100,7 +109,7 @@ export class RoomController {
     removeRoom(@Body() params: IRemoveRoomBody) {
         let response: IRemoveRoomResponse = {
             success: true,
-            message: ''
+            message: null
         }
         this.gameManager.removeRoom(params.roomId, params.playerId, (error: string) => {
             if (error) {

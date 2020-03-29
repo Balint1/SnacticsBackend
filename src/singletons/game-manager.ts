@@ -1,6 +1,6 @@
 import {Guid} from 'guid-typescript'
 import {IRoom, IPlayer} from '../interfaces/game-interfaces'
-import {IActionResult} from '../interfaces/socket-interfaces'
+import {IJoinActionResult} from '../interfaces/socket-interfaces'
 import {Game} from '../game'
 import {getLogger} from '../loggers'
 import * as socketIo from 'socket.io';
@@ -36,7 +36,7 @@ export class GameManager {
         return this._rooms
     }
 
-    public createRoom(name: string, capacity: number, ownerId: string): {roomId: string, message: string} {
+    public createRoom(name: string, password: string, capacity: number, ownerId: string): { roomId: string, message: string } {
         let nameTaken = this._rooms.find(room => room.name == name)
         if (nameTaken) {
             logger.error(`Couldn't CREATE new room: ${name}, name already taken`)
@@ -49,6 +49,7 @@ export class GameManager {
             this._rooms.push({
                 id: roomId,
                 name: name,
+                password: password,
                 capacity: capacity,
                 ownerId: ownerId,
                 players: [],
@@ -126,33 +127,45 @@ export class GameManager {
      * Add new user to room
      * Check if nickname is available in specified room
      */
-    public joinRoom = (socket: socketIo.Socket, nickname: string, roomId: string): IActionResult => {
+    public joinRoom = (socket: socketIo.Socket, nickname: string, roomId: string, password: string): IJoinActionResult => {
         const room = this._rooms.find(room => room.id == roomId)
         if (room) {
             if (room.players.length < room.capacity) {
                 const nicknameTaken = room.players.find(player => player.nickname == nickname)
-                if (nicknameTaken) {
+                if (password == room.password) {
+                    if (nicknameTaken) {
+                        return {
+                            success: false,
+                            isOwner: null,
+                            error: `Nickname: ${nickname} is already taken`
+                        }
+                    } else {
+                        room.players.push({id: socket.id, nickname, socket} as IPlayer)
+                        return {
+                            success: true,
+                            isOwner: room.ownerId == socket.id,
+                            error: null
+                        }
+                    }
+                }else {
                     return {
                         success: false,
-                        error: `Nickname: ${nickname} is already taken`
+                        isOwner: null,
+                        error: `Password: ${password} is wrong`
                     }
-                } else {
-                    room.players.push({id: socket.id, nickname, socket} as IPlayer)
-                    return {
-                        success: true,
-                        error: null
-                    } as IActionResult
                 }
             } else {
                 return {
                     success: false,
-                    error: `Room ${roomId} is full, can't join`
+                    isOwner: null,
+                    error: `Room ${room.name} is full, can't join`
                 }
             }
         } else {
             return {
                 success: false,
-                error: `Room ${roomId} not found`
+                isOwner: null,
+                error: `Room ${room.name} not found`
             }
         }
     }

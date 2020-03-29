@@ -6,8 +6,7 @@ export enum SocketEvents {
     ID = 'socket-id',
     NEW_PLAYER = 'new-player',
     JOIN_REQUEST = 'join-request',
-    JOIN_SUCCEEDED = 'join-succeeded',
-    JOIN_FAILED = 'join-failed',
+    JOIN_RESPONSE = 'join-response',
     UPDATE = 'update-state',
     SLIDER_CHANGE = 'slider-change'
 }

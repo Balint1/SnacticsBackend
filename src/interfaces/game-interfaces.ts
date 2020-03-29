@@ -4,6 +4,7 @@ import * as socketIo from 'socket.io';
 export interface IRoom {
     id: string
     name: string
+    password: string
     capacity: number
     ownerId: string
     players: IPlayer[]
