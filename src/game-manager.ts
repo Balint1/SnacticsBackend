@@ -1,9 +1,10 @@
 import {Guid} from 'guid-typescript'
 import {IRoom, IPlayer} from './interfaces/game-interfaces'
-import {IJoinActionResult} from './interfaces/socket-interfaces'
+import {IJoinActionResult, IOwnerChanged} from './interfaces/socket-interfaces'
 import {Game} from './game'
 import {getLogger} from './loggers'
 import * as socketIo from 'socket.io';
+import {SocketEvents} from "./constants";
 
 const logger = getLogger('game manager')
 
@@ -145,7 +146,7 @@ export class GameManager {
                             error: null
                         }
                     }
-                }else {
+                } else {
                     return {
                         success: false,
                         error: `Password: ${password} is wrong`
@@ -170,7 +171,17 @@ export class GameManager {
         if (gameRoom) {
             gameRoom.players = gameRoom.players.filter(player => player.id != playerId)
             logger.info(`${playerId} left room ${gameRoom.name} with id: ${roomId}`)
-            callback()
+            if (playerId == gameRoom.ownerId && gameRoom.players.length > 0) {
+                let newOwner = gameRoom.players[0]
+                gameRoom.ownerId = newOwner.id
+                newOwner.socket.emit(SocketEvents.OWNER_CHANGED, {
+                    success: true,
+                    error: null
+                }as IOwnerChanged)
+                logger.info(`OWNER CHANGED for room: ${gameRoom.name} new owner is:  ${newOwner.nickname}`)
+                callback()
+            }
+            callback("Something wring with changing owner")
         } else {
             let message = `Room with id: ${roomId} doesn't exists`
             logger.error(message)

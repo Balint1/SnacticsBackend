@@ -8,7 +8,8 @@ export enum SocketEvents {
     JOIN_REQUEST = 'join-request',
     JOIN_RESPONSE = 'join-response',
     UPDATE = 'update-state',
-    SLIDER_CHANGE = 'slider-change'
+    SLIDER_CHANGE = 'slider-change',
+    OWNER_CHANGED = 'owner-changed'
 }
 
 export class GameConstants {

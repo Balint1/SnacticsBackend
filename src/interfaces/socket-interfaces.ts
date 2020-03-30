@@ -13,3 +13,8 @@ export interface IJoinActionResult {
     success: boolean
     error: string
 }
+
+export interface IOwnerChanged {
+    success: boolean
+    error: string
+}
