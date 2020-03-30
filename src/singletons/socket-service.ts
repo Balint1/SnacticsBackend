@@ -27,14 +27,13 @@ export class SocketService {
 
     private joinHandler(socket: socketIo.Socket, nickname: string, roomId: string, password:  string) {
         logger.info(`New join room request from '${nickname}' id: '${socket.id}'`)
-        const {success, isOwner, error}: IJoinActionResult = this.gameManager.joinRoom(socket, nickname, roomId, password)
+        const {success, error}: IJoinActionResult = this.gameManager.joinRoom(socket, nickname, roomId, password)
         if (success) {
             socket.join(roomId, (err) => {
                 if (err) {
                     logger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${err}`)
                     socket.emit(SocketEvents.JOIN_RESPONSE, {
                         success: false,
-                        isOwner: null,
                         roomId: null,
                         message: err
                     } as IJoinResult)
@@ -42,7 +41,6 @@ export class SocketService {
                     logger.info(`Join room request from '${nickname}' id: '${socket.id} succeeded.`)
                     socket.emit(SocketEvents.JOIN_RESPONSE, {
                         success: true,
-                        isOwner: isOwner,
                         roomId: roomId,
                         message: `You successfully joined room ${roomId}`
                     } as IJoinResult)
@@ -56,7 +54,6 @@ export class SocketService {
             logger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${error}`)
             socket.emit(SocketEvents.JOIN_RESPONSE, {
                 success: false,
-                isOwner: null,
                 roomId: null,
                 message: error
             } as IJoinResult)

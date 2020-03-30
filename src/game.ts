@@ -1,14 +1,14 @@
-import { EntityPool } from "./entities/entity-pool";
-import { ISystem } from "./interfaces/system-interfaces";
-import { GameConstants, SocketEvents } from "./constants";
-import { SocketService } from './singletons/socket-service'
-import { IGameState, IPlayer } from './interfaces/game-interfaces'
-import { SnakeFactory } from "./factory/SnakeFactory";
-import { FoodFactory } from "./factory/FoodFactory";
-import { DynamicsSystem } from "./systems/dynamics-system";
-import { GameManager } from './singletons/game-manager'
-import { InputSystem } from "./systems/input-system";
-import { CollisionSystem } from "./systems/collision-system";
+import {EntityPool} from "./entities/entity-pool";
+import {ISystem} from "./interfaces/system-interfaces";
+import {GameConstants, SocketEvents} from "./constants";
+import {SocketService} from './singletons/socket-service'
+import {IGameState, IPlayer} from './interfaces/game-interfaces'
+import {SnakeFactory} from "./factory/SnakeFactory";
+import {FoodFactory} from "./factory/FoodFactory";
+import {DynamicsSystem} from "./systems/dynamics-system";
+import {GameManager} from './singletons/game-manager'
+import {InputSystem} from "./systems/input-system";
+import {CollisionSystem} from "./systems/collision-system";
 import {getLogger} from './loggers'
 
 const logger = getLogger('game')
@@ -22,6 +22,7 @@ export class Game {
     private systems: ISystem[] = []
     private state: IGameState = {entities: []}
     private timer: NodeJS.Timeout
+    private inProgress: boolean = false
 
     //Temporary solution:
     private spawningPlaces = [
@@ -36,6 +37,7 @@ export class Game {
     }
 
     startGame(players: IPlayer[]) {
+        this.inProgress = true
         this.players = players
         this.systems.push(new InputSystem(this.players, this.entityPool))
         this.systems.push(new DynamicsSystem(this.entityPool))
@@ -62,7 +64,7 @@ export class Game {
         });
         this.state.entities = []
         this.entityPool.entities.forEach(e => this.state.entities.push(e.components.map(c => c.serialize())))
-        this.io.to(this.roomId).emit(SocketEvents.UPDATE, { state: this.state.entities })
+        this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
         console.log("UPDATE:")
         this.entityPool.positionManager.forEach(element => {
             console.log("X: " + element.position.x + " Y : " + element.position.y + " ID : " + element.entityId)
@@ -71,16 +73,20 @@ export class Game {
     }
 
     endGame() {
+        this.inProgress = false
         clearTimeout(this.timer)
     }
 
     private addListeners = () => {
         this.players.map(player => {
-            player.socket.on(SocketEvents.DISCONNECT, () => this.gameManager.leaveRoom(this.roomId, player.id, (error)=>{
-                if (error) {
-                    logger.error("LEAVE ROOM request FAILED")
-                }
-            }))
+            player.socket.on(SocketEvents.DISCONNECT, () => {
+                logger.info(`${player.id} DISCONNECTED`)
+                this.gameManager.leaveRoom(this.roomId, player.id, (error) => {
+                    if (error) {
+                        logger.error("LEAVE ROOM request FAILED")
+                    }
+                })
+            })
         })
     }
 

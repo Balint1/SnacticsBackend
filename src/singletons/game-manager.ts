@@ -72,9 +72,9 @@ export class GameManager {
                 gameRoom.game.startGame(gameRoom.players)
                 callback()
             } else {
-                let message = `Player with id: ${playerId} doesn't have permission to end START in room: ${gameRoom.name}`
+                let message = `Player with id: ${playerId} doesn't have permission to START game in room: ${gameRoom.name}`
                 logger.error(message)
-                callback(message)
+                callback("Only room owner can start the game")
             }
         } else {
             let message = `Room with id: ${roomId} doesn't exists`
@@ -136,35 +136,30 @@ export class GameManager {
                     if (nicknameTaken) {
                         return {
                             success: false,
-                            isOwner: null,
                             error: `Nickname: ${nickname} is already taken`
                         }
                     } else {
                         room.players.push({id: socket.id, nickname, socket} as IPlayer)
                         return {
                             success: true,
-                            isOwner: room.ownerId == socket.id,
                             error: null
                         }
                     }
                 }else {
                     return {
                         success: false,
-                        isOwner: null,
                         error: `Password: ${password} is wrong`
                     }
                 }
             } else {
                 return {
                     success: false,
-                    isOwner: null,
                     error: `Room ${room.name} is full, can't join`
                 }
             }
         } else {
             return {
                 success: false,
-                isOwner: null,
                 error: `Room ${room.name} not found`
             }
         }
