@@ -6,7 +6,7 @@ import "reflect-metadata";
 import {useExpressServer} from 'routing-controllers';
 import {createServer, Server} from 'http';
 
-import {SocketService} from './singletons/socket-service';
+import {SocketService} from './socket-service';
 import {RoomController} from './room-controller';
 import {getLogger} from './loggers'
 

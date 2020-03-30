@@ -2,7 +2,7 @@ import { ISystem } from "../interfaces/system-interfaces";
 import { IPlayer } from "../interfaces/game-interfaces";
 import { SocketEvents } from "../constants";
 import { EntityPool } from "../entities/entity-pool";
-import { GameManager } from "../singletons/game-manager";
+import { GameManager } from "../game-manager";
 
 export class InputSystem implements ISystem{
     private players: IPlayer[];

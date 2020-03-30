@@ -1,12 +1,12 @@
 import {EntityPool} from "./entities/entity-pool";
 import {ISystem} from "./interfaces/system-interfaces";
 import {GameConstants, SocketEvents} from "./constants";
-import {SocketService} from './singletons/socket-service'
+import {SocketService} from './socket-service'
 import {IGameState, IPlayer} from './interfaces/game-interfaces'
 import {SnakeFactory} from "./factory/SnakeFactory";
 import {FoodFactory} from "./factory/FoodFactory";
 import {DynamicsSystem} from "./systems/dynamics-system";
-import {GameManager} from './singletons/game-manager'
+import {GameManager} from './game-manager'
 import {InputSystem} from "./systems/input-system";
 import {CollisionSystem} from "./systems/collision-system";
 import {getLogger} from './loggers'

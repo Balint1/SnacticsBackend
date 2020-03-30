@@ -2,10 +2,10 @@ import * as socketIo from 'socket.io';
 
 import {Server} from 'http';
 
-import {SocketEvents} from '../constants'
+import {SocketEvents} from './constants'
 import {GameManager} from './game-manager'
-import {IJoinResult, INewPlayerJoined, IJoinActionResult} from '../interfaces/socket-interfaces'
-import {getLogger} from '../loggers'
+import {IJoinResult, INewPlayerJoined, IJoinActionResult} from './interfaces/socket-interfaces'
+import {getLogger} from './loggers'
 
 const logger = getLogger('socket')
 

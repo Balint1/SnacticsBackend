@@ -1,8 +1,8 @@
 import {Guid} from 'guid-typescript'
-import {IRoom, IPlayer} from '../interfaces/game-interfaces'
-import {IJoinActionResult} from '../interfaces/socket-interfaces'
-import {Game} from '../game'
-import {getLogger} from '../loggers'
+import {IRoom, IPlayer} from './interfaces/game-interfaces'
+import {IJoinActionResult} from './interfaces/socket-interfaces'
+import {Game} from './game'
+import {getLogger} from './loggers'
 import * as socketIo from 'socket.io';
 
 const logger = getLogger('game manager')

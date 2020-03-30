@@ -1,5 +1,5 @@
 import {JsonController, Body, Get, Post} from "routing-controllers";
-import {GameManager} from './singletons/game-manager'
+import {GameManager} from './game-manager'
 import {getLogger} from './loggers'
 import {Game} from "./game"
 import {
