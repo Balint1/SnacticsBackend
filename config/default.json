@@ -10,7 +10,7 @@
         "timerInterval":1000,
         "fieldWidth":300,
         "fieldHeight":300,
-        "blockLength": 4
+        "blockLength": 20
     },
     "FoodDefaults": {
         "foodColliderRadius": 6

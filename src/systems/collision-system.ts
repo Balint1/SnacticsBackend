@@ -31,7 +31,7 @@ export class CollisionSystem implements ISystem{
                             console.log("Change")
                             colliderPosition.position.x = Math.floor(Math.random() * config.ServerSettings.fieldWidth)
                             colliderPosition.position.y = Math.floor(Math.random() * config.ServerSettings.fieldHeight)
-                            
+                            colliderPosition.setChanged()
                             break;
                         case TagType.SnakeHead:
                             

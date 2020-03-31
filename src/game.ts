@@ -67,12 +67,19 @@ export class Game {
             s.calculateNextState()
         });
         this.state.entities = []
-        this.entityPool.entities.forEach(e => this.state.entities.push(e.components.map(c => c.serialize())))
+        this.entityPool.entities.forEach(e => {
+            //Can be optimized
+            let changedComponents = e.components.filter(c => c.changed)
+            if(changedComponents.length > 0){
+                this.state.entities.push.apply(this.state.entities, changedComponents.map(c => c.serialize()).filter(o => o != undefined))
+                changedComponents.forEach(c => c.changed = false)
+            }
+            }   
+            )
         this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
+        //TODO delete Debug 
         console.log("UPDATE:")
-        this.entityPool.positionManager.forEach(element => {
-            console.log("X: " + element.position.x + " Y : " + element.position.y + " ID : " + element.entityId)
-        });
+        console.log(this.state.entities)
         return this.state
     }
 
