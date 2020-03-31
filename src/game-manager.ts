@@ -177,11 +177,11 @@ export class GameManager {
                 newOwner.socket.emit(SocketEvents.OWNER_CHANGED, {
                     success: true,
                     error: null
-                }as IOwnerChanged)
+                } as IOwnerChanged)
                 logger.info(`OWNER CHANGED for room: ${gameRoom.name} new owner is:  ${newOwner.nickname}`)
                 callback()
             }
-            callback("Something wring with changing owner")
+            callback()
         } else {
             let message = `Room with id: ${roomId} doesn't exists`
             logger.error(message)
