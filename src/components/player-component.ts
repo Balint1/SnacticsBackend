@@ -1,8 +1,10 @@
 import { ComponentType } from "../enums/component-type";
 import { BaseComponent } from "./base-component";
+import { SocketData } from "../helpers/decorators";
 
 export class PlayerComponent extends BaseComponent {
 
+    @SocketData
     playerId: string;
 
     constructor(playerId: string) {

@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import { BaseComponent } from "../components/base-component";
 
 
 export function SocketData(target: Object, propertyKey: string | symbol) {

@@ -1,5 +1,5 @@
 {
     "GameSettings": {
-        "timerInterval":100
+        "timerInterval":1000
     }
 }
