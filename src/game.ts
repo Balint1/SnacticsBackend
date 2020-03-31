@@ -25,7 +25,7 @@ export class Game {
     private systems: ISystem[] = []
     private state: IGameState = {entities: []}
     private timer: NodeJS.Timeout
-    private inProgress: boolean = false
+    private _inProgress: boolean = false
     private settings:Setting = new Setting()
 
     //Temporary solution:
@@ -41,7 +41,7 @@ export class Game {
     }
 
     startGame(players: IPlayer[]) {
-        this.inProgress = true
+        this._inProgress = true
         this.players = players
         this.systems.push(new InputSystem(this.players, this.entityPool))
         this.systems.push(new CollisionSystem(this.entityPool))
@@ -77,7 +77,7 @@ export class Game {
     }
 
     endGame() {
-        this.inProgress = false
+        this._inProgress = false
         clearTimeout(this.timer)
     }
 
@@ -94,4 +94,7 @@ export class Game {
         })
     }
 
+    get inProgress() {
+         return this._inProgress
+    }
 }

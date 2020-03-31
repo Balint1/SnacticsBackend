@@ -87,7 +87,8 @@ export class RoomController {
                 name: room.name,
                 hasPassword: room.password != "",
                 capacity: room.capacity,
-                players: room.players.length
+                players: room.players.length,
+                inProgress: room.game.inProgress
             }
         })
 
