@@ -1,3 +1,14 @@
 {
-    "Name" : "Balint"
+    "GameSettings": {
+    },
+    "SnakeDefaults": {
+        "speed": 1,
+        "length": 4
+    },
+    "ServerSettings":{
+        "timerInterval":1000,
+        "fieldWidth":300,
+        "fieldHeight":300,
+        "blockLength": 4
+    }
 }

@@ -134,7 +134,6 @@ export class RoomController {
 
     @Get("/config")
     config(){
-        var a = config.Name
-        return { config: a}
+        return config
     }
 }

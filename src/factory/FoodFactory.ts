@@ -1,14 +1,15 @@
 import {EntityFactory} from "./EntityFactory";
 import {Entity} from "../entities/entity";
 import {PositionComponent} from "../components/position-component";
-import {GameConstants} from "../constants";
+import {config} from 'node-config-ts'
+
 
 export class FoodFactory extends EntityFactory {
     public create(): Entity {
 
         let positionComponent = new PositionComponent(
-            Math.floor(Math.random() * GameConstants.fieldWidth),
-            Math.floor(Math.random() * GameConstants.fieldHeight)
+            Math.floor(Math.random() * config.ServerSettings.fieldWidth),
+            Math.floor(Math.random() * config.ServerSettings.fieldHeight)
         )
 
         let food = new Entity()
