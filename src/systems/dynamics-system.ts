@@ -1,9 +1,18 @@
 import {BaseSystem} from "./base-system";
-import {GameConstants} from "../constants";
 import { SnakeComponent } from "../components/snake-component";
+import { EntityPool } from "../entities/entity-pool";
+import { GameSetting, Setting } from "../models/game-setting";
+import {config} from 'node-config-ts'
+
 
 export class DynamicsSystem extends BaseSystem {
     counter:number = 0
+    private setting: Setting;
+
+    constructor(entityPool:EntityPool, setting:Setting){
+        super(entityPool)
+        this.setting = setting
+    }
 
     calculateNextState() {
         this.entityPool.movementManager.forEach(c => {
@@ -29,8 +38,8 @@ export class DynamicsSystem extends BaseSystem {
                 tailPosition.position.x = position.position.x
                 tailPosition.position.y = position.position.y
 
-                position.position.x = (position.position.x + c.direction.x) % GameConstants.fieldWidth
-                position.position.y = (position.position.y + c.direction.y) % GameConstants.fieldHeight
+                position.position.x = (position.position.x + c.direction.x) % config.ServerSettings.fieldWidth
+                position.position.y = (position.position.y + c.direction.y) % config.ServerSettings.fieldHeight
 
                 tailSnakeComponent.next = secondSnakeComponent
                 head.next = tailSnakeComponent

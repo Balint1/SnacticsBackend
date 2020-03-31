@@ -1,4 +1,5 @@
 import { Vector2 } from "./models/position";
+import { config } from 'node-config-ts'
 
 export enum SocketEvents {
     CONNECT = 'connect',
@@ -12,35 +13,21 @@ export enum SocketEvents {
     OWNER_CHANGED = 'owner-changed'
 }
 
-export class GameConstants {
-    static readonly timerInterval: number = 1000;
-    //TODO maybe it should be modifiable
-    static fieldWidth = 300;
-    static fieldHeight = 300;
-    static blockLength = 20;
-    static readonly foodColliderRadius = 6
-
-}
-
 export class HelperConstants {
     static readonly SocketData = "SocketData"
 }
 
-export class SnakeConstants{
-    static readonly speed = 1;
-    static readonly colliderRadius = 8;
-    static readonly snakeLength = 4;
-
+export class SnakeConstants {
 
     static readonly directions = [
-        new Vector2(0, GameConstants.blockLength),
-        new Vector2(GameConstants.blockLength / Math.sqrt(2), GameConstants.blockLength / Math.sqrt(2)),
-        new Vector2(GameConstants.blockLength, 0),
-        new Vector2(GameConstants.blockLength / Math.sqrt(2), - GameConstants.blockLength / Math.sqrt(2)),
-        new Vector2(0, - GameConstants.blockLength),
-        new Vector2( - GameConstants.blockLength / Math.sqrt(2), - GameConstants.blockLength / Math.sqrt(2)),
-        new Vector2( - GameConstants.blockLength, 0 ),
-        new Vector2( - GameConstants.blockLength / Math.sqrt(2), GameConstants.blockLength / Math.sqrt(2)),
+        new Vector2(0, config.ServerSettings.blockLength),
+        new Vector2(config.ServerSettings.blockLength / Math.sqrt(2), config.ServerSettings.blockLength / Math.sqrt(2)),
+        new Vector2(config.ServerSettings.blockLength, 0),
+        new Vector2(config.ServerSettings.blockLength / Math.sqrt(2), - config.ServerSettings.blockLength / Math.sqrt(2)),
+        new Vector2(0, - config.ServerSettings.blockLength),
+        new Vector2(- config.ServerSettings.blockLength / Math.sqrt(2), - config.ServerSettings.blockLength / Math.sqrt(2)),
+        new Vector2(- config.ServerSettings.blockLength, 0),
+        new Vector2(- config.ServerSettings.blockLength / Math.sqrt(2), config.ServerSettings.blockLength / Math.sqrt(2)),
     ]
 }
 

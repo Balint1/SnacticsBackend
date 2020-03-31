@@ -1,0 +1,18 @@
+{
+    "GameSettings": {
+    },
+    "SnakeDefaults": {
+        "speed": 1,
+        "length": 4,
+        "colliderRadius":10
+    },
+    "ServerSettings":{
+        "timerInterval":1000,
+        "fieldWidth":300,
+        "fieldHeight":300,
+        "blockLength": 4
+    },
+    "FoodDefaults": {
+        "foodColliderRadius": 6
+    }
+}

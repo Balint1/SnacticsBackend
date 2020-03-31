@@ -1,15 +1,18 @@
-import {EntityPool} from "./entities/entity-pool";
-import {ISystem} from "./interfaces/system-interfaces";
-import {GameConstants, SocketEvents} from "./constants";
-import {SocketService} from './socket-service'
-import {IGameState, IPlayer} from './interfaces/game-interfaces'
-import {SnakeFactory} from "./factory/SnakeFactory";
-import {FoodFactory} from "./factory/FoodFactory";
-import {DynamicsSystem} from "./systems/dynamics-system";
-import {GameManager} from './game-manager'
-import {InputSystem} from "./systems/input-system";
-import {CollisionSystem} from "./systems/collision-system";
-import {getLogger} from './loggers'
+import { EntityPool } from "./entities/entity-pool";
+import { ISystem } from "./interfaces/system-interfaces";
+import { IGameState, IPlayer } from './interfaces/game-interfaces'
+import { SnakeFactory } from "./factory/SnakeFactory";
+import { FoodFactory } from "./factory/FoodFactory";
+import { DynamicsSystem } from "./systems/dynamics-system";
+import { InputSystem } from "./systems/input-system";
+import {config} from 'node-config-ts'
+import { SocketEvents } from "./constants";
+import { getLogger } from "./loggers";
+import { CollisionSystem } from "./systems/collision-system";
+import { GameManager } from "./game-manager";
+import { SocketService } from "./socket-service";
+import { Setting } from "./models/game-setting";
+
 
 const logger = getLogger('game')
 
@@ -23,6 +26,7 @@ export class Game {
     private state: IGameState = {entities: []}
     private timer: NodeJS.Timeout
     private inProgress: boolean = false
+    private settings:Setting = new Setting()
 
     //Temporary solution:
     private spawningPlaces = [
@@ -40,15 +44,15 @@ export class Game {
         this.inProgress = true
         this.players = players
         this.systems.push(new InputSystem(this.players, this.entityPool))
-        this.systems.push(new DynamicsSystem(this.entityPool))
         this.systems.push(new CollisionSystem(this.entityPool))
+        this.systems.push(new DynamicsSystem(this.entityPool, this.settings))
         this.addListeners()
-        this.timer = setInterval(() => this.updateState(), GameConstants.timerInterval)
+        this.timer = setInterval(() => this.updateState(), config.ServerSettings.timerInterval)
         //initialize here
         let i = 0;
         players.forEach(p => {
             //TODO random position?
-            let snake = SnakeFactory.create(p.id, this.spawningPlaces[i][0], this.spawningPlaces[i++][1]);
+            let snake = SnakeFactory.create(p.id, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings.snakeDefaults);
             snake.forEach(s => {
                 this.entityPool.addEntity(s)
             });

@@ -2,7 +2,7 @@ import { ISystem } from "../interfaces/system-interfaces";
 import { EntityPool } from "../entities/entity-pool";
 import { TagType } from "../Enums/tag-type";
 import { Vector2 } from "../models/position";
-import { GameConstants } from "../constants";
+import {config} from 'node-config-ts'
 
 export class CollisionSystem implements ISystem{
     entityPool: EntityPool;
@@ -29,8 +29,8 @@ export class CollisionSystem implements ISystem{
                         case TagType.Food:
                             //Maybe move to a function or function to food component
                             console.log("Change")
-                            colliderPosition.position.x = Math.floor(Math.random() * GameConstants.fieldWidth)
-                            colliderPosition.position.y = Math.floor(Math.random() * GameConstants.fieldHeight)
+                            colliderPosition.position.x = Math.floor(Math.random() * config.ServerSettings.fieldWidth)
+                            colliderPosition.position.y = Math.floor(Math.random() * config.ServerSettings.fieldHeight)
                             
                             break;
                         case TagType.SnakeHead:

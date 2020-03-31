@@ -17,6 +17,8 @@ import {
     IGetRoomsResponse, ILeaveRoomResponse
 } from './interfaces/http-response-interfaces'
 
+import {config} from 'node-config-ts'
+
 const logger = getLogger('http')
 
 @JsonController("/Rooms")
@@ -164,5 +166,10 @@ export class RoomController {
             }])
 
         return {test: "test"}
+    }
+
+    @Get("/config")
+    config(){
+        return config
     }
 }

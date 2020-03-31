@@ -3,27 +3,30 @@ import { MovementComponent } from "../components/movement-component";
 import { PositionComponent } from "../components/position-component";
 import { TagComponent } from "../components/tag-component";
 import { TagType } from "../Enums/tag-type";
-import { GameConstants, SnakeConstants } from "../constants";
 import { SnakeComponent } from "../components/snake-component";
 import { PlayerComponent } from "../components/player-component";
 import { ColliderComponent } from "../components/collider-component";
+import {config} from 'node-config-ts'
+import { SnakeDefaults } from "../models/game-setting";
+import { SnakeConstants } from "../constants";
 
 export class SnakeFactory {
-    public static create(playerId: string, x: number, y: number): Entity[] {
+    public static create(playerId: string, x: number, y: number, snakeDefaults:SnakeDefaults): Entity[] {
 
         let snake: Entity[] = [];
 
-        let tail = SnakeFactory.createSnakePiece(playerId, x, y, TagType.SnakeBody, null);
+        let tail = SnakeFactory.createSnakePiece(playerId, x, y,snakeDefaults.speed, TagType.SnakeBody, null);
 
         snake.push(tail.snakePiece)
 
-        for (let index = 1; index <= SnakeConstants.snakeLength; index++) {
+        for (let index = 1; index <= snakeDefaults.length; index++) {
 
             var { snakePiece, nextSnakeComponent } = SnakeFactory.createSnakePiece(
                 playerId,
-                (x + GameConstants.blockLength * index) % GameConstants.fieldWidth,
+                (x + config.ServerSettings.blockLength * index) % config.ServerSettings.fieldWidth,
                 y,
-                index == SnakeConstants.snakeLength ? TagType.SnakeHead : TagType.SnakeBody,
+                snakeDefaults.speed,
+                index == snakeDefaults.length ? TagType.SnakeHead : TagType.SnakeBody,
                 nextSnakeComponent ? nextSnakeComponent : tail.nextSnakeComponent);
 
             snake.push(snakePiece)
@@ -32,15 +35,15 @@ export class SnakeFactory {
         return snake
     }
 
-    private static createSnakePiece(playerId: string, x: number, y: number, tag: TagType, next: SnakeComponent) {
+    private static createSnakePiece(playerId: string, x: number, y: number, speed:number, tag: TagType, next: SnakeComponent) {
         let snakePiece = new Entity()
         let positionComponent = new PositionComponent(x, y);
         let tagComponent = new TagComponent(tag);
-        let colliderComponent = new ColliderComponent(SnakeConstants.colliderRadius)
+        let colliderComponent = new ColliderComponent(config.SnakeDefaults.colliderRadius)
         if (tag == TagType.SnakeHead) {
             let playerComponent = new PlayerComponent(playerId)
             let movementComponent = new MovementComponent();
-            movementComponent.speed = SnakeConstants.speed
+            movementComponent.speed = speed
             movementComponent.direction.x = SnakeConstants.directions[2].x
             movementComponent.direction.y = SnakeConstants.directions[2].y
             snakePiece.addComponent(movementComponent)
