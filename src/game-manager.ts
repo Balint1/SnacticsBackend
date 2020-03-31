@@ -169,7 +169,7 @@ export class GameManager {
     public leaveRoom = (roomId: string, playerId: string, callback) => {
         let gameRoom = this._rooms.find(room => room.id == roomId)
         if (gameRoom) {
-            gameRoom.players = gameRoom.players.filter(player => player.id != playerId)
+            gameRoom.players = gameRoom.players.filter(player => player.id != playerId) //remove player
             logger.info(`${playerId} left room ${gameRoom.name} with id: ${roomId}`)
             if (playerId == gameRoom.ownerId && gameRoom.players.length > 0) {
                 let newOwner = gameRoom.players[0]
@@ -179,6 +179,10 @@ export class GameManager {
                     error: null
                 } as IOwnerChanged)
                 logger.info(`OWNER CHANGED for room: ${gameRoom.name} new owner is:  ${newOwner.nickname}`)
+                callback()
+            }else if(gameRoom.players.length == 0){
+                gameRoom.game.endGame()
+                this._rooms = this._rooms.filter(room=> room.id != roomId) //remove room
                 callback()
             }
             callback()
