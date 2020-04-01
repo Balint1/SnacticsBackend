@@ -46,7 +46,6 @@ export class Game {
         this.systems.push(new InputSystem(this.players, this.entityPool))
         this.systems.push(new CollisionSystem(this.entityPool))
         this.systems.push(new DynamicsSystem(this.entityPool, this.settings))
-        this.addListeners()
         this.timer = setInterval(() => this.updateState(), config.ServerSettings.timerInterval)
         //initialize here
         let i = 0;
@@ -86,19 +85,6 @@ export class Game {
     endGame() {
         this._inProgress = false
         clearTimeout(this.timer)
-    }
-
-    private addListeners = () => {
-        this.players.map(player => {
-            player.socket.on(SocketEvents.DISCONNECT, () => {
-                logger.info(`${player.id} DISCONNECTED`)
-                this.gameManager.leaveRoom(this.roomId, player.id, (error) => {
-                    if (error) {
-                        logger.error("LEAVE ROOM request FAILED")
-                    }
-                })
-            })
-        })
     }
 
     get inProgress() {

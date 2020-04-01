@@ -1,6 +1,6 @@
 import {Guid} from 'guid-typescript'
 import {IRoom, IPlayer} from './interfaces/game-interfaces'
-import {IJoinActionResult, IOwnerChanged} from './interfaces/socket-interfaces'
+import {ISimpleResponse} from './interfaces/response-interfaces'
 import {Game} from './game'
 import {getLogger} from './loggers'
 import * as socketIo from 'socket.io';
@@ -128,7 +128,7 @@ export class GameManager {
      * Add new user to room
      * Check if nickname is available in specified room
      */
-    public joinRoom = (socket: socketIo.Socket, nickname: string, roomId: string, password: string): IJoinActionResult => {
+    public joinRoom = (socket: socketIo.Socket, nickname: string, roomId: string, password: string): ISimpleResponse => {
         const room = this._rooms.find(room => room.id == roomId)
         if (room) {
             if (room.players.length < room.capacity) {
@@ -137,31 +137,32 @@ export class GameManager {
                     if (nicknameTaken) {
                         return {
                             success: false,
-                            error: `Nickname: ${nickname} is already taken`
+                            message: `Nickname: ${nickname} is already taken`
                         }
                     } else {
                         room.players.push({id: socket.id, nickname, socket} as IPlayer)
+                        this.addListeners(socket, roomId, socket.id)
                         return {
                             success: true,
-                            error: null
+                            message: null
                         }
                     }
                 } else {
                     return {
                         success: false,
-                        error: `Password: ${password} is wrong`
+                        message: `Password: ${password} is wrong`
                     }
                 }
             } else {
                 return {
                     success: false,
-                    error: `Room ${room.name} is full, can't join`
+                    message: `Room ${room.name} is full, can't join`
                 }
             }
         } else {
             return {
                 success: false,
-                error: `Room ${room.name} not found`
+                message: `Room ${room.name} not found`
             }
         }
     }
@@ -169,27 +170,66 @@ export class GameManager {
     public leaveRoom = (roomId: string, playerId: string, callback) => {
         let gameRoom = this._rooms.find(room => room.id == roomId)
         if (gameRoom) {
-            gameRoom.players = gameRoom.players.filter(player => player.id != playerId) //remove player
-            logger.info(`${playerId} left room ${gameRoom.name} with id: ${roomId}`)
+            this.leaveSocketRoom(playerId, gameRoom)
+            this.leaveServerRoom(playerId, gameRoom)
             if (playerId == gameRoom.ownerId && gameRoom.players.length > 0) {
-                let newOwner = gameRoom.players[0]
-                gameRoom.ownerId = newOwner.id
-                newOwner.socket.emit(SocketEvents.OWNER_CHANGED, {
-                    success: true,
-                    error: null
-                } as IOwnerChanged)
-                logger.info(`OWNER CHANGED for room: ${gameRoom.name} new owner is:  ${newOwner.nickname}`)
+                this.changeOwner(gameRoom)
                 callback()
-            }else if(gameRoom.players.length == 0){
-                gameRoom.game.endGame()
-                this._rooms = this._rooms.filter(room=> room.id != roomId) //remove room
+            } else if (gameRoom.players.length == 0) {
+                this.deleteRoom(gameRoom)
                 callback()
             }
             callback()
         } else {
-            let message = `Room with id: ${roomId} doesn't exists`
+            let message = `leaveRoom::Room with id: ${roomId} doesn't exists or was already removed`
             logger.error(message)
             callback(message)
         }
+    }
+
+    private leaveSocketRoom(playerId: string, gameRoom: IRoom) {
+        let playerToRemove = gameRoom.players.find(player => player.id == playerId)
+        playerToRemove.socket.leave(gameRoom.id, (err) => {
+            if (err) {
+                logger.error(`leaveSocketRoom::request from '${playerId}' failed. cause: ${err}`)
+                playerToRemove.socket.emit(SocketEvents.LEAVE_RESPONSE, {
+                    success: false,
+                    message: err
+                })
+            } else {
+                logger.info(`leaveSocketRoom::request from '${playerId}' succeeded.`)
+                playerToRemove.socket.emit(SocketEvents.LEAVE_RESPONSE, {
+                    success: true,
+                    message: null
+                })
+            }
+        })
+    }
+
+    private leaveServerRoom(playerId: string, gameRoom: IRoom) {
+        gameRoom.players = gameRoom.players.filter(player => player.id != playerId) //remove player
+        logger.info(`leaveServerRoom::${playerId} left room ${gameRoom.name} with id: ${gameRoom.id}`)
+    }
+
+    private changeOwner(gameRoom: IRoom) {
+        let newOwner = gameRoom.players[0]
+        gameRoom.ownerId = newOwner.id
+        newOwner.socket.emit(SocketEvents.OWNER_CHANGED, {
+            success: true,
+            message: null
+        } as ISimpleResponse)
+        logger.info(`changeOwner::OWNER CHANGED for room: ${gameRoom.name} new owner is:  ${newOwner.nickname}`)
+    }
+
+    private deleteRoom(gameRoom: IRoom) {
+        gameRoom.game.endGame()
+        this._rooms = this._rooms.filter(room => room.id != gameRoom.id) //remove room
+    }
+
+    private addListeners = (socket: socketIo.Socket, roomId: string, playerId: string) => {
+        socket.on(SocketEvents.DISCONNECT, () => {
+            logger.info(`${playerId} DISCONNECTED`)
+            this.leaveRoom(roomId, playerId, ()=>{})
+        })
     }
 }

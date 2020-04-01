@@ -4,7 +4,8 @@ import {Server} from 'http';
 
 import {SocketEvents} from './constants'
 import {GameManager} from './game-manager'
-import {IJoinResult, INewPlayerJoined, IJoinActionResult} from './interfaces/socket-interfaces'
+import {IJoinResult, INewPlayerJoined} from './interfaces/response-interfaces'
+import {ISimpleResponse} from "./interfaces/response-interfaces";
 import {getLogger} from './loggers'
 
 const logger = getLogger('socket')
@@ -27,7 +28,7 @@ export class SocketService {
 
     private joinHandler(socket: socketIo.Socket, nickname: string, roomId: string, password:  string) {
         logger.info(`New join room request from '${nickname}' id: '${socket.id}'`)
-        const {success, error}: IJoinActionResult = this.gameManager.joinRoom(socket, nickname, roomId, password)
+        const {success, message}: ISimpleResponse = this.gameManager.joinRoom(socket, nickname, roomId, password)
         if (success) {
             socket.join(roomId, (err) => {
                 if (err) {
@@ -51,11 +52,11 @@ export class SocketService {
                 }
             })
         } else {
-            logger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${error}`)
+            logger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${message}`)
             socket.emit(SocketEvents.JOIN_RESPONSE, {
                 success: false,
                 roomId: null,
-                message: error
+                message: message
             } as IJoinResult)
         }
     }

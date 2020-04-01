@@ -22,23 +22,18 @@ export interface ICreateRoomResponse {
     ownerId: string
 }
 
-export interface IStartGameResponse {
+export interface ISimpleResponse {
     success: boolean
     message: string
 }
 
-export interface IEndGameResponse {
+export interface IJoinResult {
     success: boolean
+    roomId: string
     message: string
 }
 
-
-export interface IRemoveRoomResponse {
-    success: boolean
-    message: string
-}
-
-export interface ILeaveRoomResponse {
-    success: boolean
-    message: string
+export interface INewPlayerJoined {
+    nickname: string,
+    id: string
 }

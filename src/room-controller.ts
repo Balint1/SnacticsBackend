@@ -11,11 +11,9 @@ import {
 } from './interfaces/http-request-interfaces'
 import {
     ICreateRoomResponse,
-    IStartGameResponse,
-    IEndGameResponse,
-    IRemoveRoomResponse,
-    IGetRoomsResponse, ILeaveRoomResponse
-} from './interfaces/http-response-interfaces'
+    IGetRoomsResponse,
+    ISimpleResponse
+} from './interfaces/response-interfaces'
 
 import {config} from 'node-config-ts'
 
@@ -38,7 +36,7 @@ export class RoomController {
             params.ownerId
         )
         if (roomId) {
-            logger.info("CREATE ROOM request SUCCEEDED")
+            logger.info("createRoom::CREATE ROOM request SUCCEEDED")
             response = {
                 success: true,
                 message: message,
@@ -48,7 +46,7 @@ export class RoomController {
                 ownerId: params.ownerId
             }
         } else {
-            logger.error("CREATE ROOM request FAILED")
+            logger.error("createRoom::CREATE ROOM request FAILED")
             response = {
                 success: false,
                 message: message,
@@ -63,18 +61,20 @@ export class RoomController {
 
     @Post("/start")
     startGame(@Body() params: IStartGameBody) {
-        let response: IStartGameResponse = {
+        let response: ISimpleResponse = {
             success: true,
             message: null
         }
         this.gameManager.startGame(params.roomId, params.playerId, (error: string) => {
             if (error) {
+                logger.error("startGame::START GAME request FAILED")
                 response = {
                     success: false,
                     message: error
                 }
             }
         })
+        logger.info("startGame::START GAME request SUCCEEDED")
         return response
     }
 
@@ -91,19 +91,19 @@ export class RoomController {
                 inProgress: room.game.inProgress
             }
         })
-
+        logger.info("getAllRooms::GET ROOMS request SUCCEEDED")
         return {success: true, message: '', rooms: roomList} as IGetRoomsResponse
     }
 
     @Post("/endgame")
     endGame(@Body() params: IEndGameBody) {
-        let response: IEndGameResponse = {
+        let response: ISimpleResponse = {
             success: true,
             message: null
         }
         this.gameManager.endGame(params.roomId, params.playerId, (error: string) => {
             if (error) {
-                logger.error("CREATE ROOM request FAILED")
+                logger.error("endGame::END GAME request FAILED")
                 response = {
                     success: false,
                     message: error
@@ -111,19 +111,19 @@ export class RoomController {
             }
         })
 
-        logger.info("CREATE ROOM request SUCCEEDED")
+        logger.info("endGame::END GAME request SUCCEEDED")
         return response
     }
 
     @Post("/remove")
     removeRoom(@Body() params: IRemoveRoomBody) {
-        let response: IRemoveRoomResponse = {
+        let response: ISimpleResponse = {
             success: true,
             message: null
         }
         this.gameManager.removeRoom(params.roomId, params.playerId, (error: string) => {
             if (error) {
-                logger.error("CREATE ROOM request FAILED")
+                logger.error("removeRoom::REMOVE ROOM request FAILED")
                 response = {
                     success: false,
                     message: error
@@ -131,19 +131,19 @@ export class RoomController {
             }
         })
 
-        logger.info("CREATE ROOM request SUCCEEDED")
+        logger.info("removeRoom::REMOVE ROOM request SUCCEEDED")
         return response
     }
 
     @Post("/leave")
     leaveRoom(@Body() params: ILeaveRoomBody) {
-        let response: ILeaveRoomResponse = {
+        let response: ISimpleResponse = {
             success: true,
             message: null
         }
         this.gameManager.leaveRoom(params.roomId, params.playerId, (error: string) => {
             if (error) {
-                logger.error("LEAVE ROOM request FAILED")
+                logger.error("leaveRoom::LEAVE ROOM request FAILED")
                 response = {
                     success: false,
                     message: error
@@ -151,7 +151,7 @@ export class RoomController {
             }
         })
 
-        logger.info("LEAVE ROOM request SUCCEEDED")
+        logger.info("leaveRoom::LEAVE ROOM request SUCCEEDED")
         return response
     }
 
