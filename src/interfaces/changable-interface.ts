@@ -1,4 +1,4 @@
-export interface IChangable {
+export interface IChangeable {
     changed:boolean
     setChanged(): void;
 }

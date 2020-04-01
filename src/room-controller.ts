@@ -1,5 +1,5 @@
 import {JsonController, Body, Get, Post} from "routing-controllers";
-import {GameManager} from './game-manager'
+import {GameManager} from './games-manager'
 import {getLogger} from './loggers'
 import {Game} from "./game"
 import {
@@ -136,7 +136,7 @@ export class RoomController {
     }
 
     @Post("/leave")
-    leaveRoom(@Body() params: ILeaveRoomBody) {
+    leaveRoomRequest(@Body() params: ILeaveRoomBody) {
         let response: ISimpleResponse = {
             success: true,
             message: null

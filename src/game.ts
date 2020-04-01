@@ -9,7 +9,7 @@ import {config} from 'node-config-ts'
 import { SocketEvents } from "./constants";
 import { getLogger } from "./loggers";
 import { CollisionSystem } from "./systems/collision-system";
-import { GameManager } from "./game-manager";
+import { GameManager } from "./games-manager";
 import { SocketService } from "./socket-service";
 import { Setting } from "./models/game-setting";
 
@@ -78,7 +78,7 @@ export class Game {
         this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
         //TODO delete Debug 
         console.log("UPDATE:")
-        console.log(this.state.entities)
+        // console.log(this.state.entities)
         return this.state
     }
 

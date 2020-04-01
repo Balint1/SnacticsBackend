@@ -3,7 +3,7 @@ import * as socketIo from 'socket.io';
 import {Server} from 'http';
 
 import {SocketEvents} from './constants'
-import {GameManager} from './game-manager'
+import {GameManager} from './games-manager'
 import {IJoinResult, INewPlayerJoined} from './interfaces/response-interfaces'
 import {ISimpleResponse} from "./interfaces/response-interfaces";
 import {getLogger} from './loggers'
