@@ -39,8 +39,12 @@ export class DynamicsSystem extends BaseSystem {
                 tailPosition.position.y = position.position.y
                 tailPosition.setChanged()
 
-                position.position.x = (position.position.x + c.direction.x) % config.ServerSettings.fieldWidth
-                position.position.y = (position.position.y + c.direction.y) % config.ServerSettings.fieldHeight
+                position.position.x = position.position.x + c.direction.x >= 0 
+                    ? (position.position.x + c.direction.x) % config.ServerSettings.fieldWidth 
+                    : config.ServerSettings.fieldWidth + position.position.x + c.direction.x
+                position.position.y = position.position.y + c.direction.y >= 0 
+                    ? (position.position.y + c.direction.y) % config.ServerSettings.fieldHeight 
+                    : config.ServerSettings.fieldHeight + position.position.y + c.direction.y
                 position.setChanged()
 
                 tailSnakeComponent.next = secondSnakeComponent
