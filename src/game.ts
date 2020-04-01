@@ -78,7 +78,7 @@ export class Game {
         this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
         //TODO delete Debug 
         console.log("UPDATE:")
-        // console.log(this.state.entities)
+        console.log(this.state.entities)
         return this.state
     }
 
