@@ -21,9 +21,10 @@ export class InputSystem implements ISystem{
     }
     calculateNextState(): void {
         this.entityPool.movementManager.forEach(m => {
-
-            m.setDeltaDirection(this.deltaDirections.get(this.players[0].id))
-            this.deltaDirections.set(this.players[0].id, 0)
+            
+            let player = this.entityPool.playerManager.get(m.entityId)
+            m.setDeltaDirection(this.deltaDirections.get(player.playerId))
+            this.deltaDirections.set(player.playerId, 0)
         });
     }
 
