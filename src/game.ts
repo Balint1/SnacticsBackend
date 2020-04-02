@@ -12,6 +12,8 @@ import { CollisionSystem } from "./systems/collision-system";
 import { GameManager } from "./games-manager";
 import { SocketService } from "./socket-service";
 import { Setting } from "./models/game-setting";
+import { PowerupSystem } from "./systems/powerup-system";
+import { PowerupFactory } from "./factory/PowerupFactory";
 
 
 const logger = getLogger('game')
@@ -27,6 +29,7 @@ export class Game {
     private timer: NodeJS.Timeout
     private _inProgress: boolean = false
     private settings:Setting = new Setting()
+    private idle:number = 0
 
     //Temporary solution:
     private spawningPlaces = [
@@ -46,6 +49,7 @@ export class Game {
         this.systems.push(new InputSystem(this.players, this.entityPool))
         this.systems.push(new CollisionSystem(this.entityPool))
         this.systems.push(new DynamicsSystem(this.entityPool, this.settings))
+        this.systems.push(new PowerupSystem(this.entityPool))
         this.timer = setInterval(() => this.updateState(), config.ServerSettings.timerInterval)
         //initialize here
         let i = 0;
@@ -58,12 +62,13 @@ export class Game {
         });
 
         this.entityPool.addEntity(new FoodFactory().create())
+        this.entityPool.addEntity(new PowerupFactory().create())
     }
 
     private updateState() {
 
         this.systems.forEach(s => {
-            s.calculateNextState()
+            s.calculateNextState(this.idle)
         });
         this.state.entities = []
         this.entityPool.entities.forEach(e => {
@@ -79,6 +84,9 @@ export class Game {
         //TODO delete Debug 
         console.log("UPDATE:")
         console.log(this.state.entities)
+
+        //Sometimes we have to reset the counter, this number won't break the rest ( % ) operation 
+        this.idle = this.idle == config.ServerSettings.idleReset ? 0 : this.idle + 1
         return this.state
     }
 

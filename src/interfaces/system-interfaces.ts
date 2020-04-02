@@ -1,4 +1,4 @@
 
 export interface ISystem {
-    calculateNextState(): void;
+    calculateNextState(idle:number): void;
 }

@@ -19,9 +19,9 @@ export class InputSystem implements ISystem{
             player.socket.on(SocketEvents.SLIDER_CHANGE, ({ value }) => this.onValueChange(player.id, value))
         })
     }
-    calculateNextState(): void {
+    calculateNextState(idle:number): void {
         this.entityPool.movementManager.forEach(m => {
-            
+
             let player = this.entityPool.playerManager.get(m.entityId)
             m.setDeltaDirection(this.deltaDirections.get(player.playerId))
             this.deltaDirections.set(player.playerId, 0)

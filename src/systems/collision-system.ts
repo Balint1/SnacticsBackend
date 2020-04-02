@@ -3,15 +3,12 @@ import { EntityPool } from "../entities/entity-pool";
 import { TagType } from "../Enums/tag-type";
 import { Vector2 } from "../models/position";
 import {config} from 'node-config-ts'
+import { BaseSystem } from "./base-system";
+import { SpeedBoosterPowerUp } from "../powerups/speed-booster-powerup";
 
-export class CollisionSystem implements ISystem{
-    entityPool: EntityPool;
+export class CollisionSystem extends BaseSystem{
     
-    constructor(entityPool: EntityPool) {
-        this.entityPool = entityPool
-    }
-    
-    calculateNextState(): void {
+    calculateNextState(idle:number): void {
         this.entityPool.playerManager.forEach(playerCompomemt => {
             let headCollider = this.entityPool.colliderManager.get(playerCompomemt.entityId)
             let headPosition = this.entityPool.positionManager.get(playerCompomemt.entityId)
@@ -39,7 +36,12 @@ export class CollisionSystem implements ISystem{
                         case TagType.SnakeBody:
                             
                             break;
-                    
+                        
+                        case TagType.Powerup:
+                            let powerup = this.entityPool.powerupManager.get(colliderEntity.entityId)
+                            
+                            playerCompomemt.powerups.push(new SpeedBoosterPowerUp(this.entityPool, playerCompomemt.entityId))
+                            break;
                         default:
                             break;
                     }

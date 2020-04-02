@@ -6,7 +6,6 @@ import {config} from 'node-config-ts'
 
 
 export class DynamicsSystem extends BaseSystem {
-    counter:number = 0
     private setting: Setting;
 
     constructor(entityPool:EntityPool, setting:Setting){
@@ -14,14 +13,14 @@ export class DynamicsSystem extends BaseSystem {
         this.setting = setting
     }
 
-    calculateNextState() {
+    calculateNextState(idle:number) {
         this.entityPool.movementManager.forEach(c => {
             
             let position = this.entityPool.positionManager.get(c.entityId)
             let entity = this.entityPool.entities.get(c.entityId);
             let snake = this.entityPool.tagManager.get(entity.id);
 
-            if(snake && this.counter % c.speed == 0){
+            if(snake && idle % c.speed == 0){
 
                 let head = this.entityPool.snakeManager.get(entity.id);
 
@@ -29,16 +28,19 @@ export class DynamicsSystem extends BaseSystem {
                 let beforeTailSnakeComponent: SnakeComponent = null;
                 let secondSnakeComponent = head.next;
 
+                //Get the tail of the snake
                 while(tailSnakeComponent.next){
                     beforeTailSnakeComponent = tailSnakeComponent
                     tailSnakeComponent = tailSnakeComponent.next
                 }
 
+                //Set tail position to the second position of the snake
                 let tailPosition = this.entityPool.positionManager.get(tailSnakeComponent.entityId);
                 tailPosition.position.x = position.position.x
                 tailPosition.position.y = position.position.y
                 tailPosition.setChanged()
 
+                //Set the head position to the proper direction
                 position.position.x = position.position.x + c.direction.x >= 0 
                     ? (position.position.x + c.direction.x) % config.ServerSettings.fieldWidth 
                     : config.ServerSettings.fieldWidth + position.position.x + c.direction.x
@@ -52,9 +54,6 @@ export class DynamicsSystem extends BaseSystem {
                 beforeTailSnakeComponent.next = undefined
 
             }
-
-            //Sometimes we have to reset the counter, this number won't break the rest ( % ) operation 
-            this.counter = this.counter == 362880 ? 0 : this.counter + 1
         });
     }
 

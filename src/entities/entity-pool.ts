@@ -6,7 +6,12 @@ import {IComponent} from "../interfaces/component-interfaces";
 import { SnakeComponent } from "../components/snake-component";
 import { TagComponent } from "../components/tag-component";
 import { PlayerComponent } from "../components/player-component";
+import { PowerupComponent } from "../components/poweup-component";
 
+/**
+ * Stores entities and components in manager hashes
+ * Fore each components you have to set it up here
+*/
 export class EntityPool {
 
     constructor() {
@@ -19,15 +24,23 @@ export class EntityPool {
     snakeManager: Map<string, SnakeComponent> = new Map()
     tagManager: Map<string, TagComponent> = new Map()
     playerManager: Map<string, PlayerComponent> = new Map()
+    powerupManager: Map<string, PowerupComponent> = new Map()
+    
+    //Register all managers here
     managers: Map<string, IComponent>[] = [
         this.positionManager,
         this.colliderManager,
         this.movementManager,
         this.snakeManager,
         this.tagManager,
-        this.playerManager
+        this.playerManager,
+        this.powerupManager
     ]
 
+    /**
+     * Add new entity to the entites and all of its components to the managers
+     * based on the name of the componentType
+     */
     addEntity(entity: Entity) {
         this.entities.set(entity.id, entity)
 

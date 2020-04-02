@@ -11,6 +11,9 @@ import { SnakeDefaults } from "../models/game-setting";
 import { SnakeConstants } from "../constants";
 
 export class SnakeFactory {
+    /**
+     * creates a snake based on the given parameters
+     */
     public static create(playerId: string, x: number, y: number, snakeDefaults:SnakeDefaults): Entity[] {
 
         let snake: Entity[] = [];

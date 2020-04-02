@@ -8,6 +8,9 @@ import {config} from 'node-config-ts'
 
 
 export class FoodFactory extends EntityFactory {
+    /**
+     * Creates new Food entity with initialized components
+     */
     public create(): Entity {
 
         let positionComponent = new PositionComponent(

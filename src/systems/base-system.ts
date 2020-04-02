@@ -6,7 +6,7 @@ export abstract class BaseSystem implements ISystem {
         this.entityPool = entityPool
     }
 
-    abstract calculateNextState(): void
+    abstract calculateNextState(idle:number): void
 
     protected entityPool: EntityPool
 
