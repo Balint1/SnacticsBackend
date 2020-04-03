@@ -8,6 +8,7 @@ import {IPlayer} from "./interfaces/game-interfaces";
 import {GameManager} from "./games-manager";
 import {SocketEvents} from "./constants";
 import {Game} from "./game";
+import {SocketService} from "./socket-service";
 
 const logger = getLogger('room manager')
 
@@ -147,7 +148,7 @@ export class RoomManager {
 
     private notifyLeaving() {
         if (this.players.length > 0) {
-            this.players[0].socket.broadcast.to(this.id).emit(SocketEvents.PLAYER_LEFT, {
+            SocketService.io().to(this.id).emit(SocketEvents.PLAYER_LEFT, {
                 players: this.players.map(player => ({
                     nickname: player.nickname,
                     owner: player.id == this.ownerId
