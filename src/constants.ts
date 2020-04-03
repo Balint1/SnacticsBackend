@@ -5,6 +5,7 @@ export enum SocketEvents {
     CONNECT = 'connect',
     DISCONNECT = 'disconnect',
     NEW_PLAYER = 'new-player',
+    PLAYER_LEFT = 'player-left',
     JOIN_REQUEST = 'join-request',
     JOIN_RESPONSE = 'join-response',
     LEAVE_RESPONSE = 'leave-response',

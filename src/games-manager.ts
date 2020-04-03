@@ -1,5 +1,5 @@
 import {Guid} from 'guid-typescript'
-import {ISimpleResponse} from './interfaces/response-interfaces'
+import {IJoinResponse, ISimpleResponse} from './interfaces/response-interfaces'
 import {getLogger} from './loggers'
 import * as socketIo from 'socket.io';
 import {RoomManager} from "./room-manager";
@@ -108,14 +108,16 @@ export class GameManager {
      * Add new user to room
      * Check if nickname is available in specified room
      */
-    public joinRoom = (socket: socketIo.Socket, nickname: string, roomId: string, password: string): ISimpleResponse => {
+    public joinRoom = (socket: socketIo.Socket, nickname: string, roomId: string, password: string): IJoinResponse => {
         const room = this._rooms.find(room => room.id == roomId)
         if (room) {
             return room.joinRoom(socket, nickname, password)
         } else {
             return {
                 success: false,
-                message: `Room ${room.name} not found`
+                roomId: null,
+                message: `Room ${room.name} not found`,
+                players: null
             }
         }
     }

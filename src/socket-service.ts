@@ -4,8 +4,7 @@ import {Server} from 'http';
 
 import {SocketEvents} from './constants'
 import {GameManager} from './games-manager'
-import {IJoinResult, INewPlayerJoined} from './interfaces/response-interfaces'
-import {ISimpleResponse} from "./interfaces/response-interfaces";
+import {IJoinResponse, INewPlayerJoined} from './interfaces/response-interfaces'
 import {getLogger} from './loggers'
 
 const logger = getLogger('socket')
@@ -26,38 +25,36 @@ export class SocketService {
         })
     }
 
-    private joinHandler(socket: socketIo.Socket, nickname: string, roomId: string, password:  string) {
+    private joinHandler(socket: socketIo.Socket, nickname: string, roomId: string, password: string) {
         logger.info(`New join room request from '${nickname}' id: '${socket.id}'`)
-        const {success, message}: ISimpleResponse = this.gameManager.joinRoom(socket, nickname, roomId, password)
-        if (success) {
+        const joinResponse: IJoinResponse = this.gameManager.joinRoom(socket, nickname, roomId, password)
+        if (joinResponse.success) {
             socket.join(roomId, (err) => {
                 if (err) {
                     logger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${err}`)
                     socket.emit(SocketEvents.JOIN_RESPONSE, {
                         success: false,
                         roomId: null,
-                        message: err
-                    } as IJoinResult)
+                        message: err,
+                        players: null
+                    } as IJoinResponse)
                 } else {
                     logger.info(`Join room request from '${nickname}' id: '${socket.id} succeeded.`)
-                    socket.emit(SocketEvents.JOIN_RESPONSE, {
-                        success: true,
-                        roomId: roomId,
-                        message: `You successfully joined room ${roomId}`
-                    } as IJoinResult)
+                    socket.emit(SocketEvents.JOIN_RESPONSE, joinResponse)
                     socket.broadcast.to(roomId).emit(SocketEvents.NEW_PLAYER, {
                         nickname,
-                        id: socket.id
+                        owner: false
                     } as INewPlayerJoined)
                 }
             })
         } else {
-            logger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${message}`)
+            logger.error(`Join room request from '${nickname}' id: '${socket.id} failed. cause: ${joinResponse.message}`)
             socket.emit(SocketEvents.JOIN_RESPONSE, {
                 success: false,
                 roomId: null,
-                message: message
-            } as IJoinResult)
+                message: joinResponse.message,
+                players: null
+            } as IJoinResponse)
         }
     }
 

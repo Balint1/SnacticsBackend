@@ -1,10 +1,13 @@
-import {IPlayer} from "./interfaces/game-interfaces";
-import {Game} from "./game";
 import * as socketIo from "socket.io";
-import { ISimpleResponse} from "./interfaces/response-interfaces";
-import {SocketEvents} from "./constants";
 import {getLogger} from './loggers'
+
+//Interfaces
+import {IJoinResponse, ISimpleResponse, IUpdatedList} from "./interfaces/response-interfaces";
+import {IPlayer} from "./interfaces/game-interfaces";
+
 import {GameManager} from "./games-manager";
+import {SocketEvents} from "./constants";
+import {Game} from "./game";
 
 const logger = getLogger('room manager')
 
@@ -26,45 +29,47 @@ export class RoomManager {
         this.game = new Game(id)
     }
 
-    addListeners = (socket: socketIo.Socket, roomId: string, playerId: string) => {
+    addListeners = (socket: socketIo.Socket) => {
+        let id = socket.id
         socket.on(SocketEvents.DISCONNECT, () => {
-            logger.info(`${playerId} DISCONNECTED`)
-            this.leaveRoom(playerId)
+            logger.info(`${id} DISCONNECTED`)
+            this.leaveRoom(id)
         })
     }
 
-    joinRoom = (socket: socketIo.Socket, nickname: string, password: string): ISimpleResponse => {
+    joinRoom = (socket: socketIo.Socket, nickname: string, password: string): IJoinResponse => {
         if (this.players.length < this.capacity) {
-            const nicknameTaken = this.players.find(player => player.nickname == nickname)
             if (password == this.password) {
+                const nicknameTaken = this.players.find(player => player.nickname == nickname)
                 if (nicknameTaken) {
                     logger.error(`::joinRoom(${nickname}, ${password}) FAILED. cause: nickname already taken`)
                     return {
                         success: false,
-                        message: `Nickname: ${nickname} is already taken`
+                        roomId: null,
+                        message: `Nickname: ${nickname} is already taken`,
+                        players: null
                     }
                 } else {
                     logger.info(`::joinRoom(${nickname}, ${password}) SUCCEEDED`)
                     this.players.push({id: socket.id, nickname, socket} as IPlayer)
-                    this.addListeners(socket, this.id, socket.id)
+                    this.addListeners(socket)
                     return {
                         success: true,
-                        message: null
+                        roomId: this.id,
+                        message: `You successfully joined room ${this.id}`,
+                        players: this.players.map(player => ({
+                            nickname: player.nickname,
+                            owner: player.id == this.ownerId
+                        }))
                     }
                 }
             } else {
                 logger.error(`::joinRoom(${nickname}, ${password}) FAILED. cause: password is wrong`)
-                return {
-                    success: false,
-                    message: `Password: ${password} is wrong`
-                }
+                return {success: false, roomId: null, message: `Password: ${password} is wrong`, players: null}
             }
         } else {
             logger.error(`::joinRoom(${nickname}, ${password}) FAILED. cause: room is full`)
-            return {
-                success: false,
-                message: `Room ${this.name} is full, can't join`
-            }
+            return {success: false, roomId: null, message: `Room ${this.name} is full, can't join`, players: null}
         }
     }
 
@@ -78,6 +83,7 @@ export class RoomManager {
             this.game.endGame()
             GameManager.getInstance().forceDeleteRoom(this.id)
         }
+        this.notifyLeaving()
     }
 
 
@@ -137,5 +143,17 @@ export class RoomManager {
             message: null
         } as ISimpleResponse)
         logger.info(`changeOwner::OWNER CHANGED for room: ${this.name} new owner is:  ${newOwner.nickname}`)
+    }
+
+    private notifyLeaving() {
+        if (this.players.length > 0) {
+            this.players[0].socket.broadcast.to(this.id).emit(SocketEvents.PLAYER_LEFT, {
+                players: this.players.map(player => ({
+                    nickname: player.nickname,
+                    owner: player.id == this.ownerId
+                }))
+            } as IUpdatedList)
+            logger.info(`notifyLeaving::sending updated players list for room: ${this.name}`)
+        }
     }
 }

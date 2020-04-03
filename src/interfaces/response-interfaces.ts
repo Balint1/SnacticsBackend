@@ -27,13 +27,22 @@ export interface ISimpleResponse {
     message: string
 }
 
-export interface IJoinResult {
+interface IPlayer {
+    nickname: string,
+    owner: boolean
+}
+
+export interface IJoinResponse {
     success: boolean
     roomId: string
     message: string
+    players: IPlayer[]
 }
 
+export interface IUpdatedList {
+    players: IPlayer[]
+}
 export interface INewPlayerJoined {
     nickname: string,
-    id: string
+    owner: boolean
 }
