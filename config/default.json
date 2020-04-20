@@ -4,7 +4,7 @@
     "SnakeDefaults": {
         "speed": 1,
         "length": 8,
-        "colliderRadius":6
+        "colliderRadius":4
     },
     "ServerSettings":{
         "timerInterval":1000,
