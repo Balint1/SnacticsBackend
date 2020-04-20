@@ -3,8 +3,8 @@
     },
     "SnakeDefaults": {
         "speed": 1,
-        "length": 4,
-        "colliderRadius":10
+        "length": 8,
+        "colliderRadius":6
     },
     "ServerSettings":{
         "timerInterval":1000,
