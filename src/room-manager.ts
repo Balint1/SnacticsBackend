@@ -1,14 +1,14 @@
 import * as socketIo from "socket.io";
-import {getLogger} from './loggers'
+import { getLogger } from './loggers'
 
 //Interfaces
-import {IJoinResponse, ISimpleResponse, IUpdatedList} from "./interfaces/response-interfaces";
-import {IPlayer} from "./interfaces/game-interfaces";
+import { IJoinResponse, ISimpleResponse, IUpdatedList } from "./interfaces/response-interfaces";
+import { IPlayer } from "./interfaces/game-interfaces";
 
-import {GameManager} from "./games-manager";
-import {SocketEvents} from "./constants";
-import {Game} from "./game";
-import {SocketService} from "./socket-service";
+import { GameManager } from "./games-manager";
+import { SocketEvents } from "./constants";
+import { Game } from "./game";
+import { SocketService } from "./socket-service";
 
 const logger = getLogger('room manager')
 
@@ -52,7 +52,7 @@ export class RoomManager {
                     }
                 } else {
                     logger.info(`::joinRoom(${nickname}, ${password}) SUCCEEDED`)
-                    this.players.push({id: socket.id, nickname, socket} as IPlayer)
+                    this.players.push({ id: socket.id, nickname, socket } as IPlayer)
                     this.addListeners(socket)
                     return {
                         success: true,
@@ -66,11 +66,11 @@ export class RoomManager {
                 }
             } else {
                 logger.error(`::joinRoom(${nickname}, ${password}) FAILED. cause: password is wrong`)
-                return {success: false, roomId: null, message: `Password: ${password} is wrong`, players: null}
+                return { success: false, roomId: null, message: `Password: ${password} is wrong`, players: null }
             }
         } else {
             logger.error(`::joinRoom(${nickname}, ${password}) FAILED. cause: room is full`)
-            return {success: false, roomId: null, message: `Room ${this.name} is full, can't join`, players: null}
+            return { success: false, roomId: null, message: `Room ${this.name} is full, can't join`, players: null }
         }
     }
 
@@ -90,9 +90,10 @@ export class RoomManager {
 
     startGame(playerId: string, callback): void {
         if (this.ownerId == playerId) {
+            this.players[0].socket.broadcast.to(this.id).emit(SocketEvents.START_GAME)
+            this.game.startGame(this.players)
             let message = `${this.ownerId} STARTED game in room: ${this.name} id ${this.id}`
             logger.info(message)
-            this.game.startGame(this.players)
             callback()
         } else {
             let message = `Player with id: ${playerId} doesn't have permission to START game in room: ${this.name}`

@@ -11,7 +11,8 @@ export enum SocketEvents {
     LEAVE_RESPONSE = 'leave-response',
     UPDATE = 'update-state',
     SLIDER_CHANGE = 'slider-change',
-    OWNER_CHANGED = 'owner-changed'
+    OWNER_CHANGED = 'owner-changed',
+    START_GAME = 'start-game'
 }
 
 export class HelperConstants {
