@@ -11,6 +11,7 @@ export enum SocketEvents {
     LEAVE_RESPONSE = 'leave-response',
     UPDATE = 'update-state',
     SLIDER_CHANGE = 'slider-change',
+    JOYSTICK_CHANGE = 'joystick-change',
     OWNER_CHANGED = 'owner-changed',
     START_GAME = 'start-game'
 }
@@ -32,4 +33,3 @@ export class SnakeConstants {
         new Vector2(- config.ServerSettings.blockLength / Math.sqrt(2), config.ServerSettings.blockLength / Math.sqrt(2)),
     ]
 }
-
