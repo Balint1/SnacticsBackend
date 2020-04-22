@@ -37,7 +37,6 @@ export class CollisionSystem extends BaseSystem{
                             let headSnakePiece = this.entityPool.snakeManager.get(playerCompoment.entityId)
                             let tailSnakeComponent = headSnakePiece;
                             let beforeTailSnakeComponent: SnakeComponent = null;
-                            let secondSnakeComponent = headSnakePiece.next;
 
                             //Get the tail of the snake
                             while(tailSnakeComponent.next){
@@ -47,6 +46,8 @@ export class CollisionSystem extends BaseSystem{
 
                             let tailPosition = this.entityPool.positionManager.get(tailSnakeComponent.entityId);
                             SnakeFactory.createSnakePiece(playerCompoment.entityId, tailPosition.position.x , tailPosition.position.y, 0, TagType.SnakeBody, null)
+                            tailSnakeComponent = beforeTailSnakeComponent.next
+
 
                             break;
                         case TagType.SnakeHead:
