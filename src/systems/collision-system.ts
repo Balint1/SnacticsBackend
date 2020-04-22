@@ -11,9 +11,9 @@ import { SnakeComponent } from "../components/snake-component";
 export class CollisionSystem extends BaseSystem{
     
     calculateNextState(idle:number): void {
-        this.entityPool.playerManager.forEach(playerCompoment => {
-            let headCollider = this.entityPool.colliderManager.get(playerCompoment.entityId)
-            let headPosition = this.entityPool.positionManager.get(playerCompoment.entityId)
+        this.entityPool.playerManager.forEach(playerComponent => {
+            let headCollider = this.entityPool.colliderManager.get(playerComponent.entityId)
+            let headPosition = this.entityPool.positionManager.get(playerComponent.entityId)
 
             this.entityPool.colliderManager.forEach(collider => {
                 let colliderPosition = this.entityPool.positionManager.get(collider.entityId)
@@ -34,7 +34,7 @@ export class CollisionSystem extends BaseSystem{
                             
 
                             //Adds the new piece to the snake, at the end of it
-                            let headSnakePiece = this.entityPool.snakeManager.get(playerCompoment.entityId)
+                            let headSnakePiece = this.entityPool.snakeManager.get(playerComponent.entityId)
                             let tailSnakeComponent = headSnakePiece;
                             let beforeTailSnakeComponent: SnakeComponent = null;
 
@@ -45,7 +45,7 @@ export class CollisionSystem extends BaseSystem{
                             }
 
                             let tailPosition = this.entityPool.positionManager.get(tailSnakeComponent.entityId);
-                            SnakeFactory.createSnakePiece(playerCompoment.entityId, tailPosition.position.x , tailPosition.position.y, 0, TagType.SnakeBody, null)
+                            SnakeFactory.createSnakePiece(playerComponent.entityId, tailPosition.position.x , tailPosition.position.y, 0, TagType.SnakeBody, null)
                             tailSnakeComponent = beforeTailSnakeComponent.next
 
 
@@ -60,7 +60,7 @@ export class CollisionSystem extends BaseSystem{
                         case TagType.Powerup:
                             let powerup = this.entityPool.powerupManager.get(colliderEntity.entityId)
                             
-                            playerCompoment.powerups.push(new SpeedBoosterPowerUp(this.entityPool, playerCompoment.entityId))
+                            playerComponent.powerups.push(new SpeedBoosterPowerUp(this.entityPool, playerComponent.entityId))
                             break;
                         default:
                             break;
