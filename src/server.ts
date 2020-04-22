@@ -7,8 +7,9 @@ import {useExpressServer} from 'routing-controllers';
 import {createServer, Server} from 'http';
 
 import {SocketService} from './socket-service';
-import {RoomController} from './room-controller';
+import {RoomController} from './controllers/room-controller';
 import {getLogger} from './loggers'
+import { AdminController } from './controllers/admin-controller';
 
 const logger = getLogger('http')
 const PORT: number = 5000
@@ -17,6 +18,8 @@ let port: string | number = process.env.PORT || PORT
 let app = express()
 let server: Server = createServer(app)
 
+
+app.get('/', (req, res) => res.send('App is up and running!'))
 server.listen(port, () => {
     logger.info(`Running server on port ${port}`);
 });
@@ -29,7 +32,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 useExpressServer(app, {
     // register created express server in routing-controllers
-    controllers: [RoomController], // and configure it the way you need (controllers, validation, etc.)
+    controllers: [RoomController, AdminController], // and configure it the way you need (controllers, validation, etc.)
+
     routePrefix: "/api"
 });
 
