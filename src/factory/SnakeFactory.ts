@@ -38,7 +38,7 @@ export class SnakeFactory {
         return snake
     }
 
-    private static createSnakePiece(playerId: string, x: number, y: number, speed:number, tag: TagType, next: SnakeComponent) {
+    static createSnakePiece(playerId: string, x: number, y: number, speed:number, tag: TagType, next: SnakeComponent) {
         let snakePiece = new Entity()
         let positionComponent = new PositionComponent(x, y);
         let tagComponent = new TagComponent(tag);
