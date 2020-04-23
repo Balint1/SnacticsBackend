@@ -163,7 +163,8 @@ export class RoomController {
             {
                 id: "dsa",
                 nickname: "fds",
-                socket: null
+                socket: null,
+                entities: []
             }])
 
         return {test: "test"}
