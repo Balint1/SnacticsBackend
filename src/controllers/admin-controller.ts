@@ -1,8 +1,9 @@
-import {JsonController, Body, Get, Post} from "routing-controllers";
+import {JsonController, Body, Get, Post, Param, NotFoundError} from "routing-controllers";
 import {getLogger} from '../loggers'
 
 import {config} from 'node-config-ts'
 import { GameManager } from "../games-manager";
+import { query } from "winston";
 
 const logger = getLogger('http')
 
@@ -35,5 +36,14 @@ export class AdminController {
             roomCount : this.gameManager.rooms.length,
             rooms : rooms
         }
+    }
+
+    @Get("/rooms/:id")
+    getRoom(@Param("id") id: string){
+        let room = this.gameManager.rooms.find(r => r.id == id)
+        if(!room)
+            throw new NotFoundError("Room not found")
+
+        return room.game.getEntities()
     }
 }

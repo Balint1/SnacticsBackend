@@ -108,4 +108,8 @@ export class Game {
     get inProgress() {
          return this._inProgress
     }
+
+    getEntities(){
+        return this.entityPool.entities
+    }
 }
