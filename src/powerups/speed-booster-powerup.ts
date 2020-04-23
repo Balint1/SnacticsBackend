@@ -17,17 +17,20 @@ export class SpeedBoosterPowerUp implements IPowerup{
     }
     activate(expiration:number): void {
         console.log("ACTIVATED------------------------------------------------")
-        this.expiration = expiration
-        this.activationStatus = PowerupActivationStatusType.Atcivated
         let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
-        movementComponent.speed = movementComponent.speed + 1
-        console.log("ACTIVATED------------------------------------------------")
+        if(movementComponent.speed > 1){
+            this.expiration = expiration
+            this.activationStatus = PowerupActivationStatusType.Atcivated
+            movementComponent.speed = movementComponent.speed - 1
+            console.log("ACTIVATED------------------------------------------------")
+
+        }
     }
     deactivate(): void {
         console.log("DEACTIVATED------------------------------------------------")
         let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
-        movementComponent.speed = movementComponent.speed - 1
-        this.activationStatus = PowerupActivationStatusType.Used
+        movementComponent.speed = movementComponent.speed + 1
+        this.activationStatus = PowerupActivationStatusType.Inactive
         console.log("DEACTIVATED------------------------------------------------")
     } 
 }

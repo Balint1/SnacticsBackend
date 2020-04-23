@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "tsc && nodemon server.ts",
-    "test": "mocha -r ts-node/register src/**/**-test.ts",
+    "test": "mocha -r ts-node/register tests/**/**-test.ts",
     "postinstall": "node-config-ts"
   },
   "author": "",

@@ -7,6 +7,9 @@ import { BaseSystem } from "./base-system";
 import { SpeedBoosterPowerUp } from "../powerups/speed-booster-powerup";
 import { SnakeFactory } from "../factory/SnakeFactory"
 import { SnakeComponent } from "../components/snake-component";
+import { PowerupType } from "../Enums/powerup-type";
+import { getRandomPowerUp } from "../helpers/powerUp-helper";
+
 
 export class CollisionSystem extends BaseSystem{
     
@@ -59,8 +62,13 @@ export class CollisionSystem extends BaseSystem{
                         
                         case TagType.Powerup:
                             let powerup = this.entityPool.powerupManager.get(colliderEntity.entityId)
-                            
                             playerComponent.powerups.push(new SpeedBoosterPowerUp(this.entityPool, playerComponent.entityId))
+
+                            powerup.powerup = getRandomPowerUp() 
+                            colliderPosition.position.x = Math.floor(Math.random() * config.ServerSettings.fieldWidth)
+                            colliderPosition.position.y = Math.floor(Math.random() * config.ServerSettings.fieldHeight)
+                            colliderPosition.setChanged()
+                            
                             break;
                         default:
                             break;
