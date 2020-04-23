@@ -51,13 +51,15 @@ export class Game {
         this.systems.push(new DynamicsSystem(this.entityPool, this.settings))
         this.systems.push(new PowerupSystem(this.entityPool))
         this.timer = setInterval(() => this.updateState(), config.ServerSettings.timerInterval)
-        //initialize here
+        
+        // Initialize the snakes
         let i = 0;
         players.forEach(p => {
             //TODO random position?
             let snake = SnakeFactory.create(p.id, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings.snakeDefaults);
             snake.forEach(s => {
                 this.entityPool.addEntity(s)
+                p.entities.push(s)
             });
         });
 
@@ -78,12 +80,19 @@ export class Game {
                 this.state.entities.push.apply(this.state.entities, changedComponents.map(c => c.serialize()).filter(o => o != undefined))
                 changedComponents.forEach(c => c.changed = false)
             }
-            }   
-            )
+        })
+
         this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
+
         //TODO delete Debug 
         console.log("UPDATE:")
         console.log(this.state.entities)
+
+        // Send deleted entities if necessary
+        if(this.entityPool.deletedEntities.size > 0) {
+            this.io.to(this.roomId).emit(SocketEvents.DELETE_ENTITIES, {entityIds: this.entityPool.deletedEntities.keys()})
+            this.entityPool.deletedEntities.clear()
+        }
 
         //Sometimes we have to reset the counter, this number won't break the rest ( % ) operation 
         this.idle = this.idle == config.ServerSettings.idleReset ? 0 : this.idle + 1
@@ -93,6 +102,11 @@ export class Game {
 
     removePlayer(playerId: string){
         this.players = this.players.filter(player => player.id != playerId)
+
+        // Remove the player's entities from the ECS
+        let player = this.players.filter(player => player.id == playerId)[0]
+        player.entities.forEach(e => this.entityPool.removeEntity(e.id))
+        
         if(this.players.length == 0){
             this.endGame()
         }else if(this.players.length == 1){
