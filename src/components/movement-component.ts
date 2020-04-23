@@ -16,13 +16,14 @@ export class MovementComponent extends BaseComponent {
 
 
     setDirection(dir: string){
-        if(dir == "up"){
+
+        if(dir == "up" && this.direction != SnakeConstants.directions[4]){
           this.direction = SnakeConstants.directions[0]
-        }else if(dir == "left"){
+        }else if(dir == "left"  && this.direction != SnakeConstants.directions[2]){
           this.direction = SnakeConstants.directions[6]
-        }else if(dir == "down"){
+        }else if(dir == "down"  && this.direction != SnakeConstants.directions[0]){
           this.direction = SnakeConstants.directions[4]
-        }else if(dir == "right"){
+        }else if(dir == "right"  && this.direction != SnakeConstants.directions[6]){
           this.direction = SnakeConstants.directions[2]
         }
     }
