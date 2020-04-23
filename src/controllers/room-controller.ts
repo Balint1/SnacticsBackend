@@ -1,19 +1,19 @@
 import {JsonController, Body, Get, Post} from "routing-controllers";
-import {GameManager} from './games-manager'
-import {getLogger} from './loggers'
-import {Game} from "./game"
+import {GameManager} from '../games-manager'
+import {getLogger} from '../loggers'
+import {Game} from "../game"
 import {
     ICreateRoomBody,
     IStartGameBody,
     IEndGameBody,
     IRemoveRoomBody,
     ILeaveRoomBody
-} from './interfaces/http-request-interfaces'
+} from '../interfaces/http-request-interfaces'
 import {
     ICreateRoomResponse,
     IGetRoomsResponse,
     ISimpleResponse
-} from './interfaces/response-interfaces'
+} from '../interfaces/response-interfaces'
 
 import {config} from 'node-config-ts'
 
@@ -167,10 +167,5 @@ export class RoomController {
             }])
 
         return {test: "test"}
-    }
-
-    @Get("/config")
-    config(){
-        return config
     }
 }

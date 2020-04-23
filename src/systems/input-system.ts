@@ -8,28 +8,30 @@ export class InputSystem implements ISystem{
     private players: IPlayer[];
     private entityPool: EntityPool;
     private gameManager = GameManager.getInstance()
-    
-    deltaDirections:Map<string, number> = new Map()
-    
+
+    directions:Map<string, string> = new Map()
+
     constructor(players: IPlayer[], entityPool:EntityPool){
         this.players = players
         this.entityPool = entityPool
         this.players.map(player => {
-            this.deltaDirections.set(player.id, 0)
-            player.socket.on(SocketEvents.SLIDER_CHANGE, ({ value }) => this.onValueChange(player.id, value))
+            this.directions.set(player.id, "")
+            player.socket.on(SocketEvents.SWIPE, ({ direction }) => this.onValueChange(player.id, direction))
         })
     }
     calculateNextState(idle:number): void {
         this.entityPool.movementManager.forEach(m => {
-
             let player = this.entityPool.playerManager.get(m.entityId)
-            m.setDeltaDirection(this.deltaDirections.get(player.playerId))
-            this.deltaDirections.set(player.playerId, 0)
+            
+            m.setDirection(this.directions.get(player.playerId))
+            this.directions.set(player.playerId, "")
         });
     }
 
     onValueChange(playerId:string, value:any){
-        this.deltaDirections.set(playerId, value)
+        console.log("we received something !!!")
+        console.log(value)
+        this.directions.set(playerId, value)
     }
 
 }
