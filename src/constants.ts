@@ -9,6 +9,7 @@ export enum SocketEvents {
     JOIN_REQUEST = 'join-request',
     JOIN_RESPONSE = 'join-response',
     LEAVE_RESPONSE = 'leave-response',
+    SWIPE = 'swipe',
     UPDATE = 'update-state',
     SLIDER_CHANGE = 'slider-change',
     OWNER_CHANGED = 'owner-changed',
@@ -35,4 +36,3 @@ export class SnakeConstants {
         new Vector2(-config.ServerSettings.blockLength / Math.sqrt(2), config.ServerSettings.blockLength / Math.sqrt(2)),
     ]
 }
-
