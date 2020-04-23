@@ -1,14 +1,14 @@
 import * as socketIo from "socket.io";
-import { getLogger } from './loggers'
+import {getLogger} from './loggers'
 
 //Interfaces
-import { IJoinResponse, ISimpleResponse, IUpdatedList } from "./interfaces/response-interfaces";
-import { IPlayer } from "./interfaces/game-interfaces";
+import {IJoinResponse, ISimpleResponse, IUpdatedList, ILeftToLobby} from "./interfaces/response-interfaces";
+import {IPlayer} from "./interfaces/game-interfaces";
 
-import { GameManager } from "./games-manager";
-import { SocketEvents } from "./constants";
-import { Game } from "./game";
-import { SocketService } from "./socket-service";
+import {GameManager} from "./games-manager";
+import {SocketEvents} from "./constants";
+import {Game} from "./game";
+import {SocketService} from "./socket-service";
 
 const logger = getLogger('room manager')
 
@@ -35,6 +35,9 @@ export class RoomManager {
         socket.on(SocketEvents.DISCONNECT, () => {
             logger.info(`${id} DISCONNECTED`)
             this.leaveRoom(id)
+        }).on(SocketEvents.LEAVE_TO_LOBBY, () => {
+            logger.info(`${id} LEFT TO LOBBY`)
+            this.leaveToLobby(id)
         })
     }
 
@@ -52,7 +55,7 @@ export class RoomManager {
                     }
                 } else {
                     logger.info(`::joinRoom(${nickname}, ${password}) SUCCEEDED`)
-                    this.players.push({ id: socket.id, nickname, socket } as IPlayer)
+                    this.players.push({id: socket.id, nickname, socket} as IPlayer)
                     this.addListeners(socket)
                     return {
                         success: true,
@@ -66,11 +69,11 @@ export class RoomManager {
                 }
             } else {
                 logger.error(`::joinRoom(${nickname}, ${password}) FAILED. cause: password is wrong`)
-                return { success: false, roomId: null, message: `Password: ${password} is wrong`, players: null }
+                return {success: false, roomId: null, message: `Password: ${password} is wrong`, players: null}
             }
         } else {
             logger.error(`::joinRoom(${nickname}, ${password}) FAILED. cause: room is full`)
-            return { success: false, roomId: null, message: `Room ${this.name} is full, can't join`, players: null }
+            return {success: false, roomId: null, message: `Room ${this.name} is full, can't join`, players: null}
         }
     }
 
@@ -85,6 +88,32 @@ export class RoomManager {
             GameManager.getInstance().forceDeleteRoom(this.id)
         }
         this.notifyLeaving()
+    }
+
+    private leaveToLobby = (playerId: string) => {
+        let player = this.players.find(player => player.id == playerId)
+        if (player){
+            //remove player from game
+            this.game.removePlayer(playerId)
+            //notify itself
+            player.socket.emit(SocketEvents.LEAVE_TO_LOBBY_RESPONSE, {
+                success: true,
+                message: null
+            }as ISimpleResponse )
+            //notify other players that someone left the game
+            player.socket.broadcast.to(this.id).emit(SocketEvents.PLAYER_LEFT_GAME, {
+                id: playerId,
+                success: true,
+                message: null
+            }as ILeftToLobby)
+            //TODO stop sending rendering data for this player
+        }else {
+            player.socket.emit(SocketEvents.LEAVE_TO_LOBBY_RESPONSE, {
+                success: false,
+                message: `Player with id ${playerId} doesn't exist`
+            }as ISimpleResponse )
+
+        }
     }
 
 
@@ -149,7 +178,7 @@ export class RoomManager {
 
     private notifyLeaving() {
         if (this.players.length > 0) {
-            SocketService.io().to(this.id).emit(SocketEvents.PLAYER_LEFT, {
+            SocketService.io().to(this.id).emit(SocketEvents.PLAYER_LEFT_ROOM, {
                 players: this.players.map(player => ({
                     nickname: player.nickname,
                     owner: player.id == this.ownerId

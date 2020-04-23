@@ -90,6 +90,16 @@ export class Game {
         return this.state
     }
 
+
+    removePlayer(playerId: string){
+        this.players = this.players.filter(player => player.id != playerId)
+        if(this.players.length == 0){
+            this.endGame()
+        }else if(this.players.length == 1){
+            //TODO this is the winner send notification about wining game
+        }
+    }
+
     endGame() {
         this._inProgress = false
         clearTimeout(this.timer)

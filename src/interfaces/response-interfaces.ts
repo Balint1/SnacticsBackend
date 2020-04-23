@@ -46,3 +46,9 @@ export interface INewPlayerJoined {
     nickname: string,
     owner: boolean
 }
+
+export interface ILeftToLobby {
+    id: string,
+    success: boolean,
+    message: string
+}
