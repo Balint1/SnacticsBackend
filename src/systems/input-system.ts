@@ -22,8 +22,12 @@ export class InputSystem implements ISystem{
     calculateNextState(idle:number): void {
         this.entityPool.movementManager.forEach(m => {
             let player = this.entityPool.playerManager.get(m.entityId)
-            m.setDirection(this.directions.get(player.playerId))
-            this.directions.set(player.playerId, "")
+            let direction = this.directions.get(player.playerId)
+            
+            if(direction != ""){
+                m.setDirection(direction)
+                this.directions.set(player.playerId, "")
+            }
         });
     }
 

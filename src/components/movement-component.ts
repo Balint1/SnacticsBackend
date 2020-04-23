@@ -10,10 +10,7 @@ export class MovementComponent extends BaseComponent {
         this.direction = new Vector2(0, 0)
     }
 
-    directionValue = 0
-
     direction: Vector2
-
 
     setDirection(dir: string){
 
