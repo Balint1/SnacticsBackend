@@ -3,14 +3,15 @@
     },
     "SnakeDefaults": {
         "speed": 1,
-        "length": 8,
-        "colliderRadius":4
+        "length": 16,
+        "colliderRadius": 4,
+        "headSizeFactor": 2
     },
     "ServerSettings":{
         "timerInterval":1000,
         "fieldWidth":500,
         "fieldHeight":300,
-        "blockLength": 10,
+        "blockLength": 6,
         "idleReset" : 362880
     },
     "FoodDefaults": {
