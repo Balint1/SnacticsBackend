@@ -12,6 +12,7 @@ import {CollisionSystem} from "./systems/collision-system";
 import {SocketService} from "./socket-service";
 import {PowerupSystem} from "./systems/powerup-system";
 import {PowerupFactory} from "./factory/PowerupFactory";
+import { PlayerSystem } from "./systems/player-system";
 
 
 const logger = getLogger('game')
@@ -27,6 +28,7 @@ export class Game {
     private timer: NodeJS.Timeout
     private _inProgress: boolean = false
     private idle: number = 0
+    private numUpdates: number = 0
 
     //Temporary solution:
     private spawningPlaces = [
@@ -44,10 +46,14 @@ export class Game {
     startGame(players: IPlayer[]) {
         this._inProgress = true
         this.players = players
+
+        let playerSystem = new PlayerSystem(this.entityPool)
         this.systems.push(new InputSystem(this.players, this.entityPool))
-        this.systems.push(new CollisionSystem(this.entityPool))
+        this.systems.push(playerSystem)
+        this.systems.push(new CollisionSystem(this.entityPool, playerSystem))
         this.systems.push(new DynamicsSystem(this.entityPool, this.settings))
         this.systems.push(new PowerupSystem(this.entityPool))
+
         this.timer = setInterval(() => this.updateState(), config.ServerSettings.timerInterval)
 
         // Initialize the snakes
@@ -66,6 +72,12 @@ export class Game {
     }
 
     private updateState() {
+        this.numUpdates++;
+
+        // Skip the first two updates to give the players time to register the startGame()
+        // TODO cleaner fix
+        if(this.numUpdates < 10)
+            return;
 
         this.systems.forEach(s => {
             s.calculateNextState(this.idle)

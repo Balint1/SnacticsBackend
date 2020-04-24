@@ -44,7 +44,6 @@ export class SnakeFactory{
         let tagComponent = new TagComponent(tag);
 
         let colliderRadius = (tag == TagType.SnakeHead ? config.SnakeDefaults.headSizeFactor : 1) * config.SnakeDefaults.colliderRadius;
-        let colliderComponent = new ColliderComponent(colliderRadius);
 
         if (tag == TagType.SnakeHead) {
             let playerComponent = new PlayerComponent(playerId)
@@ -54,14 +53,19 @@ export class SnakeFactory{
             movementComponent.direction.y = SnakeConstants.directions[2].y
             snakePiece.addComponent(movementComponent)
             snakePiece.addComponent(playerComponent)
+            snakePiece.addComponent(new ColliderComponent(colliderRadius, true))
         }
+        else {
+            snakePiece.addComponent(new ColliderComponent(colliderRadius, false))
+        }
+
         let snakeComponent = new SnakeComponent();
         snakeComponent.next = next
 
         snakePiece.addComponent(positionComponent)
         snakePiece.addComponent(tagComponent)
         snakePiece.addComponent(snakeComponent)
-        snakePiece.addComponent(colliderComponent)
+        
         return {snakePiece, nextSnakeComponent: snakeComponent}
     }
 }

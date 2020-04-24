@@ -9,10 +9,22 @@ export class PlayerComponent extends BaseComponent {
     playerId: string;
     @SocketData()
     powerups:IPowerup[] = []
+    @SocketData()
+    alive: boolean
+
+    // Decay is the state where the snake is alive but has not yet disappeared.
+    @SocketData()
+    decaying: boolean
+
+    // Number of ticks remaining until decay is finished and snake is removed
+    @SocketData()
+    remainingDecayTicks: number
 
     constructor(playerId: string) {
         super()
         this.componentType = ComponentType.Player
         this.playerId = playerId
+        this.alive = true
+        this.decaying = false;
     }
 }
