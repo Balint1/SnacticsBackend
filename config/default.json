@@ -3,7 +3,7 @@
     },
     "SnakeDefaults": {
         "speed": 1,
-        "length": 16,
+        "length": 12,
         "colliderRadius": 4,
         "headSizeFactor": 2
     },
@@ -11,7 +11,7 @@
         "timerInterval":1000,
         "fieldWidth":500,
         "fieldHeight":300,
-        "blockLength": 6,
+        "blockLength": 10,
         "idleReset" : 362880
     },
     "FoodDefaults": {
