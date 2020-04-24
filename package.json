@@ -5,21 +5,37 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "tsc && nodemon server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r ts-node/register tests/**/**-test.ts",
+    "postinstall": "node-config-ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/chai": "^4.2.11",
     "@types/express": "^4.16.1",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "ts-node": "^8.9.0",
     "tslint": "^5.12.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "typings": "^2.1.1"
   },
   "dependencies": {
+    "@types/body-parser": "^1.19.0",
     "@types/node": "^13.7.7",
     "@types/socket.io": "^2.1.4",
+    "@types/winston": "^2.4.4",
+    "body-parser": "^1.19.0",
+    "class-transformer": "^0.2.3",
+    "class-validator": "^0.11.1",
     "express": "^4.16.4",
+    "guid-typescript": "^1.0.9",
+    "node-config-ts": "^3.0.4",
     "nodemon": "^2.0.2",
+    "reflect-metadata": "^0.1.13",
+    "routing-controllers": "^0.8.1-alpha.2",
     "socket.io": "^2.3.0",
-    "ts-node": "^8.6.2"
+    "winston": "^3.2.1"
   }
 }

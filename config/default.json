@@ -1,0 +1,25 @@
+{
+    "GameSettings": {
+    },
+    "SnakeDefaults": {
+        "colliderRadius": 4,
+        "headSizeFactor": 2
+    },
+    "ServerSettings":{
+        "timerInterval":200,
+        "fieldWidth":500,
+        "fieldHeight":300,
+        "blockLength": 10,
+        "idleReset" : 362880
+    },
+    "FoodDefaults": {
+        "foodColliderRadius": 6
+    },
+    "PowerupDefaults":{
+        "InstantPowerUpTimeout" : 10,
+        "powerUpTable" : [
+            { "powerUp" : "SpeedBooster", "weight" : 5 }, 
+            { "powerUp" : "SpeedDebuff", "weight" : 5 } 
+        ]
+    }
+}

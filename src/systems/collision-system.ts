@@ -1,0 +1,75 @@
+import { TagType } from "../Enums/tag-type";
+import {config} from 'node-config-ts'
+import { BaseSystem } from "./base-system";
+import { SpeedBoosterPowerUp } from "../powerups/speed-booster-powerup";
+import { SnakeFactory } from "../factory/SnakeFactory"
+import { getRandomPowerUp } from "../helpers/powerUp-helper";
+
+
+export class CollisionSystem extends BaseSystem{
+    
+    calculateNextState(idle:number): void {
+        this.entityPool.playerManager.forEach(playerComponent => {
+            let headCollider = this.entityPool.colliderManager.get(playerComponent.entityId)
+            let headPosition = this.entityPool.positionManager.get(playerComponent.entityId)
+
+            this.entityPool.colliderManager.forEach(collider => {
+                let colliderPosition = this.entityPool.positionManager.get(collider.entityId)
+                let distance = headPosition.position.distance(colliderPosition.position)
+                
+                if(colliderPosition.entityId != headCollider.entityId && distance < headCollider.colliderRadius + collider.colliderRadius){
+                    //Collision detected
+                    
+                    let colliderEntity = this.entityPool.tagManager.get(collider.entityId)
+
+                    switch (colliderEntity?.tag) {
+                        case TagType.Food:
+                            //Maybe move to a function or function to food component
+                            colliderPosition.position.x = Math.floor(Math.random() * config.ServerSettings.fieldWidth)
+                            colliderPosition.position.y = Math.floor(Math.random() * config.ServerSettings.fieldHeight)
+                            colliderPosition.setChanged()
+                            
+                            //Adds the new piece to the snake, at the end of it
+                            let headSnakePiece = this.entityPool.snakeManager.get(playerComponent.entityId)
+                            let tailSnakeComponent = headSnakePiece;
+
+                            //Get the tail of the snake
+                            while(tailSnakeComponent.next){
+                            tailSnakeComponent = tailSnakeComponent.next
+                            }
+
+                            let tailPosition = this.entityPool.positionManager.get(tailSnakeComponent.entityId);
+                            //Create new tail and add it to the entity pool
+                            let newTail = new SnakeFactory().createSnakePiece(playerComponent.entityId, tailPosition.position.x , tailPosition.position.y, 0, TagType.SnakeBody, null)
+                            this.entityPool.addEntity(newTail.snakePiece)
+                            //Connect new tail to the previous tail
+                            tailSnakeComponent.next = newTail.nextSnakeComponent
+                            tailSnakeComponent.setChanged()
+
+                            break;
+                        case TagType.SnakeHead:
+                            
+                            break;
+                        case TagType.SnakeBody:
+                            
+                            break;
+                        
+                        case TagType.Powerup:
+                            let powerup = this.entityPool.powerupManager.get(colliderEntity.entityId)
+                            playerComponent.powerups.push(new SpeedBoosterPowerUp(this.entityPool, playerComponent.entityId))
+
+                            powerup.powerup = getRandomPowerUp() 
+                            colliderPosition.position.x = Math.floor(Math.random() * config.ServerSettings.fieldWidth)
+                            colliderPosition.position.y = Math.floor(Math.random() * config.ServerSettings.fieldHeight)
+                            colliderPosition.setChanged()
+                            
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+        });
+    }
+
+}
