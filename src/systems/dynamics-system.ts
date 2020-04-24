@@ -52,6 +52,7 @@ export class DynamicsSystem extends BaseSystem {
                 tailSnakeComponent.next = secondSnakeComponent
                 tailSnakeComponent.setChanged()
                 head.next = tailSnakeComponent
+                head.setChanged()
                 beforeTailSnakeComponent.next = undefined
                 beforeTailSnakeComponent.setChanged()
 
