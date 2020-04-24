@@ -67,6 +67,7 @@ export class CollisionSystem extends BaseSystem {
                             break;
                         case TagType.SnakeBody:
                             // Head to body collision: kill head
+                            this.playerSystem.killPlayer(playerComponent)
                             break;
                         
                         case TagType.Powerup:
