@@ -13,10 +13,10 @@
 ![](images/add-new-piece.png)
 
 ## Sending component data to client
- - Mark the properties of the component with `SocketData()` decorator
+ - Mark the properties of the component with `SocketData()` decorator  
  ![](images/socket_data_usage.png)
- - Set the component status to changed whenever you change the tracked properties of the component (TODO it can be done automaticly with a custom setter)
+ - Set the component status to changed whenever you change the tracked properties of the component (TODO it can be done automaticly with a custom setter)  
  ![](images/set_changed.png)
  - If you need only one ore more sub-property of the property you can specify them by passing the sub-property name in parameter:
- (you can use more decorators on the same property)
+ (you can use more decorators on the same property)  
  ![](images/socket_data_sub_property_usage.png)
