@@ -29,8 +29,6 @@ export class InputSystem implements ISystem{
     }
 
     onValueChange(playerId:string, value:any){
-        console.log("we received something !!!")
-        console.log(value)
         this.directions.set(playerId, value)
     }
 

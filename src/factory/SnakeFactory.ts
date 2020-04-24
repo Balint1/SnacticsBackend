@@ -10,7 +10,7 @@ import {config} from 'node-config-ts'
 import {SnakeConstants} from "../constants";
 import {ISettings} from "../interfaces/game-interfaces";
 
-export class SnakeFactory {
+export class SnakeFactory{
     /**
      * creates a snake based on the given parameters
      */
@@ -22,7 +22,6 @@ export class SnakeFactory {
 
         snake.push(tail.snakePiece)
         for (let index = 1; index <= settings.snakeLength; index++) {
-            console.log("For")
             let isHead = index == settings.snakeLength;
 
             var {snakePiece, nextSnakeComponent} = this.createSnakePiece(

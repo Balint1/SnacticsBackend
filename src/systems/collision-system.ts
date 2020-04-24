@@ -25,7 +25,6 @@ export class CollisionSystem extends BaseSystem{
                     switch (colliderEntity?.tag) {
                         case TagType.Food:
                             //Maybe move to a function or function to food component
-                            console.log("Change")
                             colliderPosition.position.x = Math.floor(Math.random() * config.ServerSettings.fieldWidth)
                             colliderPosition.position.y = Math.floor(Math.random() * config.ServerSettings.fieldHeight)
                             colliderPosition.setChanged()

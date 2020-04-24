@@ -82,10 +82,6 @@ export class Game {
 
         this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
 
-        //TODO delete Debug 
-        console.log("UPDATE:")
-        console.log(this.state.entities)
-
         // Send deleted entities if necessary
         if (this.entityPool.deletedEntities.size > 0) {
             this.io.to(this.roomId).emit(SocketEvents.DELETE_ENTITIES, {entityIds: this.entityPool.deletedEntities.keys()})
