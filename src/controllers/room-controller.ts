@@ -15,8 +15,6 @@ import {
     ISimpleResponse
 } from '../interfaces/response-interfaces'
 
-import {config} from 'node-config-ts'
-
 const logger = getLogger('http')
 
 @JsonController("/Rooms")
@@ -28,6 +26,7 @@ export class RoomController {
 
     @Post("/create")
     createRoom(@Body() params: ICreateRoomBody) {
+        console.log(params.settings)
         let response: ICreateRoomResponse
         let {roomId, message} = this.gameManager.createRoom(
             params.name,

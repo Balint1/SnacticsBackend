@@ -1,8 +1,15 @@
+interface ISettings {
+    customSpeed: number
+    snakeLength:  string
+    colorsDisabled: boolean
+}
+
 export interface ICreateRoomBody {
     name: string
     password: string
     capacity: number
     ownerId: string
+    settings: ISettings
 }
 
 export interface IStartGameBody {
