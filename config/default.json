@@ -2,13 +2,11 @@
     "GameSettings": {
     },
     "SnakeDefaults": {
-        "speed": 1,
-        "length": 12,
         "colliderRadius": 4,
         "headSizeFactor": 2
     },
     "ServerSettings":{
-        "timerInterval":1000,
+        "timerInterval":200,
         "fieldWidth":500,
         "fieldHeight":300,
         "blockLength": 10,

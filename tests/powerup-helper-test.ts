@@ -7,8 +7,6 @@ describe('Test get random powerup', () => {
   it('should be a powerup', () => {
 
     let powerUp = getRandomPowerUp()
-    console.log(powerUp)
     expect(powerUp).not.equal(null)
-
   });
 });

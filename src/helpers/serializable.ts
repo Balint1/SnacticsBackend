@@ -1,6 +1,5 @@
 import {getDecorators, SocketData} from "./decorators";
 import {HelperConstants, SnakeConstants} from "../constants";
-import { SnakeDefaults } from "../models/game-setting";
 
 export abstract class Serializable {
     serialize(): object {

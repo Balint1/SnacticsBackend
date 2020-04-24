@@ -1,7 +1,7 @@
 import {JsonController, Body, Get, Post} from "routing-controllers";
 import {GameManager} from '../games-manager'
 import {getLogger} from '../loggers'
-import {Game} from "../game"
+
 import {
     ICreateRoomBody,
     IStartGameBody,
@@ -14,6 +14,7 @@ import {
     IGetRoomsResponse,
     ISimpleResponse
 } from '../interfaces/response-interfaces'
+import {ISettings} from "../interfaces/game-interfaces";
 
 const logger = getLogger('http')
 
@@ -26,13 +27,14 @@ export class RoomController {
 
     @Post("/create")
     createRoom(@Body() params: ICreateRoomBody) {
-        console.log(params.settings)
+        let settings: ISettings = JSON.parse(params.settings)
         let response: ICreateRoomResponse
         let {roomId, message} = this.gameManager.createRoom(
             params.name,
             params.password,
             params.capacity,
-            params.ownerId
+            params.ownerId,
+            settings
         )
         if (roomId) {
             logger.info("createRoom::CREATE ROOM request SUCCEEDED")
@@ -152,20 +154,5 @@ export class RoomController {
 
         logger.info("leaveRoom::LEAVE ROOM request SUCCEEDED")
         return response
-    }
-
-    @Get("/test")
-    test() {
-
-        let g = new Game("dsfds")
-        g.startGame([
-            {
-                id: "dsa",
-                nickname: "fds",
-                socket: null,
-                entities: []
-            }])
-
-        return {test: "test"}
     }
 }

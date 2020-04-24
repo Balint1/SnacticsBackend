@@ -3,7 +3,7 @@ import {getLogger} from './loggers'
 
 //Interfaces
 import {IJoinResponse, ISimpleResponse, IUpdatedList, ILeftToLobby} from "./interfaces/response-interfaces";
-import {IPlayer} from "./interfaces/game-interfaces";
+import {IPlayer, ISettings} from "./interfaces/game-interfaces";
 
 import {GameManager} from "./games-manager";
 import {SocketEvents} from "./constants";
@@ -20,14 +20,15 @@ export class RoomManager {
     players: IPlayer[] = [];
     capacity: number;
     game: Game;
+    settings: ISettings
 
-    constructor(id: string, name: string, password: string, ownerId: string, capacity: number) {
+    constructor(id: string, name: string, password: string, ownerId: string, capacity: number, settings: ISettings) {
         this.id = id
         this.name = name
         this.password = password
         this.ownerId = ownerId
         this.capacity = capacity
-        this.game = new Game(id)
+        this.game = new Game(id, settings)
     }
 
     addListeners = (socket: socketIo.Socket) => {
@@ -107,12 +108,6 @@ export class RoomManager {
                 message: null
             }as ILeftToLobby)
             //TODO stop sending rendering data for this player
-        }else {
-            player.socket.emit(SocketEvents.LEAVE_TO_LOBBY_RESPONSE, {
-                success: false,
-                message: `Player with id ${playerId} doesn't exist`
-            }as ISimpleResponse )
-
         }
     }
 

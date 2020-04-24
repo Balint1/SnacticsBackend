@@ -1,35 +1,34 @@
-import { Entity } from "../entities/entity";
-import { MovementComponent } from "../components/movement-component";
-import { PositionComponent } from "../components/position-component";
-import { TagComponent } from "../components/tag-component";
-import { TagType } from "../Enums/tag-type";
-import { SnakeComponent } from "../components/snake-component";
-import { PlayerComponent } from "../components/player-component";
-import { ColliderComponent } from "../components/collider-component";
+import {Entity} from "../entities/entity";
+import {MovementComponent} from "../components/movement-component";
+import {PositionComponent} from "../components/position-component";
+import {TagComponent} from "../components/tag-component";
+import {TagType} from "../Enums/tag-type";
+import {SnakeComponent} from "../components/snake-component";
+import {PlayerComponent} from "../components/player-component";
+import {ColliderComponent} from "../components/collider-component";
 import {config} from 'node-config-ts'
-import { SnakeDefaults } from "../models/game-setting";
-import { SnakeConstants } from "../constants";
+import {SnakeConstants} from "../constants";
+import {ISettings} from "../interfaces/game-interfaces";
 
-export class SnakeFactory {
+export class SnakeFactory{
     /**
      * creates a snake based on the given parameters
      */
-    public static create(playerId: string, x: number, y: number, snakeDefaults:SnakeDefaults): Entity[] {
+    public create(playerId: string, x: number, y: number, settings: ISettings): Entity[] {
 
         let snake: Entity[] = [];
 
-        let tail = SnakeFactory.createSnakePiece(playerId, x, y,snakeDefaults.speed, TagType.SnakeBody, null);
+        let tail = this.createSnakePiece(playerId, x, y, settings.speed, TagType.SnakeBody, null);
 
         snake.push(tail.snakePiece)
+        for (let index = 1; index <= settings.snakeLength; index++) {
+            let isHead = index == settings.snakeLength;
 
-        for (let index = 1; index <= snakeDefaults.length; index++) {
-            let isHead = index == snakeDefaults.length; 
-            
-            var { snakePiece, nextSnakeComponent } = SnakeFactory.createSnakePiece(
+            var {snakePiece, nextSnakeComponent} = this.createSnakePiece(
                 playerId,
                 (x + config.ServerSettings.blockLength * index) % config.ServerSettings.fieldWidth,
                 y,
-                snakeDefaults.speed,
+                settings.speed,
                 isHead ? TagType.SnakeHead : TagType.SnakeBody,
                 nextSnakeComponent ? nextSnakeComponent : tail.nextSnakeComponent);
 
@@ -39,7 +38,7 @@ export class SnakeFactory {
         return snake
     }
 
-    static createSnakePiece(playerId: string, x: number, y: number, speed:number, tag: TagType, next: SnakeComponent) {
+    createSnakePiece(playerId: string, x: number, y: number, speed: number, tag: TagType, next: SnakeComponent) {
         let snakePiece = new Entity()
         let positionComponent = new PositionComponent(x, y);
         let tagComponent = new TagComponent(tag);
@@ -63,6 +62,6 @@ export class SnakeFactory {
         snakePiece.addComponent(tagComponent)
         snakePiece.addComponent(snakeComponent)
         snakePiece.addComponent(colliderComponent)
-        return { snakePiece, nextSnakeComponent: snakeComponent }
+        return {snakePiece, nextSnakeComponent: snakeComponent}
     }
 }

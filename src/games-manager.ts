@@ -3,6 +3,7 @@ import {IJoinResponse, ISimpleResponse} from './interfaces/response-interfaces'
 import {getLogger} from './loggers'
 import * as socketIo from 'socket.io';
 import {RoomManager} from "./room-manager";
+import {ISettings} from "./interfaces/game-interfaces";
 
 const logger = getLogger('game manager')
 
@@ -35,7 +36,7 @@ export class GameManager {
         return this._rooms
     }
 
-    public createRoom(name: string, password: string, capacity: number, ownerId: string): { roomId: string, message: string } {
+    public createRoom(name: string, password: string, capacity: number, ownerId: string, settings: ISettings): { roomId: string, message: string } {
         let nameTaken = this._rooms.find(room => room.name == name)
         if (nameTaken) {
             logger.error(`Couldn't CREATE new room: ${name}, name already taken`)
@@ -45,7 +46,7 @@ export class GameManager {
             }
         } else {
             let roomId = Guid.raw()
-            this._rooms.push(new RoomManager(roomId, name, password, ownerId, capacity))
+            this._rooms.push(new RoomManager(roomId, name, password, ownerId, capacity, settings))
             logger.info(`${ownerId} CREATED new room: ${name} id: ${roomId}`)
             return {
                 roomId: roomId,
