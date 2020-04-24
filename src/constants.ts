@@ -11,6 +11,7 @@ export enum SocketEvents {
     LEAVE_RESPONSE = 'leave-response',
     SWIPE = 'swipe',
     UPDATE = 'update-state',
+    DELETE_ENTITIES = 'delete-entities',
     SLIDER_CHANGE = 'slider-change',
     OWNER_CHANGED = 'owner-changed',
     START_GAME = 'start-game',

@@ -15,6 +15,7 @@ import { PowerupComponent } from "../components/poweup-component";
 export class EntityPool {
 
     constructor() {
+
     }
 
     entities: Map<string, Entity> = new Map()
@@ -26,7 +27,7 @@ export class EntityPool {
     playerManager: Map<string, PlayerComponent> = new Map()
     powerupManager: Map<string, PowerupComponent> = new Map()
     
-    //Register all managers here
+    // Register all managers here
     managers: Map<string, IComponent>[] = [
         this.positionManager,
         this.colliderManager,
@@ -37,9 +38,11 @@ export class EntityPool {
         this.powerupManager
     ]
 
+    // Keep track of deleted entities so we can notify the client on the next state update
+    deletedEntities: Map<string, Entity> = new Map()
+
     /**
-     * Add new entity to the entites and all of its components to the managers
-     * based on the name of the componentType
+     * Add a new entity and all of its components to the managers based on the name of the componentType
      */
     addEntity(entity: Entity) {
         this.entities.set(entity.id, entity)
@@ -50,11 +53,14 @@ export class EntityPool {
         });
     }
 
+    /**
+     * Removes an entity. The entity will be stored temporarily until the clients are notified of its deletion.
+     */
     removeEntity(entityId: string) {
+        this.deletedEntities.set(entityId, this.entities.get(entityId))
         this.entities.delete(entityId)
         this.managers.forEach(m => {
             m.delete(entityId)
         });
-
     }
 }

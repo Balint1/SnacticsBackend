@@ -5,9 +5,9 @@ import { IPowerup } from "../powerups/powerup-interface";
 
 export class PlayerComponent extends BaseComponent {
 
-    @SocketData
+    @SocketData()
     playerId: string;
-    @SocketData
+    @SocketData()
     powerups:IPowerup[] = []
 
     constructor(playerId: string) {

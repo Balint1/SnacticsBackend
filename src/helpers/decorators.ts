@@ -2,9 +2,6 @@ import "reflect-metadata";
 import { BaseComponent } from "../components/base-component";
 
 
-export function SocketData(target: Object, propertyKey: string | symbol) {
-    Reflect.defineMetadata("custom:annotations:socketData", "SocketData", target, propertyKey);
-}
 
 export function getDecorators(target: any, propertyName: string | symbol): string[] {
     // get info about keys that used in current property
@@ -17,4 +14,8 @@ export function getDecorators(target: any, propertyName: string | symbol): strin
             const currValues = Reflect.getMetadata(key, target, propertyName);
             return values.concat(currValues);
         }, []);
+}
+
+export function SocketData(subProperty: string = "") {
+    return Reflect.metadata("custom:annotations:socketData", "SocketData:" + subProperty);
 }

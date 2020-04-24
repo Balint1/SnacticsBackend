@@ -55,7 +55,7 @@ export class RoomManager {
                     }
                 } else {
                     logger.info(`::joinRoom(${nickname}, ${password}) SUCCEEDED`)
-                    this.players.push({id: socket.id, nickname, socket} as IPlayer)
+                    this.players.push({id: socket.id, nickname, socket, entities: []} as IPlayer)
                     this.addListeners(socket)
                     return {
                         success: true,

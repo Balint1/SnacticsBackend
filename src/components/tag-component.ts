@@ -9,6 +9,6 @@ export class TagComponent extends BaseComponent{
             this.componentType = ComponentType.Tag
             this.tag = tag
         }
-        @SocketData
+        @SocketData()
         tag:TagType
 }

@@ -8,9 +8,9 @@ export class PositionComponent extends BaseComponent {
         this.componentType = ComponentType.Position
     }
 
-    @SocketData
+    @SocketData()
     x: number
-    @SocketData
+    @SocketData()
     y: number
 
 }

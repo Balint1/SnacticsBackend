@@ -23,13 +23,14 @@ export class SnakeFactory {
         snake.push(tail.snakePiece)
 
         for (let index = 1; index <= snakeDefaults.length; index++) {
-
+            let isHead = index == snakeDefaults.length; 
+            
             var { snakePiece, nextSnakeComponent } = SnakeFactory.createSnakePiece(
                 playerId,
                 (x + config.ServerSettings.blockLength * index) % config.ServerSettings.fieldWidth,
                 y,
                 snakeDefaults.speed,
-                index == snakeDefaults.length ? TagType.SnakeHead : TagType.SnakeBody,
+                isHead ? TagType.SnakeHead : TagType.SnakeBody,
                 nextSnakeComponent ? nextSnakeComponent : tail.nextSnakeComponent);
 
             snake.push(snakePiece)
@@ -42,7 +43,10 @@ export class SnakeFactory {
         let snakePiece = new Entity()
         let positionComponent = new PositionComponent(x, y);
         let tagComponent = new TagComponent(tag);
-        let colliderComponent = new ColliderComponent(config.SnakeDefaults.colliderRadius)
+
+        let colliderRadius = (tag == TagType.SnakeHead ? config.SnakeDefaults.headSizeFactor : 1) * config.SnakeDefaults.colliderRadius;
+        let colliderComponent = new ColliderComponent(colliderRadius);
+
         if (tag == TagType.SnakeHead) {
             let playerComponent = new PlayerComponent(playerId)
             let movementComponent = new MovementComponent();

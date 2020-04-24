@@ -35,7 +35,6 @@ export class CollisionSystem extends BaseSystem{
                             colliderPosition.position.y = Math.floor(Math.random() * config.ServerSettings.fieldHeight)
                             colliderPosition.setChanged()
                             
-
                             //Adds the new piece to the snake, at the end of it
                             let headSnakePiece = this.entityPool.snakeManager.get(playerComponent.entityId)
                             let tailSnakeComponent = headSnakePiece;
@@ -51,6 +50,7 @@ export class CollisionSystem extends BaseSystem{
                             this.entityPool.addEntity(newTail.snakePiece)
                             //Connect new tail to the previous tail
                             tailSnakeComponent.next = newTail.nextSnakeComponent
+                            tailSnakeComponent.setChanged()
 
                             break;
                         case TagType.SnakeHead:
