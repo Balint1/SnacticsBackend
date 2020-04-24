@@ -9,8 +9,8 @@ export abstract class BaseComponent extends Serializable implements IComponent, 
         this.changed = true
     }
     changed: boolean = true;
-    @SocketData
+    @SocketData()
     entityId: string
-    @SocketData
+    @SocketData()
     componentType: ComponentType
 }

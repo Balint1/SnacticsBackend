@@ -10,7 +10,7 @@ export class PositionComponent extends BaseComponent {
         this.position = new Vector2(x,y)
     }
 
-    @SocketData
+    @SocketData()
     position:Vector2
 
 }
