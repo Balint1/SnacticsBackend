@@ -105,7 +105,9 @@ export class Game {
 
         // Remove the player's entities from the ECS
         let player = this.players.filter(player => player.id == playerId)[0]
-        player.entities.forEach(e => this.entityPool.removeEntity(e.id))
+        //TODO player was undefined when closing the game and server crashed
+        if(player)
+            player.entities.forEach(e => this.entityPool.removeEntity(e.id))
         
         if(this.players.length == 0){
             this.endGame()
