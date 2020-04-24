@@ -1,13 +1,8 @@
-import { ISystem } from "../interfaces/system-interfaces";
-import { EntityPool } from "../entities/entity-pool";
 import { TagType } from "../Enums/tag-type";
-import { Vector2 } from "../models/position";
 import {config} from 'node-config-ts'
 import { BaseSystem } from "./base-system";
 import { SpeedBoosterPowerUp } from "../powerups/speed-booster-powerup";
 import { SnakeFactory } from "../factory/SnakeFactory"
-import { SnakeComponent } from "../components/snake-component";
-import { PowerupType } from "../Enums/powerup-type";
 import { getRandomPowerUp } from "../helpers/powerUp-helper";
 
 
@@ -46,7 +41,7 @@ export class CollisionSystem extends BaseSystem{
 
                             let tailPosition = this.entityPool.positionManager.get(tailSnakeComponent.entityId);
                             //Create new tail and add it to the entity pool
-                            let newTail = SnakeFactory.createSnakePiece(playerComponent.entityId, tailPosition.position.x , tailPosition.position.y, 0, TagType.SnakeBody, null)
+                            let newTail = new SnakeFactory().createSnakePiece(playerComponent.entityId, tailPosition.position.x , tailPosition.position.y, 0, TagType.SnakeBody, null)
                             this.entityPool.addEntity(newTail.snakePiece)
                             //Connect new tail to the previous tail
                             tailSnakeComponent.next = newTail.nextSnakeComponent

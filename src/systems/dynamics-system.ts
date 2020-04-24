@@ -1,14 +1,14 @@
 import {BaseSystem} from "./base-system";
 import { SnakeComponent } from "../components/snake-component";
 import { EntityPool } from "../entities/entity-pool";
-import { GameSetting, Setting } from "../models/game-setting";
 import {config} from 'node-config-ts'
+import {ISettings} from "../interfaces/game-interfaces";
 
 
 export class DynamicsSystem extends BaseSystem {
-    private setting: Setting;
+    private setting: ISettings;
 
-    constructor(entityPool:EntityPool, setting:Setting){
+    constructor(entityPool:EntityPool, setting:ISettings){
         super(entityPool)
         this.setting = setting
     }

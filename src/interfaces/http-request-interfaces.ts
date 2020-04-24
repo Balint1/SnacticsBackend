@@ -1,15 +1,11 @@
-interface ISettings {
-    customSpeed: number
-    snakeLength:  string
-    colorsDisabled: boolean
-}
+import {ISettings} from "./game-interfaces";
 
 export interface ICreateRoomBody {
     name: string
     password: string
     capacity: number
     ownerId: string
-    settings: ISettings
+    settings: string
 }
 
 export interface IStartGameBody {
