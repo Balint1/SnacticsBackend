@@ -6,7 +6,7 @@ export class PowerupSystem extends BaseSystem{
     calculateNextState(idle: number): void {
         this.entityPool.playerManager.forEach(player => {
             player.powerups.forEach(powerup => {
-                if(powerup.activationStatus == PowerupActivationStatusType.Atcivated){
+                if(powerup.activationStatus == PowerupActivationStatusType.Activated){
                     if(powerup.expiration == idle){
                         powerup.deactivate()
                     }

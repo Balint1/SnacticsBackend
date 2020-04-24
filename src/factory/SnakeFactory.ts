@@ -9,12 +9,13 @@ import { ColliderComponent } from "../components/collider-component";
 import {config} from 'node-config-ts'
 import { SnakeDefaults } from "../models/game-setting";
 import { SnakeConstants } from "../constants";
+import { SnakeColorType } from "../Enums/snake-color-type";
 
 export class SnakeFactory {
     /**
      * creates a snake based on the given parameters
      */
-    public static create(playerId: string, x: number, y: number, snakeDefaults:SnakeDefaults): Entity[] {
+    public static create(playerId: string, x: number, y: number, snakeDefaults:SnakeDefaults, snakeColorType:SnakeColorType): Entity[] {
 
         let snake: Entity[] = [];
 
