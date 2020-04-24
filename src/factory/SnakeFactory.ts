@@ -10,6 +10,8 @@ import {config} from 'node-config-ts'
 import { SnakeDefaults } from "../models/game-setting";
 import { SnakeConstants } from "../constants";
 import { SnakeColorType } from "../Enums/snake-color-type";
+import { RedSnakePowerup } from "../powerups/red-snake-constant-powerup"
+import { GreenSnakePowerup } from "../powerups/green-snake-constant-powerup"
 
 export class SnakeFactory {
     /**
@@ -34,6 +36,15 @@ export class SnakeFactory {
                 nextSnakeComponent ? nextSnakeComponent : tail.nextSnakeComponent);
 
             snake.push(snakePiece)
+        }
+
+        if (snakeColorType == "RedSnake") {
+            let playerComponent = new PlayerComponent(playerId)
+            playerComponent.powerups.push(new RedSnakePowerup(this.entityPool, playerId))
+        }
+        if (snakeColorType == "GreenSnake") {
+            let playerComponent = new PlayerComponent(playerId)
+            playerComponent.powerups.push(new GreenSnakePowerup(this.entityPool, playerId))
         }
 
         return snake
