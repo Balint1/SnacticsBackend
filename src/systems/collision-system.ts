@@ -4,7 +4,6 @@ import { BaseSystem } from "./base-system";
 import { SpeedBoosterPowerUp } from "../powerups/speed-booster-powerup";
 import { SnakeFactory } from "../factory/SnakeFactory"
 import { getRandomPowerUp } from "../helpers/powerUp-helper";
-import { PlayerSystem } from "./player-system";
 import { EntityPool } from "../entities/entity-pool";
 import { Game } from "../game";
 import { PowerupType } from "../Enums/powerup-type";
@@ -13,11 +12,9 @@ import { InvisiblePowerUp } from "../powerups/invisible-powerup";
 
 
 export class CollisionSystem extends BaseSystem {
-    playerSystem: PlayerSystem
-    
-    constructor(game: Game, entityPool: EntityPool, playerSystem: PlayerSystem) {
+
+    constructor(game: Game, entityPool: EntityPool) {
         super(game, entityPool)
-        this.playerSystem = playerSystem
     }
 
     calculateNextState(idle: number): void {
@@ -69,12 +66,11 @@ export class CollisionSystem extends BaseSystem {
                             break;
                         case TagType.SnakeHead:
                             // Head to head collision: kill both
-                            this.playerSystem.killPlayer(playerComponent)
-                            this.playerSystem.killPlayer(this.entityPool.playerManager.get(collider.entityId))
+                            headCollider.collided = true
                             break;
                         case TagType.SnakeBody:
                             // Head to body collision: kill head
-                            this.playerSystem.killPlayer(playerComponent)
+                            headCollider.collided = true
                             break;
                         
                         case TagType.Powerup:
@@ -119,8 +115,10 @@ export class CollisionSystem extends BaseSystem {
                     // Check if this is a player colliding
                     if(this.entityPool.playerManager.has(collider.entityId)) {
                         let player = this.entityPool.playerManager.get(collider.entityId);
-                        if(player.alive)
-                            this.playerSystem.killPlayer(player);
+                        if(player.alive){
+                            collider.collided = true
+                        }
+
                     }       
                 }
             } 

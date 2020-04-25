@@ -2,6 +2,7 @@ import { ComponentType } from "../enums/component-type";
 import { BaseComponent } from "./base-component";
 import { SocketData } from "../helpers/decorators";
 import { IPowerup } from "../powerups/powerup-interface";
+import {Socket} from "socket.io";
 
 export class PlayerComponent extends BaseComponent {
 
@@ -24,10 +25,16 @@ export class PlayerComponent extends BaseComponent {
     @SocketData()
     remainingDecayTicks: number
 
-    constructor(playerId: string) {
+    socket: Socket
+
+    roomId: string
+
+    constructor(playerId: string, socket: Socket, roomId: string) {
         super()
         this.componentType = ComponentType.Player
         this.playerId = playerId
+        this.socket = socket
+        this.roomId = roomId
         this.alive = true
         this.decaying = false
         this.invisible = false

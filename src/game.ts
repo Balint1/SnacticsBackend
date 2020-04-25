@@ -52,7 +52,7 @@ export class Game {
         this.playerSystem = new PlayerSystem(this, this.entityPool)
         this.systems.push(new InputSystem(this, this.entityPool, this.players))
         this.systems.push(this.playerSystem)
-        this.systems.push(new CollisionSystem(this, this.entityPool, this.playerSystem))
+        this.systems.push(new CollisionSystem(this, this.entityPool))
         this.systems.push(new DynamicsSystem(this, this.entityPool, this.settings))
         this.systems.push(new PowerupSystem(this, this.entityPool))
 
@@ -62,7 +62,7 @@ export class Game {
         let i = 0;
         players.forEach(p => {
             //TODO random position?
-            let snake = new SnakeFactory().create(p, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings);
+            let snake = new SnakeFactory().create(p, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings, this.roomId);
             snake.forEach(s => {
                 this.entityPool.addEntity(s)
             });
@@ -127,7 +127,7 @@ export class Game {
 
             // Remove the player's entities from the ECS
             player.entities.forEach(e => this.entityPool.removeEntity(e.id))
-        
+
             if (this.players.length == 0) {
                 this.endGame()
             } else if (this.players.length == 1) {

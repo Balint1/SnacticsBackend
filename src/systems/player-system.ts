@@ -5,6 +5,8 @@ import { GameManager } from "../games-manager";
 import { PlayerComponent } from "../components/player-component";
 import {config} from "node-config-ts"
 import { Game } from "../game";
+import {SocketEvents} from "../constants";
+import {IPlayerEvent} from "../interfaces/response-interfaces";
 
 export class PlayerSystem implements ISystem {
     private players: IPlayer[];
@@ -19,6 +21,10 @@ export class PlayerSystem implements ISystem {
     
     calculateNextState(idle: number): void {
         this.entityPool.playerManager.forEach(player => {
+            let headCollider = this.entityPool.colliderManager.get(player.entityId)
+            if(headCollider.collided && player.alive){
+                this.killPlayer(player)
+            }
             // Handle snake decay
             if(!player.alive) {
                 if(player.decaying) {
@@ -38,5 +44,9 @@ export class PlayerSystem implements ISystem {
         player.decaying = true;
         player.remainingDecayTicks = config.SnakeDefaults.decayingTicks;
         player.setChanged();
+        player.socket.emit(SocketEvents.YOU_DIED)
+        player.socket.broadcast.to(player.roomId).emit(SocketEvents.PLAYER_DIED, {
+            id: player.playerId
+        }as IPlayerEvent)
     }
 }
