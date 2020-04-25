@@ -19,7 +19,8 @@ export enum SocketEvents {
     LEAVE_TO_LOBBY_RESPONSE = 'leave-to-lobby-response',
     PLAYER_LEFT_GAME = 'player-left-game',
     PLAYER_DIED = 'player-died',
-    YOU_DIED = 'you-died'
+    YOU_DIED = 'you-died',
+    USE_POWERUP = "use-powerup"
 }
 
 export class HelperConstants {

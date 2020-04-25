@@ -17,7 +17,8 @@ export class InputSystem extends BaseSystem {
         this.players = players
         this.players.map(player => {
             this.directions.set(player.id, "")
-            player.socket.on(SocketEvents.SWIPE, ({ direction }) => this.onValueChange(player.id, direction))
+            player.socket.on(SocketEvents.SWIPE, ({ direction }) => this.onSwipeValueChange(player.id, direction))
+            player.socket.on(SocketEvents.USE_POWERUP, ({ powerup }) => this.onPowerupUse(player.id, powerup))
         })
     }
 
@@ -30,7 +31,14 @@ export class InputSystem extends BaseSystem {
         });
     }
 
-    onValueChange(playerId:string, value:any){
+    onSwipeValueChange(playerId:string, value:any){
         this.directions.set(playerId, value)
+    }
+
+    onPowerupUse(playerId:string, powerup:string){
+        let playerComponent = this.entityPool.playerManager.get(playerId)
+        // if(playerComponent.powerups.filter(p => p.activationStatus == ))
+        console.log("BULLET")
+        console.log(playerId + " " + powerup)
     }
 }
