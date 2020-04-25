@@ -4,6 +4,7 @@ import { EntityPool } from "../entities/entity-pool";
 import { GameManager } from "../games-manager";
 import { PlayerComponent } from "../components/player-component";
 import {config} from "node-config-ts"
+import { Game } from "../game";
 import {SocketEvents} from "../constants";
 import {IPlayerEvent} from "../interfaces/response-interfaces";
 
@@ -11,8 +12,10 @@ export class PlayerSystem implements ISystem {
     private players: IPlayer[];
     private entityPool: EntityPool;
     private gameManager = GameManager.getInstance()
+    private game: Game
 
-    constructor(entityPool: EntityPool){
+    constructor(game: Game, entityPool: EntityPool) {
+        this.game = game
         this.entityPool = entityPool
     }
     
@@ -26,8 +29,10 @@ export class PlayerSystem implements ISystem {
             if(!player.alive) {
                 if(player.decaying) {
                     player.remainingDecayTicks--;
-                    if(player.remainingDecayTicks == 0)
+                    if(player.remainingDecayTicks == 0) {
                         player.decaying = false;
+                        this.game.removePlayer(player.playerId)
+                    }
                     player.setChanged()
                 }
             }
