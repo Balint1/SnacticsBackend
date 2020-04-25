@@ -9,12 +9,17 @@ import {ColliderComponent} from "../components/collider-component";
 import {config} from 'node-config-ts'
 import {SnakeConstants} from "../constants";
 import {ISettings, IPlayer} from "../interfaces/game-interfaces";
+import { SnakeColorType } from "../Enums/snake-color-type";
+import { RedSnakePowerup } from "../powerups/red-snake-constant-powerup"
+import { GreenSnakePowerup } from "../powerups/green-snake-constant-powerup"
+import { EntityPool } from "../entities/entity-pool";
 
 export class SnakeFactory {
     /**
      * Creates a snake based on the given parameters
      */
-    public create(player: IPlayer, x: number, y: number, settings: ISettings): Entity[] {
+    public create(player: IPlayer, x: number, y: number, settings: ISettings, snakeColorType:SnakeColorType, entityPool:EntityPool): Entity[] {
+
         let snake: Entity[] = [];
 
         let tail = this.createSnakePiece(player, x, y, settings.speed, TagType.SnakeBody, null);
@@ -35,6 +40,15 @@ export class SnakeFactory {
                 player.headEntityId = snakePiece.id
 
             snake.push(snakePiece)
+        }
+
+        if (snakeColorType == "RedSnake") {
+            let playerComponent = new PlayerComponent(player.id)
+            playerComponent.powerups.push(new RedSnakePowerup(entityPool, player.id))
+        }
+        if (snakeColorType == "GreenSnake") {
+            let playerComponent = new PlayerComponent(player.id)
+            playerComponent.powerups.push(new GreenSnakePowerup(entityPool, player.id))
         }
 
         return snake

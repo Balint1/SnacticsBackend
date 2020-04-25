@@ -20,7 +20,7 @@ export class SpeedBoosterPowerUp implements IPowerup{
         let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
         if(movementComponent.speed > 1){
             this.expiration = expiration
-            this.activationStatus = PowerupActivationStatusType.Atcivated
+            this.activationStatus = PowerupActivationStatusType.Activated
             movementComponent.speed = movementComponent.speed - 1
             console.log("ACTIVATED------------------------------------------------")
 

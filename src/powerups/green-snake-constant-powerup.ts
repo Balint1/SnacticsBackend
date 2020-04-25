@@ -2,8 +2,9 @@ import { PowerupType } from "../Enums/powerup-type";
 import { IPowerup } from "./powerup-interface";
 import { EntityPool } from "../entities/entity-pool";
 import { PowerupActivationStatusType } from "../Enums/powerup-activation-state-type";
+import { ColliderComponent } from "../components/collider-component"
 
-export class SpeedDebuffPowerUp implements IPowerup{
+export class GreenSnakePowerup implements IPowerup{
     type:PowerupType
     activationStatus = PowerupActivationStatusType.AutoTriggered
     expiration: number
@@ -11,23 +12,25 @@ export class SpeedDebuffPowerUp implements IPowerup{
     entityPool: EntityPool
 
     constructor(entityPool:EntityPool, playerEntityId:string){
-        this.type = PowerupType.SpeedDebuff
+        this.type = PowerupType.GreenSnake
         this.entityPool = entityPool
         this.playerEntityId = playerEntityId
     }
     activate(expiration:number): void {
         console.log("ACTIVATED------------------------------------------------")
-        this.expiration = expiration
+        let colliderComponent = this.entityPool.colliderManager.get(this.playerEntityId)
+        this.expiration = -1
         this.activationStatus = PowerupActivationStatusType.Activated
-        let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
-        movementComponent.speed = movementComponent.speed + 1
+        ColliderComponent.collideWithWalls = false
         console.log("ACTIVATED------------------------------------------------")
+
+        
     }
     deactivate(): void {
         console.log("DEACTIVATED------------------------------------------------")
-        let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
-        movementComponent.speed = movementComponent.speed - 1
-        this.activationStatus = PowerupActivationStatusType.Used
+        let colliderComponent = this.entityPool.colliderManager.get(this.playerEntityId)
+        ColliderComponent.collideWithWalls = true
+        this.activationStatus = PowerupActivationStatusType.Inactive
         console.log("DEACTIVATED------------------------------------------------")
     } 
 }
