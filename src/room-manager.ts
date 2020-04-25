@@ -64,6 +64,7 @@ export class RoomManager {
                         message: `You successfully joined room ${this.id}`,
                         players: this.players.map(player => ({
                             nickname: player.nickname,
+                            id: player.id,
                             owner: player.id == this.ownerId
                         }))
                     }
@@ -176,6 +177,7 @@ export class RoomManager {
             SocketService.io().to(this.id).emit(SocketEvents.PLAYER_LEFT_ROOM, {
                 players: this.players.map(player => ({
                     nickname: player.nickname,
+                    id: player.id,
                     owner: player.id == this.ownerId
                 }))
             } as IUpdatedList)
