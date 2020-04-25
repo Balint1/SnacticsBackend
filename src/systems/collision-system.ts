@@ -6,13 +6,14 @@ import { SnakeFactory } from "../factory/SnakeFactory"
 import { getRandomPowerUp } from "../helpers/powerUp-helper";
 import { PlayerSystem } from "./player-system";
 import { EntityPool } from "../entities/entity-pool";
+import { Game } from "../game";
 
 
 export class CollisionSystem extends BaseSystem {
     playerSystem: PlayerSystem
-
-    constructor(entityPool: EntityPool, playerSystem: PlayerSystem) {
-        super(entityPool)
+    
+    constructor(game: Game, entityPool: EntityPool, playerSystem: PlayerSystem) {
+        super(game, entityPool)
         this.playerSystem = playerSystem
     }
 
@@ -54,7 +55,8 @@ export class CollisionSystem extends BaseSystem {
                             let tailPosition = this.entityPool.positionManager.get(tailSnakeComponent.entityId);
                             
                             //Create new tail and add it to the entity pool
-                            let newTail = new SnakeFactory().createSnakePiece(playerComponent.entityId, tailPosition.position.x , tailPosition.position.y, 0, TagType.SnakeBody, null)
+                            let player = this.game.getPlayer(playerComponent.playerId)
+                            let newTail = new SnakeFactory().createSnakePiece(player, tailPosition.position.x , tailPosition.position.y, 0, TagType.SnakeBody, null)
                             this.entityPool.addEntity(newTail.snakePiece)
                             
                             //Connect new tail to the previous tail
@@ -63,7 +65,9 @@ export class CollisionSystem extends BaseSystem {
 
                             break;
                         case TagType.SnakeHead:
-                            // Head to head collision: we need to detect which snake is moving toward which 
+                            // Head to head collision: kill both
+                            this.playerSystem.killPlayer(playerComponent)
+                            this.playerSystem.killPlayer(this.entityPool.playerManager.get(collider.entityId))
                             break;
                         case TagType.SnakeBody:
                             // Head to body collision: kill head

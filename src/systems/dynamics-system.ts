@@ -3,13 +3,14 @@ import { SnakeComponent } from "../components/snake-component";
 import { EntityPool } from "../entities/entity-pool";
 import {config} from 'node-config-ts'
 import {ISettings} from "../interfaces/game-interfaces";
+import { Game } from "../game";
 
 
 export class DynamicsSystem extends BaseSystem {
     private setting: ISettings;
 
-    constructor(entityPool:EntityPool, setting:ISettings){
-        super(entityPool)
+    constructor(game: Game, entityPool:EntityPool, setting:ISettings){
+        super(game, entityPool)
         this.setting = setting
     }
 
