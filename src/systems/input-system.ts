@@ -18,7 +18,7 @@ export class InputSystem extends BaseSystem {
         this.players.map(player => {
             this.directions.set(player.id, "")
             player.socket.on(SocketEvents.SWIPE, ({ direction }) => this.onSwipeValueChange(player.id, direction))
-            player.socket.on(SocketEvents.USE_POWERUP, ({ powerup }) => this.onPowerupUse(player.id, powerup))
+            player.socket.on(SocketEvents.USE_POWERUP, ({ powerup }) => this.onPowerupUse(player, powerup))
         })
     }
 
@@ -35,10 +35,8 @@ export class InputSystem extends BaseSystem {
         this.directions.set(playerId, value)
     }
 
-    onPowerupUse(playerId:string, powerup:string){
-        let playerComponent = this.entityPool.playerManager.get(playerId)
+    onPowerupUse(player:IPlayer, powerup:string){
+        let playerComponent = this.entityPool.playerManager.get(player.headEntityId)
         // if(playerComponent.powerups.filter(p => p.activationStatus == ))
-        console.log("BULLET")
-        console.log(playerId + " " + powerup)
     }
 }

@@ -3,5 +3,5 @@ export enum TagType {
     SnakeBody = "snakeBody",
     Food = "food",
     Powerup = "powerup",
-    Bullet = "bullet"
+    Fireball = "fireball"
 }

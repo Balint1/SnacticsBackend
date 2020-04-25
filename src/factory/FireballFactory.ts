@@ -9,7 +9,7 @@ import { Vector2 } from "../models/position";
 import { MovementComponent } from "../components/movement-component";
 
 
-export class BulletFactory extends EntityFactory {
+export class FireballFactory extends EntityFactory {
     /**
      * Creates new Food entity with initialized components
      */
@@ -32,18 +32,18 @@ export class BulletFactory extends EntityFactory {
 
         let positionComponent = new PositionComponent(this.launchPosition.x, this.launchPosition.y)
 
-        let bullet = new Entity()
+        let fireball = new Entity()
         let colliderComponent = new ColliderComponent(config.FoodDefaults.foodColliderRadius)
-        let tagComponent = new TagComponent(TagType.Bullet)
+        let tagComponent = new TagComponent(TagType.Fireball)
         let movementComponent = new MovementComponent();
-        movementComponent.speed = config.BulletDefaults.bulletSpeed
+        movementComponent.speed = config.FireballDefaults.fireballSpeed
         movementComponent.direction = this.direction
 
-        bullet.addComponent(positionComponent)
-        bullet.addComponent(colliderComponent)
-        bullet.addComponent(tagComponent)
+        fireball.addComponent(positionComponent)
+        fireball.addComponent(colliderComponent)
+        fireball.addComponent(tagComponent)
 
-        return bullet
+        return fireball
     }
 
 }

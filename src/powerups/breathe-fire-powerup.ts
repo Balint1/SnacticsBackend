@@ -2,7 +2,7 @@ import { PowerupType } from "../Enums/powerup-type";
 import { IPowerup } from "./powerup-interface";
 import { EntityPool } from "../entities/entity-pool";
 import { PowerupActivationStatusType } from "../Enums/powerup-activation-state-type";
-import { BulletFactory } from "../factory/BulletFactory";
+import { FireballFactory } from "../factory/FireballFactory";
 import { ActivationType } from "../Enums/activation-type";
 
 export class BreatheFirePowerUp implements IPowerup{
@@ -24,7 +24,7 @@ export class BreatheFirePowerUp implements IPowerup{
         let headPosition = this.entityPool.positionManager.get(this.playerEntityId)
         let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
 
-        let bullet = new BulletFactory()
+        let fireball = new FireballFactory()
             .setPosition(headPosition.position)
             .setDirection(movementComponent.direction)
             .create()

@@ -16,9 +16,9 @@
     "FoodDefaults": {
         "foodColliderRadius": 6
     },
-    "BulletDefaults": {
-        "bulletColliderRadius": 6,
-        "bulletSpeed": 1
+    "FireballDefaults": {
+        "fireballColliderRadius": 6,
+        "fireballSpeed": 1
     },
     "PowerupDefaults":{
         "InstantPowerUpTimeout" : 10,

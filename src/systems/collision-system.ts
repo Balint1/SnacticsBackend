@@ -42,7 +42,7 @@ export class CollisionSystem extends BaseSystem {
                     let collider1Tag = this.entityPool.tagManager.get(collider1.entityId).tag
                     
                     this.collideSnakeHead(colliderTag, collider1Tag, collider, collider1)
-                    this.collideBullet(colliderTag, collider1Tag, collider, collider1)
+                    this.collideFireball(colliderTag, collider1Tag, collider, collider1)
                     
                 }
                 this.collideWithWall(collider);
@@ -162,19 +162,19 @@ export class CollisionSystem extends BaseSystem {
         }   
     }
 
-    private collideBullet(colliderTag: TagType, collider1Tag: TagType, collider: ColliderComponent, collider1: ColliderComponent) {
-        if (colliderTag == TagType.Bullet || collider1Tag == TagType.Bullet) {
-            let bulletCollider: ColliderComponent
+    private collideFireball(colliderTag: TagType, collider1Tag: TagType, collider: ColliderComponent, collider1: ColliderComponent) {
+        if (colliderTag == TagType.Fireball || collider1Tag == TagType.Fireball) {
+            let fireballCollider: ColliderComponent
             let otherCollider: ColliderComponent
             let otherColliderTag: TagType
             
-            if (colliderTag == TagType.Bullet) {
-                bulletCollider = collider
+            if (colliderTag == TagType.Fireball) {
+                fireballCollider = collider
                 otherCollider = collider1
                 otherColliderTag = collider1Tag
             }
-            if (collider1Tag == TagType.Bullet) {
-                bulletCollider = collider1
+            if (collider1Tag == TagType.Fireball) {
+                fireballCollider = collider1
                 otherCollider = collider
                 otherColliderTag = colliderTag
             }
@@ -195,7 +195,7 @@ export class CollisionSystem extends BaseSystem {
                     this.entityPool.removeEntity(deletableSnakePiece.entityId)
                 }
 
-                this.entityPool.removeEntity(bulletCollider.entityId)
+                this.entityPool.removeEntity(fireballCollider.entityId)
             }
         
         }
