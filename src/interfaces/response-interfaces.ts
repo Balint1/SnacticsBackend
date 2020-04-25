@@ -47,8 +47,6 @@ export interface INewPlayerJoined {
     owner: boolean
 }
 
-export interface ILeftToLobby {
-    id: string,
-    success: boolean,
-    message: string
+export interface IPlayerEvent {
+    id: string
 }

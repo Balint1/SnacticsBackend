@@ -50,7 +50,7 @@ export class Game {
         let playerSystem = new PlayerSystem(this.entityPool)
         this.systems.push(new InputSystem(this.players, this.entityPool))
         this.systems.push(playerSystem)
-        this.systems.push(new CollisionSystem(this.entityPool, playerSystem))
+        this.systems.push(new CollisionSystem(this.entityPool))
         this.systems.push(new DynamicsSystem(this.entityPool, this.settings))
         this.systems.push(new PowerupSystem(this.entityPool))
 
@@ -60,7 +60,7 @@ export class Game {
         let i = 0;
         players.forEach(p => {
             //TODO random position?
-            let snake = new SnakeFactory().create(p.id, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings);
+            let snake = new SnakeFactory().create(p.id, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings, p.socket, this.roomId);
             snake.forEach(s => {
                 this.entityPool.addEntity(s)
                 p.entities.push(s)

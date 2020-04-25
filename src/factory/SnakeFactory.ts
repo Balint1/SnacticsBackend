@@ -9,12 +9,13 @@ import {ColliderComponent} from "../components/collider-component";
 import {config} from 'node-config-ts'
 import {SnakeConstants} from "../constants";
 import {ISettings} from "../interfaces/game-interfaces";
+import {Socket} from "socket.io";
 
 export class SnakeFactory{
     /**
      * creates a snake based on the given parameters
      */
-    public create(playerId: string, x: number, y: number, settings: ISettings): Entity[] {
+    public create(playerId: string, x: number, y: number, settings: ISettings, socket: Socket, roomId: string): Entity[] {
 
         let snake: Entity[] = [];
 
@@ -30,7 +31,9 @@ export class SnakeFactory{
                 y,
                 settings.speed,
                 isHead ? TagType.SnakeHead : TagType.SnakeBody,
-                nextSnakeComponent ? nextSnakeComponent : tail.nextSnakeComponent);
+                nextSnakeComponent ? nextSnakeComponent : tail.nextSnakeComponent,
+                socket,
+                roomId);
 
             snake.push(snakePiece)
         }
@@ -38,7 +41,7 @@ export class SnakeFactory{
         return snake
     }
 
-    createSnakePiece(playerId: string, x: number, y: number, speed: number, tag: TagType, next: SnakeComponent) {
+    createSnakePiece(playerId: string, x: number, y: number, speed: number, tag: TagType, next: SnakeComponent, socket: Socket = null, roomId: string = null) {
         let snakePiece = new Entity()
         let positionComponent = new PositionComponent(x, y);
         let tagComponent = new TagComponent(tag);
@@ -46,7 +49,7 @@ export class SnakeFactory{
         let colliderRadius = (tag == TagType.SnakeHead ? config.SnakeDefaults.headSizeFactor : 1) * config.SnakeDefaults.colliderRadius;
 
         if (tag == TagType.SnakeHead) {
-            let playerComponent = new PlayerComponent(playerId)
+            let playerComponent = new PlayerComponent(playerId, socket, roomId)
             let movementComponent = new MovementComponent();
             movementComponent.speed = speed
             movementComponent.direction.x = SnakeConstants.directions[2].x
