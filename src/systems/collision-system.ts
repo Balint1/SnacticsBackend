@@ -7,6 +7,9 @@ import { getRandomPowerUp } from "../helpers/powerUp-helper";
 import { PlayerSystem } from "./player-system";
 import { EntityPool } from "../entities/entity-pool";
 import { Game } from "../game";
+import { PowerupType } from "../Enums/powerup-type";
+import { SpeedDebuffPowerUp } from "../powerups/speed-debuff-powerup";
+import { InvisiblePowerUp } from "../powerups/invisible-powerup";
 
 
 export class CollisionSystem extends BaseSystem {
@@ -76,7 +79,19 @@ export class CollisionSystem extends BaseSystem {
                         
                         case TagType.Powerup:
                             let powerup = this.entityPool.powerupManager.get(colliderEntity.entityId)
-                            playerComponent.powerups.push(new SpeedBoosterPowerUp(this.entityPool, playerComponent.entityId))
+                            
+                            switch(powerup.powerup){
+                                case PowerupType.SpeedBooster:
+                                    playerComponent.powerups.push(new SpeedBoosterPowerUp(this.entityPool, playerComponent.entityId))
+                                    break;
+                                case PowerupType.SpeedDebuff:
+                                    playerComponent.powerups.push(new SpeedDebuffPowerUp(this.entityPool, playerComponent.entityId))
+                                    break;
+                                case PowerupType.InvisibleAbility:
+                                    playerComponent.powerups.push(new InvisiblePowerUp(this.entityPool, playerComponent.entityId))
+                                    break;
+
+                            }
 
                             powerup.powerup = getRandomPowerUp() 
                             colliderPosition.position.x = Math.floor(Math.random() * config.ServerSettings.fieldWidth)
