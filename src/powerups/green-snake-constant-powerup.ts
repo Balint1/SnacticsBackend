@@ -3,7 +3,7 @@ import { IPowerup } from "./powerup-interface";
 import { EntityPool } from "../entities/entity-pool";
 import { PowerupActivationStatusType } from "../Enums/powerup-activation-state-type";
 
-export class GreenSnakePowerUp implements IPowerup{
+export class GreenSnakePowerup implements IPowerup{
     type:PowerupType
     activationStatus = PowerupActivationStatusType.AutoTriggered
     expiration: number

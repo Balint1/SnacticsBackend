@@ -12,12 +12,13 @@ import { SnakeConstants } from "../constants";
 import { SnakeColorType } from "../Enums/snake-color-type";
 import { RedSnakePowerup } from "../powerups/red-snake-constant-powerup"
 import { GreenSnakePowerup } from "../powerups/green-snake-constant-powerup"
+import { EntityPool } from "../entities/entity-pool";
 
 export class SnakeFactory {
     /**
      * creates a snake based on the given parameters
      */
-    public static create(playerId: string, x: number, y: number, snakeDefaults:SnakeDefaults, snakeColorType:SnakeColorType): Entity[] {
+    public static create(playerId: string, x: number, y: number, snakeDefaults:SnakeDefaults, snakeColorType:SnakeColorType, entityPool:EntityPool): Entity[] {
 
         let snake: Entity[] = [];
 
@@ -40,11 +41,11 @@ export class SnakeFactory {
 
         if (snakeColorType == "RedSnake") {
             let playerComponent = new PlayerComponent(playerId)
-            playerComponent.powerups.push(new RedSnakePowerup(this.entityPool, playerId))
+            playerComponent.powerups.push(new RedSnakePowerup(entityPool, playerId))
         }
         if (snakeColorType == "GreenSnake") {
             let playerComponent = new PlayerComponent(playerId)
-            playerComponent.powerups.push(new GreenSnakePowerup(this.entityPool, playerId))
+            playerComponent.powerups.push(new GreenSnakePowerup(entityPool, playerId))
         }
 
         return snake
