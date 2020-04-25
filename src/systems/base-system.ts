@@ -8,6 +8,7 @@ export abstract class BaseSystem implements ISystem {
 
     constructor(game: Game, entityPool: EntityPool) {
         this.entityPool = entityPool
+        this.game = game
     }
 
     abstract calculateNextState(idle:number): void
