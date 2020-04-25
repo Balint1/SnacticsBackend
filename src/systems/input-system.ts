@@ -5,6 +5,9 @@ import { EntityPool } from "../entities/entity-pool";
 import { GameManager } from "../games-manager";
 import { BaseSystem } from "./base-system";
 import { Game } from "../game";
+import { ActivationType } from "../Enums/activation-type";
+import { PowerupActivationStatusType } from "../Enums/powerup-activation-state-type";
+import { PowerupType } from "../Enums/powerup-type";
 
 export class InputSystem extends BaseSystem {
     private players: IPlayer[]
@@ -37,6 +40,12 @@ export class InputSystem extends BaseSystem {
 
     onPowerupUse(player:IPlayer, powerup:string){
         let playerComponent = this.entityPool.playerManager.get(player.headEntityId)
-        // if(playerComponent.powerups.filter(p => p.activationStatus == ))
+        let powerUpEnum = powerup as PowerupType
+        let powerUps = playerComponent.powerups.filter(p => p.type == powerUpEnum && p.activationType == ActivationType.User && p.activationStatus == PowerupActivationStatusType.Inactive)
+
+        if(powerUps.length > 0)
+        {
+            powerUps[0].activate(-1)
+        }
     }
 }

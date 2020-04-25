@@ -7,7 +7,7 @@ import { ActivationType } from "../Enums/activation-type";
 
 export class BreatheFirePowerUp implements IPowerup{
     type:PowerupType
-    activationStatus = PowerupActivationStatusType.AutoTriggered
+    activationStatus = PowerupActivationStatusType.Inactive
     expiration: number
     playerEntityId: string
     entityPool: EntityPool
