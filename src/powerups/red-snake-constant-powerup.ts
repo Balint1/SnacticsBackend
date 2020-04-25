@@ -21,7 +21,7 @@ export class RedSnakePowerup implements IPowerup{
         if(movementComponent.speed > 1){
             this.expiration = -1
             this.activationStatus = PowerupActivationStatusType.Activated
-            movementComponent.speed = movementComponent.speed +1
+            movementComponent.speed = movementComponent.speed - 1
             console.log("ACTIVATED------------------------------------------------")
 
         }
@@ -29,7 +29,7 @@ export class RedSnakePowerup implements IPowerup{
     deactivate(): void {
         console.log("DEACTIVATED------------------------------------------------")
         let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
-        movementComponent.speed = movementComponent.speed - 1
+        movementComponent.speed = movementComponent.speed + 1
         this.activationStatus = PowerupActivationStatusType.Inactive
         console.log("DEACTIVATED------------------------------------------------")
     } 
