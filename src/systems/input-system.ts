@@ -26,10 +26,10 @@ export class InputSystem extends BaseSystem {
     }
 
     calculateNextState(idle:number): void {
-        this.entityPool.movementManager.forEach(m => {
-            let player = this.entityPool.playerManager.get(m.entityId)
+        this.entityPool.playerManager.forEach(player => {
+            let movement = this.entityPool.movementManager.get(player.entityId)
             
-            m.setDirection(this.directions.get(player.playerId))
+            movement.setDirection(this.directions.get(player.playerId))
             this.directions.set(player.playerId, "")
         });
     }
@@ -42,7 +42,6 @@ export class InputSystem extends BaseSystem {
         let playerComponent = this.entityPool.playerManager.get(player.headEntityId)
         let powerUpEnum = powerup as PowerupType
         let powerUps = playerComponent.powerups.filter(p => p.type == powerUpEnum && p.activationType == ActivationType.User && p.activationStatus == PowerupActivationStatusType.Inactive)
-
         if(powerUps.length > 0)
         {
             powerUps[0].activate(-1)

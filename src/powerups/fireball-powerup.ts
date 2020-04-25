@@ -5,7 +5,7 @@ import { PowerupActivationStatusType } from "../Enums/powerup-activation-state-t
 import { FireballFactory } from "../factory/FireballFactory";
 import { ActivationType } from "../Enums/activation-type";
 
-export class BreatheFirePowerUp implements IPowerup{
+export class FireballPowerup implements IPowerup{
     type:PowerupType
     activationStatus = PowerupActivationStatusType.Inactive
     expiration: number
@@ -14,7 +14,7 @@ export class BreatheFirePowerUp implements IPowerup{
     activationType: ActivationType = ActivationType.User
 
     constructor(entityPool:EntityPool, playerEntityId:string){
-        this.type = PowerupType.BreatheFire
+        this.type = PowerupType.Fireball
         this.entityPool = entityPool
         this.playerEntityId = playerEntityId
     }
@@ -32,6 +32,7 @@ export class BreatheFirePowerUp implements IPowerup{
 
         this.expiration = expiration
         this.activationStatus = PowerupActivationStatusType.Atcivated
+        this.entityPool.addEntity(fireball)
     }
     deactivate(): void {
         console.log("DEACTIVATED fire------------------------------------------------")

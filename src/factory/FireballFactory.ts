@@ -42,6 +42,7 @@ export class FireballFactory extends EntityFactory {
         fireball.addComponent(positionComponent)
         fireball.addComponent(colliderComponent)
         fireball.addComponent(tagComponent)
+        fireball.addComponent(movementComponent)
 
         return fireball
     }

@@ -26,7 +26,7 @@ export class PowerupFactory extends EntityFactory {
         let powerup = new Entity()
         let colliderComponent = new ColliderComponent(config.FoodDefaults.foodColliderRadius)
         let powerupComponent = new PowerupComponent()
-        powerupComponent.powerup = PowerupType.BreatheFire
+        powerupComponent.powerup = PowerupType.Fireball
         let tagComponent = new TagComponent(TagType.Powerup)
         powerup.addComponent(positionComponent)
         powerup.addComponent(colliderComponent)
