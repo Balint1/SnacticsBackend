@@ -5,7 +5,7 @@
         "colliderRadius": 4,
         "headSizeFactor": 2,
         "decayingTicks": 180
-    },
+        },
     "ServerSettings":{
         "timerInterval": 20,
         "fieldWidth": 500,
@@ -15,6 +15,10 @@
     },
     "FoodDefaults": {
         "foodColliderRadius": 6
+    },
+    "BulletDefaults": {
+        "bulletColliderRadius": 6,
+        "bulletSpeed": 1
     },
     "PowerupDefaults":{
         "InstantPowerUpTimeout" : 10,

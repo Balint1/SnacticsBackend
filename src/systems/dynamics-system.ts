@@ -19,6 +19,12 @@ export class DynamicsSystem extends BaseSystem {
             let position = this.entityPool.positionManager.get(c.entityId)
             let entity = this.entityPool.entities.get(c.entityId);
             let snake = this.entityPool.tagManager.get(entity.id);
+            
+            if(!snake){
+                position.position.x += c.direction.x * c.speed
+                position.position.y += c.direction.y * c.speed
+                position.setChanged()
+            }
 
             if(snake && idle % c.speed == 0){
                 let player = this.entityPool.playerManager.get(entity.id)

@@ -11,6 +11,7 @@ export class MovementComponent extends BaseComponent {
     }
 
     direction: Vector2
+    directionString: string
 
     setDirection(dir: string){
 
