@@ -16,6 +16,10 @@ export class PlayerComponent extends BaseComponent {
     @SocketData()
     decaying: boolean
 
+    // Whether or not the player has an invisible power-up enabled
+    @SocketData()
+    invisible: boolean
+
     // Number of ticks remaining until decay is finished and snake is removed
     @SocketData()
     remainingDecayTicks: number
@@ -25,6 +29,7 @@ export class PlayerComponent extends BaseComponent {
         this.componentType = ComponentType.Player
         this.playerId = playerId
         this.alive = true
-        this.decaying = false;
+        this.decaying = false
+        this.invisible = false
     }
 }

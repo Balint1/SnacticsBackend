@@ -17,31 +17,21 @@ export class InvisiblePowerUp implements IPowerup{
     }
     activate(expiration:number): void {
         console.log("ACTIVATED INVISIBLE------------------------------------------------")
-        let snakeComponent = this.entityPool.snakeManager.get(this.playerEntityId)
-        
-        snakeComponent.invisible = true;
-        snakeComponent.setChanged() 
+        let playerComponent = this.entityPool.playerManager.get(this.playerEntityId)
 
-        while(snakeComponent.next){
-            snakeComponent = snakeComponent.next
-            snakeComponent.invisible = true;
-            snakeComponent.setChanged() 
-        }
+        playerComponent.invisible = true;
+        playerComponent.setChanged() 
+
         this.expiration = expiration
         this.activationStatus = PowerupActivationStatusType.Atcivated
     }
     deactivate(): void {
         console.log("DEACTIVATED INVISIBLE------------------------------------------------")
-        let snakeComponent = this.entityPool.snakeManager.get(this.playerEntityId)
-        
-        snakeComponent.invisible = false;
-        snakeComponent.setChanged() 
+        let playerComponent = this.entityPool.playerManager.get(this.playerEntityId)
 
-        while(snakeComponent.next){
-            snakeComponent = snakeComponent.next
-            snakeComponent.invisible = false;
-            snakeComponent.setChanged() 
-        }
+        playerComponent.invisible = false;
+        playerComponent.setChanged() 
+
         this.activationStatus = PowerupActivationStatusType.Inactive
     } 
 }
