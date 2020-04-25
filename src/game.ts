@@ -62,7 +62,7 @@ export class Game {
         let i = 0;
         players.forEach(p => {
             //TODO random position?
-            let snake = new SnakeFactory().create(p, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings);
+            let snake = new SnakeFactory().create(p, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings, this.roomId);
             snake.forEach(s => {
                 this.entityPool.addEntity(s)
             });

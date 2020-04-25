@@ -5,15 +5,12 @@ import { SpeedBoosterPowerUp } from "../powerups/speed-booster-powerup";
 import { SnakeFactory } from "../factory/SnakeFactory"
 import { getRandomPowerUp } from "../helpers/powerUp-helper";
 import { EntityPool } from "../entities/entity-pool";
-import {PlayerComponent} from "../components/player-component";
-import {SocketEvents} from "../constants";
-import {IPlayerEvent} from "../interfaces/response-interfaces";
 import { Game } from "../game";
 
 
 export class CollisionSystem extends BaseSystem {
 
-    constructor(game: Game, entityPool: EntityPool, playerSystem: PlayerSystem) {
+    constructor(game: Game, entityPool: EntityPool) {
         super(game, entityPool)
     }
 
@@ -66,8 +63,7 @@ export class CollisionSystem extends BaseSystem {
                             break;
                         case TagType.SnakeHead:
                             // Head to head collision: kill both
-                            this.playerSystem.killPlayer(playerComponent)
-                            this.playerSystem.killPlayer(this.entityPool.playerManager.get(collider.entityId))
+                            headCollider.collided = true
                             break;
                         case TagType.SnakeBody:
                             // Head to body collision: kill head
