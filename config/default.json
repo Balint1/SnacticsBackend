@@ -3,13 +3,14 @@
     },
     "SnakeDefaults": {
         "colliderRadius": 4,
-        "headSizeFactor": 2
+        "headSizeFactor": 2,
+        "decayingTicks": 180
     },
     "ServerSettings":{
-        "timerInterval":200,
-        "fieldWidth":500,
-        "fieldHeight":300,
-        "blockLength": 10,
+        "timerInterval": 20,
+        "fieldWidth": 500,
+        "fieldHeight": 300,
+        "blockLength": 12,
         "idleReset" : 362880
     },
     "FoodDefaults": {

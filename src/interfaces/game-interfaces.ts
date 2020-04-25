@@ -12,6 +12,7 @@ export interface IPlayer {
     nickname: string
     socket: socketIo.Socket
     entities: Entity[]
+    headEntityId: string
 }
 
 export interface IGameState {

@@ -3,24 +3,27 @@ import { SnakeComponent } from "../components/snake-component";
 import { EntityPool } from "../entities/entity-pool";
 import {config} from 'node-config-ts'
 import {ISettings} from "../interfaces/game-interfaces";
+import { Game } from "../game";
 
 
 export class DynamicsSystem extends BaseSystem {
     private setting: ISettings;
 
-    constructor(entityPool:EntityPool, setting:ISettings){
-        super(entityPool)
+    constructor(game: Game, entityPool:EntityPool, setting:ISettings){
+        super(game, entityPool)
         this.setting = setting
     }
 
     calculateNextState(idle:number) {
         this.entityPool.movementManager.forEach(c => {
-            
             let position = this.entityPool.positionManager.get(c.entityId)
             let entity = this.entityPool.entities.get(c.entityId);
             let snake = this.entityPool.tagManager.get(entity.id);
 
             if(snake && idle % c.speed == 0){
+                let player = this.entityPool.playerManager.get(entity.id)
+                if(!player.alive)
+                    return;
 
                 let head = this.entityPool.snakeManager.get(entity.id);
 
@@ -55,7 +58,6 @@ export class DynamicsSystem extends BaseSystem {
                 head.setChanged()
                 beforeTailSnakeComponent.next = undefined
                 beforeTailSnakeComponent.setChanged()
-
             }
         });
     }
