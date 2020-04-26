@@ -30,7 +30,7 @@ export class FireballFactory extends EntityFactory {
 
     public create(): Entity {
 
-        let positionComponent = new PositionComponent(this.launchPosition.x + this.direction.x, this.launchPosition.y + this.direction.y) 
+        let positionComponent = new PositionComponent(this.launchPosition.x + this.direction.x * 2, this.launchPosition.y + this.direction.y * 2) 
 
         let fireball = new Entity()
         let colliderComponent = new ColliderComponent(config.FoodDefaults.foodColliderRadius)
