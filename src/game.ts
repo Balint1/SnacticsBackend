@@ -24,7 +24,7 @@ export class Game {
     private players: IPlayer[]
     private entityPool: EntityPool = new EntityPool()
     private systems: ISystem[] = []
-    private state: IGameState = {entities: []}
+    private state: IGameState = {entities: [] }
     private timer: NodeJS.Timeout
     private _inProgress: boolean = false
     private idle: number = 0

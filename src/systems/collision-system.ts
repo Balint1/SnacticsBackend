@@ -8,9 +8,8 @@ import { Game } from "../game";
 import { PowerupType } from "../Enums/powerup-type";
 import { SpeedDebuffPowerUp } from "../powerups/speed-debuff-powerup";
 import { InvisiblePowerUp } from "../powerups/invisible-powerup";
-import { PlayerComponent } from "../components/player-component";
 import { ColliderComponent } from "../components/collider-component";
-import { TagComponent } from "../components/tag-component";
+import {FireballPowerup} from "../powerups/fireball-powerup";
 
 
 export class CollisionSystem extends BaseSystem {
@@ -41,16 +40,13 @@ export class CollisionSystem extends BaseSystem {
                     let collider1Tag = this.entityPool.tagManager.get(collider1.entityId).tag
                     
                     this.collideSnakeHead(colliderTag, collider1Tag, collider, collider1)
+                    this.collideFireball(colliderTag, collider1Tag, collider, collider1)
                     
                 }
-                this.collideWithWall(collider);
             });
+            this.collideWithWall(collider);
         });
 
-        // Handle collision with walls
-        this.entityPool.colliderManager.forEach(collider => {
-
-        });
     }
 
     private collideWithWall(collider: ColliderComponent) {
@@ -65,6 +61,12 @@ export class CollisionSystem extends BaseSystem {
                     let player = this.entityPool.playerManager.get(collider.entityId);
                     if (player.alive) {
                         collider.collided = true;
+                    }
+                }
+                if(this.entityPool.tagManager.has(collider.entityId)){
+                    let tag = this.entityPool.tagManager.get(collider.entityId)
+                    if(tag.tag == TagType.Fireball){
+                        this.entityPool.removeEntity(collider.entityId)
                     }
                 }
             }
@@ -144,6 +146,9 @@ export class CollisionSystem extends BaseSystem {
                         case PowerupType.InvisibleAbility:
                             playerComponent.powerups.push(new InvisiblePowerUp(this.entityPool, playerComponent.entityId))
                             break;
+                        case PowerupType.Fireball:
+                            playerComponent.powerups.push(new FireballPowerup(this.entityPool, playerComponent.entityId))
+                            break;
 
                     }
 
@@ -155,5 +160,52 @@ export class CollisionSystem extends BaseSystem {
                     break;
             }
         }   
+    }
+
+    private collideFireball(colliderTag: TagType, collider1Tag: TagType, collider: ColliderComponent, collider1: ColliderComponent) {
+        if (colliderTag == TagType.Fireball || collider1Tag == TagType.Fireball) {
+            let fireballCollider: ColliderComponent
+            let otherCollider: ColliderComponent
+            let otherColliderTag: TagType
+            
+            if (colliderTag == TagType.Fireball) {
+                fireballCollider = collider
+                otherCollider = collider1
+                otherColliderTag = collider1Tag
+            }
+            if (collider1Tag == TagType.Fireball) {
+                fireballCollider = collider1
+                otherCollider = collider
+                otherColliderTag = colliderTag
+            }
+
+            if(otherColliderTag == TagType.SnakeHead){
+                let player = this.entityPool.playerManager.get(collider.entityId);
+                if (player.alive) {
+                    collider.collided = true;
+                }
+                this.entityPool.removeEntity(fireballCollider.entityId)
+            }
+
+            if(otherColliderTag == TagType.SnakeBody){
+                let snakeComponent = this.entityPool.snakeManager.get(otherCollider.entityId)
+                
+                let deletableSnakePiece = snakeComponent.next
+                snakeComponent.next = null
+
+                if(deletableSnakePiece!=null){
+
+                    while(deletableSnakePiece.next){
+                        this.entityPool.removeEntity(deletableSnakePiece.entityId)
+                        
+                        deletableSnakePiece = deletableSnakePiece.next
+                    }
+                    this.entityPool.removeEntity(deletableSnakePiece.entityId)
+                }
+
+                this.entityPool.removeEntity(fireballCollider.entityId)
+            }
+        
+        }
     }
 }

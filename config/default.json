@@ -5,7 +5,7 @@
         "colliderRadius": 4,
         "headSizeFactor": 2,
         "decayingTicks": 180
-    },
+        },
     "ServerSettings":{
         "timerInterval": 20,
         "fieldWidth": 500,
@@ -16,13 +16,18 @@
     "FoodDefaults": {
         "foodColliderRadius": 6
     },
+    "FireballDefaults": {
+        "fireballColliderRadius": 6,
+        "fireballSpeed": 0.5
+    },
     "PowerupDefaults":{
         "spawningInterval": 100,
         "InstantPowerUpTimeout": 200,
         "powerUpTable": [
             {"powerUp": "SpeedBooster", "weight": 5}, 
             {"powerUp": "SpeedDebuff", "weight": 5},
-            {"powerUp": "InvisibleAbility", "weight": 3}
+            {"powerUp": "InvisibleAbility", "weight": 3},
+            {"powerUp": "Fireball", "weight" : 3 }
         ]
     }
 }
