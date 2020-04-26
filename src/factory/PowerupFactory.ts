@@ -23,10 +23,8 @@ export class PowerupFactory extends EntityFactory {
      * Creates powerup entity with initialized components
      */
     public create(powerupType?: PowerupType): Entity {
-        if(!powerupType) {
-            // TODO add weights so the types aren't all as likely to spawn
+        if(!powerupType)
             powerupType = getRandomPowerUp()
-        }
 
         let radius = config.FoodDefaults.foodColliderRadius
         let spawnMargin = 25

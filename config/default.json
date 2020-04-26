@@ -11,17 +11,18 @@
         "fieldWidth": 500,
         "fieldHeight": 300,
         "blockLength": 12,
-        "idleReset" : 362880
+        "idleReset": 362880
     },
     "FoodDefaults": {
         "foodColliderRadius": 6
     },
     "PowerupDefaults":{
-        "spawningInterval": 80,
-        "InstantPowerUpTimeout" : 10,
-        "powerUpTable" : [
-            { "powerUp" : "SpeedBooster", "weight" : 5 }, 
-            { "powerUp" : "SpeedDebuff", "weight" : 5 } 
+        "spawningInterval": 100,
+        "InstantPowerUpTimeout": 200,
+        "powerUpTable": [
+            {"powerUp": "SpeedBooster", "weight": 5}, 
+            {"powerUp": "SpeedDebuff", "weight": 5},
+            {"powerUp": "InvisibleAbility", "weight": 3}
         ]
     }
 }

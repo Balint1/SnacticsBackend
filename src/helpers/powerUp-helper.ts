@@ -8,7 +8,7 @@ export function getRandomPowerUp() {
 
     let currentWeight = 0
 
-    for(let i = 0; i<table.length; i++){
+    for(let i = 0; i < table.length; i++){
         currentWeight += table[i].weight
         if(randomNumber < currentWeight)
             return PowerupType[table[i].powerUp]
