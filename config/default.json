@@ -14,7 +14,8 @@
         "idleReset": 362880
     },
     "FoodDefaults": {
-        "foodColliderRadius": 6
+        "foodColliderRadius": 6,
+        "growingFactor" : 5
     },
     "FireballDefaults": {
         "fireballColliderRadius": 6,

@@ -35,6 +35,6 @@ export class InvisiblePowerUp implements IPowerup{
         playerComponent.invisible = false;
         playerComponent.setChanged() 
 
-        this.activationStatus = PowerupActivationStatusType.Inactive
+        this.activationStatus = PowerupActivationStatusType.Used
     } 
 }

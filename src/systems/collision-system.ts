@@ -116,12 +116,15 @@ export class CollisionSystem extends BaseSystem {
 
                     //Create new tail and add it to the entity pool
                     let player = this.game.getPlayer(playerComponent.playerId)
-                    let newTail = new SnakeFactory().createSnakePiece(player, tailPosition.position.x, tailPosition.position.y, 0, TagType.SnakeBody, null)
-                    this.entityPool.addEntity(newTail.snakePiece)
+                    for(let i = 0; i < config.FoodDefaults.growingFactor; i++){
+                        let newTail = new SnakeFactory().createSnakePiece(player, tailPosition.position.x, tailPosition.position.y, 0, TagType.SnakeBody, null)
+                        this.entityPool.addEntity(newTail.snakePiece)
+                        //Connect new tail to the previous tail
+                        tailSnakeComponent.next = newTail.nextSnakeComponent
+                        tailSnakeComponent.setChanged()
+                        tailSnakeComponent = newTail.nextSnakeComponent
+                    }
 
-                    //Connect new tail to the previous tail
-                    tailSnakeComponent.next = newTail.nextSnakeComponent
-                    tailSnakeComponent.setChanged()
 
                     break;
                 case TagType.SnakeHead:

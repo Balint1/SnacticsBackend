@@ -28,19 +28,13 @@ export class FireballPowerup implements IPowerup{
             .setPosition(headPosition.position)
             .setDirection(movementComponent.direction)
             .create()
-        
 
         this.expiration = expiration
         this.activationStatus = PowerupActivationStatusType.Atcivated
         this.entityPool.addEntity(fireball)
+        this.deactivate()
     }
     deactivate(): void {
-        console.log("DEACTIVATED fire------------------------------------------------")
-        let playerComponent = this.entityPool.playerManager.get(this.playerEntityId)
-
-        playerComponent.invisible = false;
-        playerComponent.setChanged() 
-
-        this.activationStatus = PowerupActivationStatusType.Inactive
+        this.activationStatus = PowerupActivationStatusType.Used
     } 
 }

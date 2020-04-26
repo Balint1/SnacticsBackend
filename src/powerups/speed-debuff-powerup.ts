@@ -23,13 +23,13 @@ export class SpeedDebuffPowerUp implements IPowerup{
         this.expiration = expiration
         this.activationStatus = PowerupActivationStatusType.Atcivated
         let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
-        movementComponent.speed = movementComponent.speed + 1
+        movementComponent.speed = movementComponent.speed + 3
         console.log("ACTIVATED------------------------------------------------")
     }
     deactivate(): void {
         console.log("DEACTIVATED------------------------------------------------")
         let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
-        movementComponent.speed = movementComponent.speed - 1
+        movementComponent.speed = movementComponent.speed - 3
         this.activationStatus = PowerupActivationStatusType.Used
         console.log("DEACTIVATED------------------------------------------------")
     } 
