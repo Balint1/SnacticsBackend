@@ -30,7 +30,7 @@ export class FireballPowerup implements IPowerup{
             .create()
 
         this.expiration = expiration
-        this.activationStatus = PowerupActivationStatusType.Atcivated
+        this.activationStatus = PowerupActivationStatusType.Activated
         this.entityPool.addEntity(fireball)
         this.deactivate()
     }

@@ -3,6 +3,7 @@ import { IPowerup } from "./powerup-interface";
 import { EntityPool } from "../entities/entity-pool";
 import { PowerupActivationStatusType } from "../Enums/powerup-activation-state-type";
 import { ColliderComponent } from "../components/collider-component"
+import { ActivationType } from "../Enums/activation-type";
 
 export class GreenSnakePowerup implements IPowerup{
     type:PowerupType
@@ -10,6 +11,7 @@ export class GreenSnakePowerup implements IPowerup{
     expiration: number
     playerEntityId: string
     entityPool: EntityPool
+    activationType: ActivationType = ActivationType.Auto
 
     constructor(entityPool:EntityPool, playerEntityId:string){
         this.type = PowerupType.GreenSnake
@@ -21,7 +23,7 @@ export class GreenSnakePowerup implements IPowerup{
         let colliderComponent = this.entityPool.colliderManager.get(this.playerEntityId)
         this.expiration = -1
         this.activationStatus = PowerupActivationStatusType.Activated
-        ColliderComponent.collideWithWalls = false
+        colliderComponent.collideWithWalls = false
         console.log("ACTIVATED------------------------------------------------")
 
         
@@ -29,7 +31,7 @@ export class GreenSnakePowerup implements IPowerup{
     deactivate(): void {
         console.log("DEACTIVATED------------------------------------------------")
         let colliderComponent = this.entityPool.colliderManager.get(this.playerEntityId)
-        ColliderComponent.collideWithWalls = true
+        colliderComponent.collideWithWalls = true
         this.activationStatus = PowerupActivationStatusType.Inactive
         console.log("DEACTIVATED------------------------------------------------")
     } 
