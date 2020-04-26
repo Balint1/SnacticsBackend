@@ -44,8 +44,5 @@ export class PlayerSystem implements ISystem {
         player.decaying = true;
         player.remainingDecayTicks = config.SnakeDefaults.decayingTicks;
         player.setChanged();
-        player.socket.broadcast.to(player.roomId).emit(SocketEvents.PLAYER_DIED, {
-            id: player.playerId
-        }as IPlayerEvent)
     }
 }
