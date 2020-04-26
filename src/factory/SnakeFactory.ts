@@ -10,7 +10,7 @@ import {config} from 'node-config-ts'
 import {SnakeConstants} from "../constants";
 import {ISettings, IPlayer} from "../interfaces/game-interfaces";
 import { SnakeColorType } from "../Enums/snake-color-type";
-import { RedSnakePowerup } from "../powerups/red-snake-constant-powerup"
+import { BlueSnakePowerup } from "../powerups/blue-snake-constant-powerup"
 import { GreenSnakePowerup } from "../powerups/green-snake-constant-powerup"
 import { EntityPool } from "../entities/entity-pool";
 
@@ -63,8 +63,8 @@ export class SnakeFactory {
             snakePiece.addComponent(movementComponent)
             snakePiece.addComponent(playerComponent)
             snakePiece.addComponent(new ColliderComponent(colliderRadius, true))
-            if (snakeColorType == "RedSnake") {
-                playerComponent.powerups.push(new RedSnakePowerup(entityPool, player.id))
+            if (snakeColorType == "BlueSnake") {
+                playerComponent.powerups.push(new BlueSnakePowerup(entityPool, player.id))
             }
             if (snakeColorType == "GreenSnake") {
                 playerComponent.powerups.push(new GreenSnakePowerup(entityPool, player.id))

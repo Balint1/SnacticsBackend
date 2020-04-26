@@ -1,4 +1,4 @@
 export enum SnakeColorType {
-    RedSnake = "RedSnake",
+    BlueSnake = "BlueSnake",
     GreenSnake = "GreenSnake",
 }

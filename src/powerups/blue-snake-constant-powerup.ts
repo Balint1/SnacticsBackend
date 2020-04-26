@@ -3,7 +3,7 @@ import { IPowerup } from "./powerup-interface";
 import { EntityPool } from "../entities/entity-pool";
 import { PowerupActivationStatusType } from "../Enums/powerup-activation-state-type";
 
-export class RedSnakePowerup implements IPowerup{
+export class BlueSnakePowerup implements IPowerup{
     type:PowerupType
     activationStatus = PowerupActivationStatusType.AutoTriggered
     expiration: number
@@ -11,7 +11,7 @@ export class RedSnakePowerup implements IPowerup{
     entityPool: EntityPool
 
     constructor(entityPool:EntityPool, playerEntityId:string){
-        this.type = PowerupType.RedSnake
+        this.type = PowerupType.BlueSnake
         this.entityPool = entityPool
         this.playerEntityId = playerEntityId
     }
