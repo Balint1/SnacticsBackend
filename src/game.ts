@@ -93,7 +93,8 @@ export class Game {
             }
         })
 
-        this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
+        if(this.state.entities.length > 0)
+            this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
 
         // Send deleted entities if necessary
         if (this.entityPool.deletedEntities.size > 0) {
