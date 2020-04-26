@@ -18,7 +18,7 @@
     },
     "FireballDefaults": {
         "fireballColliderRadius": 6,
-        "fireballSpeed": 1
+        "fireballSpeed": 0.5
     },
     "PowerupDefaults":{
         "InstantPowerUpTimeout" : 10,

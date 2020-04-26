@@ -24,6 +24,7 @@ export class DynamicsSystem extends BaseSystem {
             if(snake.tag != TagType.SnakeHead){
                 position.position.x += c.direction.x * c.speed
                 position.position.y += c.direction.y * c.speed
+                console.log(`pos x: ${position.position.x} pos y: ${position.position.y}`)
                 position.setChanged()
             }
 

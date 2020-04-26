@@ -9,9 +9,7 @@ import { Game } from "../game";
 import { PowerupType } from "../Enums/powerup-type";
 import { SpeedDebuffPowerUp } from "../powerups/speed-debuff-powerup";
 import { InvisiblePowerUp } from "../powerups/invisible-powerup";
-import { PlayerComponent } from "../components/player-component";
 import { ColliderComponent } from "../components/collider-component";
-import { TagComponent } from "../components/tag-component";
 import {FireballPowerup} from "../powerups/fireball-powerup";
 
 
@@ -43,7 +41,7 @@ export class CollisionSystem extends BaseSystem {
                     let collider1Tag = this.entityPool.tagManager.get(collider1.entityId).tag
                     
                     this.collideSnakeHead(colliderTag, collider1Tag, collider, collider1)
-                    // this.collideFireball(colliderTag, collider1Tag, collider, collider1)
+                    this.collideFireball(colliderTag, collider1Tag, collider, collider1)
                     
                 }
                 this.collideWithWall(collider);
@@ -183,7 +181,7 @@ export class CollisionSystem extends BaseSystem {
                 otherColliderTag = colliderTag
             }
 
-            if(otherColliderTag == TagType.SnakeBody || otherColliderTag == TagType.SnakeHead){
+            if(otherColliderTag == TagType.SnakeBody){
                 let snakeComponent = this.entityPool.snakeManager.get(otherCollider.entityId)
                 
                 let deletableSnakePiece = snakeComponent.next
