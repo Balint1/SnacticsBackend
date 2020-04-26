@@ -29,6 +29,7 @@ export interface ISimpleResponse {
 
 interface IPlayer {
     nickname: string,
+    id: string,
     owner: boolean
 }
 
@@ -44,11 +45,10 @@ export interface IUpdatedList {
 }
 export interface INewPlayerJoined {
     nickname: string,
+    id: string,
     owner: boolean
 }
 
-export interface ILeftToLobby {
-    id: string,
-    success: boolean,
-    message: string
+export interface IPlayerEvent {
+    id: string
 }

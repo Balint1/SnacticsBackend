@@ -10,5 +10,6 @@ export class ColliderComponent extends BaseComponent {
     }
 
     colliderRadius: number 
-    collideWithWalls: boolean
+    collideWithWalls: boolean = true
+    collided: boolean = false
 }

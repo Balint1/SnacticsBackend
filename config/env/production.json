@@ -1,5 +1,5 @@
 {
     "ServerSettings": {
-        "timerInterval":300
+        "timerInterval":50
     }
 }

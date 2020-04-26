@@ -43,6 +43,7 @@ export class SocketService {
                     socket.emit(SocketEvents.JOIN_RESPONSE, joinResponse)
                     socket.broadcast.to(roomId).emit(SocketEvents.NEW_PLAYER, {
                         nickname,
+                        id: socket.id,
                         owner: false
                     } as INewPlayerJoined)
                 }

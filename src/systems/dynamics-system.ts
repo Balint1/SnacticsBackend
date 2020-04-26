@@ -1,9 +1,10 @@
 import {BaseSystem} from "./base-system";
-import { SnakeComponent } from "../components/snake-component";
-import { EntityPool } from "../entities/entity-pool";
+import {SnakeComponent} from "../components/snake-component";
+import {EntityPool} from "../entities/entity-pool";
 import {config} from 'node-config-ts'
 import {ISettings} from "../interfaces/game-interfaces";
-import { Game } from "../game";
+import {Game} from "../game";
+import {TagType} from "../Enums/tag-type";
 
 
 export class DynamicsSystem extends BaseSystem {
@@ -19,8 +20,15 @@ export class DynamicsSystem extends BaseSystem {
             let position = this.entityPool.positionManager.get(c.entityId)
             let entity = this.entityPool.entities.get(c.entityId);
             let snake = this.entityPool.tagManager.get(entity.id);
+            
+            if(snake.tag != TagType.SnakeHead){
+                position.position.x += c.direction.x * c.speed
+                position.position.y += c.direction.y * c.speed
+                console.log(`pos x: ${position.position.x} pos y: ${position.position.y}`)
+                position.setChanged()
+            }
 
-            if(snake && idle % c.speed == 0){
+            if(snake.tag == TagType.SnakeHead && idle % c.speed == 0){
                 let player = this.entityPool.playerManager.get(entity.id)
                 if(!player.alive)
                     return;

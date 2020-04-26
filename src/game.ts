@@ -24,12 +24,11 @@ export class Game {
     private players: IPlayer[]
     private entityPool: EntityPool = new EntityPool()
     private systems: ISystem[] = []
-    private state: IGameState = {entities: []}
+    private state: IGameState = {entities: [] }
     private timer: NodeJS.Timeout
     private _inProgress: boolean = false
     private idle: number = 0
-    private numUpdates: number = 0
-
+        
     private playerSystem: PlayerSystem
 
     //Temporary solution:
@@ -52,7 +51,7 @@ export class Game {
         this.playerSystem = new PlayerSystem(this, this.entityPool)
         this.systems.push(new InputSystem(this, this.entityPool, this.players))
         this.systems.push(this.playerSystem)
-        this.systems.push(new CollisionSystem(this, this.entityPool, this.playerSystem))
+        this.systems.push(new CollisionSystem(this, this.entityPool))
         this.systems.push(new DynamicsSystem(this, this.entityPool, this.settings))
         this.systems.push(new PowerupSystem(this, this.entityPool))
 
@@ -62,24 +61,16 @@ export class Game {
         let i = 0;
         players.forEach(p => {
             //TODO random position?
-            let snake = new SnakeFactory().create(p, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings);
+            let snake = new SnakeFactory().create(p, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings, this.roomId);
             snake.forEach(s => {
                 this.entityPool.addEntity(s)
             });
         });
 
         this.entityPool.addEntity(new FoodFactory().create())
-        this.entityPool.addEntity(new PowerupFactory().create())
     }
 
     private updateState() {
-        this.numUpdates++;
-
-        // Skip the first two updates to give the players time to register the startGame()
-        // TODO cleaner fix
-        if(this.numUpdates < 10)
-            return;
-
         this.systems.forEach(s => {
             s.calculateNextState(this.idle)
         });
@@ -93,7 +84,8 @@ export class Game {
             }
         })
 
-        this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
+        if(this.state.entities.length > 0)
+            this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
 
         // Send deleted entities if necessary
         if (this.entityPool.deletedEntities.size > 0) {
@@ -127,7 +119,7 @@ export class Game {
 
             // Remove the player's entities from the ECS
             player.entities.forEach(e => this.entityPool.removeEntity(e.id))
-        
+
             if (this.players.length == 0) {
                 this.endGame()
             } else if (this.players.length == 1) {

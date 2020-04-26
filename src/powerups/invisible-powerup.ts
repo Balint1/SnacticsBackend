@@ -4,7 +4,7 @@ import { EntityPool } from "../entities/entity-pool";
 import { PowerupActivationStatusType } from "../Enums/powerup-activation-state-type";
 import { ActivationType } from "../Enums/activation-type";
 
-export class SpeedDebuffPowerUp implements IPowerup{
+export class InvisiblePowerUp implements IPowerup{
     type:PowerupType
     activationStatus = PowerupActivationStatusType.AutoTriggered
     expiration: number
@@ -14,23 +14,27 @@ export class SpeedDebuffPowerUp implements IPowerup{
 
 
     constructor(entityPool:EntityPool, playerEntityId:string){
-        this.type = PowerupType.SpeedDebuff
+        this.type = PowerupType.InvisibleAbility
         this.entityPool = entityPool
         this.playerEntityId = playerEntityId
     }
     activate(expiration:number): void {
-        console.log("ACTIVATED------------------------------------------------")
+        console.log("ACTIVATED INVISIBLE------------------------------------------------")
+        let playerComponent = this.entityPool.playerManager.get(this.playerEntityId)
+
+        playerComponent.invisible = true;
+        playerComponent.setChanged() 
+
         this.expiration = expiration
-        this.activationStatus = PowerupActivationStatusType.Activated
-        let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
-        movementComponent.speed = movementComponent.speed + 3
-        console.log("ACTIVATED------------------------------------------------")
+        this.activationStatus = PowerupActivationStatusType.Atcivated
     }
     deactivate(): void {
-        console.log("DEACTIVATED------------------------------------------------")
-        let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
-        movementComponent.speed = movementComponent.speed - 3
+        console.log("DEACTIVATED INVISIBLE------------------------------------------------")
+        let playerComponent = this.entityPool.playerManager.get(this.playerEntityId)
+
+        playerComponent.invisible = false;
+        playerComponent.setChanged() 
+
         this.activationStatus = PowerupActivationStatusType.Used
-        console.log("DEACTIVATED------------------------------------------------")
     } 
 }

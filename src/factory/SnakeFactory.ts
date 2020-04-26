@@ -8,6 +8,7 @@ import {PlayerComponent} from "../components/player-component";
 import {ColliderComponent} from "../components/collider-component";
 import {config} from 'node-config-ts'
 import {SnakeConstants} from "../constants";
+import {Socket} from "socket.io";
 import {ISettings, IPlayer} from "../interfaces/game-interfaces";
 import { SnakeColorType } from "../Enums/snake-color-type";
 import { BlueSnakePowerup } from "../powerups/blue-snake-constant-powerup"
@@ -18,11 +19,10 @@ export class SnakeFactory {
     /**
      * Creates a snake based on the given parameters
      */
-    public create(player: IPlayer, x: number, y: number, settings: ISettings, snakeColorType:SnakeColorType, entityPool:EntityPool): Entity[] {
-
+    public create(player: IPlayer, x: number, y: number, settings: ISettings, roomId: string, snakeColorType:SnakeColorType, entityPool:EntityPool): Entity[] {
         let snake: Entity[] = [];
 
-        let tail = this.createSnakePiece(player, x, y, settings.speed, TagType.SnakeBody, null, snakeColorType, entityPool);
+        let tail = this.createSnakePiece(player, x, y, settings.speed, TagType.SnakeBody, null, player.socket, roomId, snakeColorType, entityPool);
 
         snake.push(tail.snakePiece)
         for (let index = 1; index <= settings.snakeLength; index++) {
@@ -35,6 +35,8 @@ export class SnakeFactory {
                 settings.speed,
                 isHead ? TagType.SnakeHead : TagType.SnakeBody,
                 nextSnakeComponent ? nextSnakeComponent : tail.nextSnakeComponent,
+                player.socket,
+                roomId,
                 snakeColorType,
                 entityPool);
 
@@ -47,7 +49,7 @@ export class SnakeFactory {
         return snake
     }
 
-    createSnakePiece(player: IPlayer, x: number, y: number, speed: number, tag: TagType, next: SnakeComponent, snakeColorType:SnakeColorType, entityPool:EntityPool) {
+    createSnakePiece(player: IPlayer, x: number, y: number, speed: number, tag: TagType, next: SnakeComponent, socket: Socket = null, roomId: string = null, snakeColorType:SnakeColorType, entityPool:EntityPool ) {
         let snakePiece = new Entity()
         let positionComponent = new PositionComponent(x, y);
         let tagComponent = new TagComponent(tag);
@@ -55,7 +57,7 @@ export class SnakeFactory {
         let colliderRadius = (tag == TagType.SnakeHead ? config.SnakeDefaults.headSizeFactor : 1) * config.SnakeDefaults.colliderRadius;
 
         if (tag == TagType.SnakeHead) {
-            let playerComponent = new PlayerComponent(player.id)
+            let playerComponent = new PlayerComponent(player.id, socket, roomId)
             let movementComponent = new MovementComponent();
             movementComponent.speed = speed
             movementComponent.direction.x = SnakeConstants.directions[2].x

@@ -2,7 +2,7 @@ import * as socketIo from "socket.io";
 import {getLogger} from './loggers'
 
 //Interfaces
-import {IJoinResponse, ISimpleResponse, IUpdatedList, ILeftToLobby} from "./interfaces/response-interfaces";
+import {IJoinResponse, ISimpleResponse, IUpdatedList, IPlayerEvent} from "./interfaces/response-interfaces";
 import {IPlayer, ISettings} from "./interfaces/game-interfaces";
 
 import {GameManager} from "./games-manager";
@@ -104,10 +104,9 @@ export class RoomManager {
             }as ISimpleResponse )
             //notify other players that someone left the game
             player.socket.broadcast.to(this.id).emit(SocketEvents.PLAYER_LEFT_GAME, {
-                id: playerId,
-                success: true,
-                message: null
-            }as ILeftToLobby)
+                id: playerId
+            }as IPlayerEvent)
+
             //TODO stop sending rendering data for this player
         }
     }

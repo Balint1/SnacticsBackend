@@ -5,22 +5,30 @@
         "colliderRadius": 4,
         "headSizeFactor": 2,
         "decayingTicks": 180
-    },
+        },
     "ServerSettings":{
         "timerInterval": 20,
         "fieldWidth": 500,
         "fieldHeight": 300,
         "blockLength": 12,
-        "idleReset" : 362880
+        "idleReset": 362880
     },
     "FoodDefaults": {
-        "foodColliderRadius": 6
+        "foodColliderRadius": 6,
+        "growingFactor" : 5
+    },
+    "FireballDefaults": {
+        "fireballColliderRadius": 6,
+        "fireballSpeed": 0.5
     },
     "PowerupDefaults":{
-        "InstantPowerUpTimeout" : 10,
-        "powerUpTable" : [
-            { "powerUp" : "SpeedBooster", "weight" : 5 }, 
-            { "powerUp" : "SpeedDebuff", "weight" : 5 } 
+        "spawningInterval": 100,
+        "InstantPowerUpTimeout": 200,
+        "powerUpTable": [
+            {"powerUp": "SpeedBooster", "weight": 5}, 
+            {"powerUp": "SpeedDebuff", "weight": 5},
+            {"powerUp": "InvisibleAbility", "weight": 3},
+            {"powerUp": "Fireball", "weight" : 3 }
         ]
     }
 }
