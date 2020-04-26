@@ -179,6 +179,14 @@ export class CollisionSystem extends BaseSystem {
                 otherColliderTag = colliderTag
             }
 
+            if(otherColliderTag == TagType.SnakeHead){
+                let player = this.entityPool.playerManager.get(collider.entityId);
+                if (player.alive) {
+                    collider.collided = true;
+                }
+                this.entityPool.removeEntity(fireballCollider.entityId)
+            }
+
             if(otherColliderTag == TagType.SnakeBody){
                 let snakeComponent = this.entityPool.snakeManager.get(otherCollider.entityId)
                 

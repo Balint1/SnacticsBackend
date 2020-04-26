@@ -25,7 +25,9 @@
         "InstantPowerUpTimeout" : 10,
         "powerUpTable" : [
             { "powerUp" : "SpeedBooster", "weight" : 5 }, 
-            { "powerUp" : "SpeedDebuff", "weight" : 5 } 
+            { "powerUp" : "SpeedDebuff", "weight" : 5 },
+            { "powerUp" : "Fireball", "weight" : 3 },
+            { "powerUp" : "InvisibleAbility", "weight" : 2 }
         ]
     }
 }
