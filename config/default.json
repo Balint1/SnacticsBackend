@@ -17,6 +17,7 @@
         "foodColliderRadius": 6
     },
     "PowerupDefaults":{
+        "spawningInterval": 80,
         "InstantPowerUpTimeout" : 10,
         "powerUpTable" : [
             { "powerUp" : "SpeedBooster", "weight" : 5 }, 

@@ -1,7 +1,7 @@
 import {config} from 'node-config-ts'
 import { PowerupType } from '../Enums/powerup-type'
 
-export function getRandomPowerUp(){
+export function getRandomPowerUp() {
     let table = config.PowerupDefaults.powerUpTable
     let sumWeight = table.reduce((a, b) => a + (b["weight"] || 0), 0)
     let randomNumber = Math.random() * sumWeight
