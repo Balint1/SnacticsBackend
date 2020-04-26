@@ -13,4 +13,8 @@ export class Entity {
         component.entityId = this.id
         this.components.push(component)
     }
+
+    addComponents(...components: BaseComponent[]) {
+        components.map(c => this.addComponent(c))
+    }
 }

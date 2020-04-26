@@ -28,8 +28,7 @@ export class Game {
     private timer: NodeJS.Timeout
     private _inProgress: boolean = false
     private idle: number = 0
-    private numUpdates: number = 0
-
+        
     private playerSystem: PlayerSystem
 
     //Temporary solution:
@@ -69,17 +68,9 @@ export class Game {
         });
 
         this.entityPool.addEntity(new FoodFactory().create())
-        this.entityPool.addEntity(new PowerupFactory().create())
     }
 
     private updateState() {
-        this.numUpdates++;
-
-        // Skip the first two updates to give the players time to register the startGame()
-        // TODO cleaner fix
-        if(this.numUpdates < 10)
-            return;
-
         this.systems.forEach(s => {
             s.calculateNextState(this.idle)
         });
@@ -93,7 +84,8 @@ export class Game {
             }
         })
 
-        this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
+        if(this.state.entities.length > 0)
+            this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
 
         // Send deleted entities if necessary
         if (this.entityPool.deletedEntities.size > 0) {

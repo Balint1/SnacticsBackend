@@ -21,6 +21,7 @@
         "fireballSpeed": 0.5
     },
     "PowerupDefaults":{
+        "spawningInterval": 80,
         "InstantPowerUpTimeout" : 10,
         "powerUpTable" : [
             { "powerUp" : "SpeedBooster", "weight" : 5 }, 

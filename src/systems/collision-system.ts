@@ -3,7 +3,6 @@ import { config } from "node-config-ts"
 import { BaseSystem } from "./base-system";
 import { SpeedBoosterPowerUp } from "../powerups/speed-booster-powerup";
 import { SnakeFactory } from "../factory/SnakeFactory"
-import { getRandomPowerUp } from "../helpers/powerUp-helper";
 import { EntityPool } from "../entities/entity-pool";
 import { Game } from "../game";
 import { PowerupType } from "../Enums/powerup-type";
@@ -44,14 +43,10 @@ export class CollisionSystem extends BaseSystem {
                     this.collideFireball(colliderTag, collider1Tag, collider, collider1)
                     
                 }
-                this.collideWithWall(collider);
             });
+            this.collideWithWall(collider);
         });
 
-        // Handle collision with walls
-        this.entityPool.colliderManager.forEach(collider => {
-
-        });
     }
 
     private collideWithWall(collider: ColliderComponent) {
@@ -66,6 +61,12 @@ export class CollisionSystem extends BaseSystem {
                     let player = this.entityPool.playerManager.get(collider.entityId);
                     if (player.alive) {
                         collider.collided = true;
+                    }
+                }
+                if(this.entityPool.tagManager.has(collider.entityId)){
+                    let tag = this.entityPool.tagManager.get(collider.entityId)
+                    if(tag.tag == TagType.Fireball){
+                        this.entityPool.removeEntity(collider.entityId)
                     }
                 }
             }
@@ -152,11 +153,8 @@ export class CollisionSystem extends BaseSystem {
                     }
 
                     playerComponent.setChanged()
-
-                    powerup.powerup = getRandomPowerUp()
-                    colliderPosition.position.x = Math.floor(Math.random() * config.ServerSettings.fieldWidth)
-                    colliderPosition.position.y = Math.floor(Math.random() * config.ServerSettings.fieldHeight)
-                    colliderPosition.setChanged()
+                    
+                    this.entityPool.removeEntity(powerup.entityId)
                     break;
                 default:
                     break;
@@ -192,7 +190,7 @@ export class CollisionSystem extends BaseSystem {
                     while(deletableSnakePiece.next){
                         this.entityPool.removeEntity(deletableSnakePiece.entityId)
                         
-                        deletableSnakePiece = snakeComponent.next
+                        deletableSnakePiece = deletableSnakePiece.next
                     }
                     this.entityPool.removeEntity(deletableSnakePiece.entityId)
                 }
