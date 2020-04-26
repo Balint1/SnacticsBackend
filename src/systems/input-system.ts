@@ -45,6 +45,7 @@ export class InputSystem extends BaseSystem {
         if(powerUps.length > 0)
         {
             powerUps[0].activate(-1)
+            playerComponent.setChanged()
         }
     }
 }
