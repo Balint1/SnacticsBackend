@@ -14,11 +14,11 @@
         "idleReset": 362880
     },
     "FoodDefaults": {
-        "foodColliderRadius": 6,
+        "foodColliderRadius": 8,
         "growingFactor" : 5
     },
     "FireballDefaults": {
-        "fireballColliderRadius": 6,
+        "fireballColliderRadius": 7,
         "fireballSpeed": 0.5
     },
     "PowerupDefaults":{
