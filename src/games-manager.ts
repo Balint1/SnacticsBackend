@@ -118,7 +118,9 @@ export class GameManager {
                 success: false,
                 roomId: null,
                 message: `Room ${room.name} not found`,
-                players: null
+                players: null,
+                fieldWidth: 0,
+                fieldHeight: 0
             }
         }
     }

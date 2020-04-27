@@ -38,6 +38,8 @@ export interface IJoinResponse {
     roomId: string
     message: string
     players: IPlayer[]
+    fieldWidth: number,
+    fieldHeight: number
 }
 
 export interface IUpdatedList {

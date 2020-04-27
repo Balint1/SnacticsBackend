@@ -9,6 +9,7 @@ import {GameManager} from "./games-manager";
 import {SocketEvents} from "./constants";
 import {Game} from "./game";
 import {SocketService} from "./socket-service";
+import {config} from "node-config-ts";
 
 const logger = getLogger('room manager')
 
@@ -52,7 +53,9 @@ export class RoomManager {
                         success: false,
                         roomId: null,
                         message: `Nickname: ${nickname} is already taken`,
-                        players: null
+                        players: null,
+                        fieldWidth: 0,
+                        fieldHeight: 0
                     }
                 } else {
                     logger.info(`::joinRoom(${nickname}, ${password}) SUCCEEDED`)
@@ -66,16 +69,18 @@ export class RoomManager {
                             nickname: player.nickname,
                             id: player.id,
                             owner: player.id == this.ownerId
-                        }))
+                        })),
+                        fieldWidth: config.ServerSettings.fieldWidth,
+                        fieldHeight: config.ServerSettings.fieldHeight
                     }
                 }
             } else {
                 logger.error(`::joinRoom(${nickname}, ${password}) FAILED. cause: password is wrong`)
-                return {success: false, roomId: null, message: `Password: ${password} is wrong`, players: null}
+                return {success: false, roomId: null, message: `Password: ${password} is wrong`, players: null, fieldWidth: 0, fieldHeight: 0}
             }
         } else {
             logger.error(`::joinRoom(${nickname}, ${password}) FAILED. cause: room is full`)
-            return {success: false, roomId: null, message: `Room ${this.name} is full, can't join`, players: null}
+            return {success: false, roomId: null, message: `Room ${this.name} is full, can't join`, players: null, fieldWidth: 0, fieldHeight: 0}
         }
     }
 

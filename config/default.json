@@ -8,8 +8,8 @@
         },
     "ServerSettings":{
         "timerInterval": 20,
-        "fieldWidth": 500,
-        "fieldHeight": 300,
+        "fieldWidth": 800,
+        "fieldHeight": 480,
         "blockLength": 12,
         "idleReset": 362880
     },
