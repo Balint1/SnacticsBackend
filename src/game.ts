@@ -90,6 +90,11 @@ export class Game {
         this.systems.forEach(s => {
             s.calculateNextState(this.idle)
         });
+
+        if(this.entityPool.playerManager.size < 2 && this.players.length > 1){
+            this.endGame()
+        }
+
         this.state.entities = []
         this.entityPool.entities.forEach(e => {
             //Can be optimized
