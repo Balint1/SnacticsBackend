@@ -3,7 +3,7 @@
     },
     "SnakeDefaults": {
         "colliderRadius": 4,
-        "headSizeFactor": 2,
+        "headSizeFactor": 1,
         "decayingTicks": 180
         },
     "ServerSettings":{
