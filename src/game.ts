@@ -30,6 +30,7 @@ export class Game {
     private timer: NodeJS.Timeout
     private _inProgress: boolean = false
     private idle: number = 0
+    private originalPlayerCount = 0
         
     private playerSystem: PlayerSystem
 
@@ -54,12 +55,15 @@ export class Game {
         this.timer = null
         this._inProgress = false
         this.idle = 0
+        this.originalPlayerCount = 0
+
     }
 
     startGame(players: IPlayer[]) {
         this.resetGame()
         this._inProgress = true
         this.players = players
+        this.originalPlayerCount = players.length
 
         this.playerSystem = new PlayerSystem(this, this.entityPool)
         this.systems.push(new InputSystem(this, this.entityPool, this.players))
@@ -91,8 +95,15 @@ export class Game {
             s.calculateNextState(this.idle)
         });
 
-        if(this.entityPool.playerManager.size < 2 && this.players.length > 1){
+        let alivePlayers = 0
+        this.entityPool.playerManager.forEach(p => {
+            if(p.alive)
+                alivePlayers++
+        });
+        if(alivePlayers < 2 && this.originalPlayerCount > 1){
+            console.log("endGame")
             this.endGame()
+            this.resetGame()
         }
 
         this.state.entities = []
@@ -133,7 +144,7 @@ export class Game {
 
         // Kill player if not dead
         let playerComponent = this.entityPool.playerManager.get(player.headEntityId)
-        if(playerComponent.alive)
+        if(playerComponent && playerComponent.alive)
             this.playerSystem.killPlayer(playerComponent)
         else {
             this.players = this.players.filter(player => player.id != playerId)
