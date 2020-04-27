@@ -59,6 +59,7 @@ export class SnakeFactory {
         if (tag == TagType.SnakeHead) {
             let playerComponent = new PlayerComponent(player.id, socket, roomId)
             let movementComponent = new MovementComponent();
+            playerComponent.color = snakeColorType
             movementComponent.speed = speed
             movementComponent.direction.x = SnakeConstants.directions[2].x
             movementComponent.direction.y = SnakeConstants.directions[2].y
@@ -66,10 +67,10 @@ export class SnakeFactory {
             snakePiece.addComponent(playerComponent)
             snakePiece.addComponent(new ColliderComponent(colliderRadius, true))
             if (snakeColorType == "BlueSnake") {
-                playerComponent.powerups.push(new BlueSnakePowerup(entityPool, player.id))
+                playerComponent.powerups.push(new BlueSnakePowerup(entityPool, playerComponent.entityId))
             }
             if (snakeColorType == "GreenSnake") {
-                playerComponent.powerups.push(new GreenSnakePowerup(entityPool, player.id))
+                playerComponent.powerups.push(new GreenSnakePowerup(entityPool, playerComponent.entityId))
             }
         }
         else {

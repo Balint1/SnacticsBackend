@@ -14,6 +14,7 @@ import {PowerupSystem} from "./systems/powerup-system";
 import {PowerupFactory} from "./factory/PowerupFactory";
 import { PlayerSystem } from "./systems/player-system";
 import { SnakeColorType } from "./Enums/snake-color-type";
+import { randomBytes } from "crypto";
 
 
 const logger = getLogger('game')
@@ -62,7 +63,10 @@ export class Game {
         let i = 0;
         players.forEach(p => {
             //TODO random position?
-            let snake = new SnakeFactory().create(p, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings, this.roomId, SnakeColorType.GreenSnake, this.entityPool);
+
+
+            let randomColor = [SnakeColorType.BlueSnake, SnakeColorType.GreenSnake][Math.floor(Math.random() * 2)]
+            let snake = new SnakeFactory().create(p, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings, this.roomId, randomColor, this.entityPool);
             snake.forEach(s => {
                 this.entityPool.addEntity(s)
             });

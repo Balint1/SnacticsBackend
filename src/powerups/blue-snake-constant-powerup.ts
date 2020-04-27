@@ -32,7 +32,7 @@ export class BlueSnakePowerup implements IPowerup{
         console.log("DEACTIVATED------------------------------------------------")
         let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
         movementComponent.speed = movementComponent.speed + 1
-        this.activationStatus = PowerupActivationStatusType.Inactive
+        this.activationStatus = PowerupActivationStatusType.Used
         console.log("DEACTIVATED------------------------------------------------")
     } 
 }

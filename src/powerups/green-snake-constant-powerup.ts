@@ -32,7 +32,7 @@ export class GreenSnakePowerup implements IPowerup{
         console.log("DEACTIVATED------------------------------------------------")
         let colliderComponent = this.entityPool.colliderManager.get(this.playerEntityId)
         colliderComponent.collideWithWalls = true
-        this.activationStatus = PowerupActivationStatusType.Inactive
+        this.activationStatus = PowerupActivationStatusType.Used
         console.log("DEACTIVATED------------------------------------------------")
     } 
 }

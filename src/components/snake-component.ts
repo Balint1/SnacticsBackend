@@ -11,5 +11,4 @@ export class SnakeComponent extends BaseComponent {
 
     @SocketData("entityId")
     next:SnakeComponent
-    color: SnakeColorType
 }
