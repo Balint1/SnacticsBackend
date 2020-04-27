@@ -5,7 +5,7 @@ import { ColliderComponent } from "../components/collider-component";
 import { TagComponent } from "../components/tag-component";
 import { TagType } from "../Enums/tag-type";
 import {config} from 'node-config-ts'
-import { PowerupComponent } from "../components/poweup-component";
+import { PowerupComponent } from "../components/powerup-component";
 import { PowerupType } from "../Enums/powerup-type";
 import { getRandomPowerUp } from "../helpers/powerUp-helper";
 import { EntityPool } from "../entities/entity-pool";

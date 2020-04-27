@@ -6,7 +6,7 @@ import {IComponent} from "../interfaces/component-interfaces";
 import { SnakeComponent } from "../components/snake-component";
 import { TagComponent } from "../components/tag-component";
 import { PlayerComponent } from "../components/player-component";
-import { PowerupComponent } from "../components/poweup-component";
+import { PowerupComponent } from "../components/powerup-component";
 
 /**
  * Stores entities and components in manager hashes

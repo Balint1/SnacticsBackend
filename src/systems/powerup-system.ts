@@ -12,7 +12,7 @@ export class PowerupSystem extends BaseSystem {
         this.entityPool.playerManager.forEach(player => {
             // Update the state of power-ups on players
             player.powerups.forEach(powerup => {
-                if(powerup.activationStatus == PowerupActivationStatusType.Atcivated) {
+                if(powerup.activationStatus == PowerupActivationStatusType.Activated){
                     if(powerup.expiration == idle){
                         powerup.deactivate()
                     }

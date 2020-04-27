@@ -3,6 +3,7 @@ import { BaseComponent } from "./base-component";
 import { SocketData } from "../helpers/decorators";
 import { IPowerup } from "../powerups/powerup-interface";
 import {Socket} from "socket.io";
+import { SnakeColorType } from "../Enums/snake-color-type";
 
 export class PlayerComponent extends BaseComponent {
 
@@ -26,6 +27,9 @@ export class PlayerComponent extends BaseComponent {
     // Number of ticks remaining until decay is finished and snake is removed
     @SocketData()
     remainingDecayTicks: number
+    
+    @SocketData()
+    color: SnakeColorType
 
     socket: Socket
 

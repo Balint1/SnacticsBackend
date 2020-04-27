@@ -10,6 +10,7 @@ import { SpeedDebuffPowerUp } from "../powerups/speed-debuff-powerup";
 import { InvisiblePowerUp } from "../powerups/invisible-powerup";
 import { ColliderComponent } from "../components/collider-component";
 import {FireballPowerup} from "../powerups/fireball-powerup";
+import { SnakeColorType } from "../Enums/snake-color-type";
 
 
 export class CollisionSystem extends BaseSystem {
@@ -117,7 +118,7 @@ export class CollisionSystem extends BaseSystem {
                     //Create new tail and add it to the entity pool
                     let player = this.game.getPlayer(playerComponent.playerId)
                     for(let i = 0; i < config.FoodDefaults.growingFactor; i++){
-                        let newTail = new SnakeFactory().createSnakePiece(player, tailPosition.position.x, tailPosition.position.y, 0, TagType.SnakeBody, null)
+                        let newTail = new SnakeFactory().createSnakePiece(player, tailPosition.position.x, tailPosition.position.y, 0, TagType.SnakeBody, null, null, null, playerComponent.color, this.entityPool)
                         this.entityPool.addEntity(newTail.snakePiece)
                         //Connect new tail to the previous tail
                         tailSnakeComponent.next = newTail.nextSnakeComponent
