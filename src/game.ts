@@ -97,11 +97,6 @@ export class Game {
             if(p.alive)
                 alivePlayers++
         });
-        if(alivePlayers < 2 && this.originalPlayerCount > 1){
-            console.log("endGame")
-            this.endGame()
-            this.resetGame()
-        }
 
         this.state.entities = []
         this.entityPool.entities.forEach(e => {
@@ -123,6 +118,11 @@ export class Game {
             this.entityPool.deletedEntities.clear()
         }
 
+        if(alivePlayers < 2 && this.originalPlayerCount > 1){
+            console.log("endGame")
+            this.endGame()
+            this.resetGame()
+        }
         //Sometimes we have to reset the counter, this number won't break the rest ( % ) operation 
         this.idle = this.idle == config.ServerSettings.idleReset ? 0 : this.idle + 1
         return this.state
