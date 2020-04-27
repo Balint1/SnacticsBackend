@@ -46,7 +46,18 @@ export class Game {
         this.settings = settings
     }
 
+    resetGame(){
+        this.entityPool = new EntityPool()
+        this.systems = []
+        this.state = {entities: [] }
+        clearTimeout(this.timer)
+        this.timer = null
+        this._inProgress = false
+        this.idle = 0
+    }
+
     startGame(players: IPlayer[]) {
+        this.resetGame()
         this._inProgress = true
         this.players = players
 
