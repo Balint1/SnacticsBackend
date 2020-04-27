@@ -17,22 +17,20 @@ export class BlueSnakePowerup implements IPowerup{
         this.entityPool = entityPool
         this.playerEntityId = playerEntityId
     }
-    activate(): void {
-        console.log("ACTIVATED------------------------------------------------")
+    activate(expiration:number): void {
+        console.log("ACTIVATED BLUE------------------------------------------------")
         let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
         if(movementComponent.speed > 1){
             this.expiration = -1
             this.activationStatus = PowerupActivationStatusType.Activated
             movementComponent.speed = movementComponent.speed - 1
-            console.log("ACTIVATED------------------------------------------------")
 
         }
     }
     deactivate(): void {
-        console.log("DEACTIVATED------------------------------------------------")
+        console.log("DEACTIVATED BLUE------------------------------------------------")
         let movementComponent = this.entityPool.movementManager.get(this.playerEntityId)
         movementComponent.speed = movementComponent.speed + 1
         this.activationStatus = PowerupActivationStatusType.Used
-        console.log("DEACTIVATED------------------------------------------------")
     } 
 }

@@ -25,7 +25,11 @@ export class PowerupSystem extends BaseSystem {
 
             });
 
-            player.powerups = player.powerups.filter(p => p.expiration != idle)
+            let unusedPowerUps = player.powerups.filter(p => p.activationStatus != PowerupActivationStatusType.Used)
+            if(unusedPowerUps.length != player.powerups.length){
+                player.powerups = unusedPowerUps
+                player.setChanged()
+            }
         });
 
         // Spawn new powerups

@@ -23,33 +23,30 @@ export class ColorSwapPowerUp implements IPowerup{
         this.playerEntityId = playerEntityId
     }
     activate(expiration:number): void {
-        console.log("ACTIVATED------------------------------------------------")
         let playerComponent = this.entityPool.playerManager.get(this.playerEntityId)
         let activeColorPowerups = playerComponent.powerups.filter(p => (p.type == PowerupType.BlueSnake || p.type == PowerupType.GreenSnake) && p.activationStatus == PowerupActivationStatusType.Activated)
         this.expiration = -1
         this.activationStatus = PowerupActivationStatusType.Activated
         for(let i=0;i<activeColorPowerups.length ;i++) {
-            if(activeColorPowerups[i].type == PowerupType.BlueSnake) {
-                activeColorPowerups[i].deactivate()
-                playerComponent.color = SnakeColorType.GreenSnake
-                let greenSnakePowerup = new GreenSnakePowerup(this.entityPool, this.playerEntityId)
-                playerComponent.powerups.push(greenSnakePowerup)
-                greenSnakePowerup.activate()
-            }
-            if(activeColorPowerups[i].type == PowerupType.GreenSnake) {
-                activeColorPowerups[i].deactivate()
-                playerComponent.color = SnakeColorType.BlueSnake
-                let blueSnakePowerup = new GreenSnakePowerup(this.entityPool, this.playerEntityId)
-                playerComponent.powerups.push(blueSnakePowerup)
-                blueSnakePowerup.activate()
-            }
+            activeColorPowerups[i].deactivate()
         }
-        console.log("ACTIVATED------------------------------------------------")
+        if(playerComponent.color == SnakeColorType.BlueSnake) {
+            playerComponent.color = SnakeColorType.GreenSnake
+            let greenSnakePowerup = new GreenSnakePowerup(this.entityPool, this.playerEntityId)
+            playerComponent.powerups.push(greenSnakePowerup)
+            // greenSnakePowerup.activate(-1)
+            playerComponent.setChanged()
+        } else if(playerComponent.color == SnakeColorType.GreenSnake) {
+            playerComponent.color = SnakeColorType.BlueSnake
+            let blueSnakePowerup = new BlueSnakePowerup(this.entityPool, this.playerEntityId)
+            playerComponent.powerups.push(blueSnakePowerup)
+            // blueSnakePowerup.activate(-1)
+            playerComponent.setChanged()
+        }
+        this.deactivate()
     }
 
     deactivate(): void {
-        console.log("DEACTIVATED------------------------------------------------")
         this.activationStatus = PowerupActivationStatusType.Used
-        console.log("DEACTIVATED------------------------------------------------")
     } 
 }
