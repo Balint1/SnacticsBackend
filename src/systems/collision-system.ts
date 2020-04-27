@@ -11,6 +11,7 @@ import { InvisiblePowerUp } from "../powerups/invisible-powerup";
 import { ColliderComponent } from "../components/collider-component";
 import {FireballPowerup} from "../powerups/fireball-powerup";
 import { SnakeColorType } from "../Enums/snake-color-type";
+import { ColorSwapPowerUp } from "../powerups/color-swap-powerup";
 
 
 export class CollisionSystem extends BaseSystem {
@@ -152,6 +153,9 @@ export class CollisionSystem extends BaseSystem {
                             break;
                         case PowerupType.Fireball:
                             playerComponent.powerups.push(new FireballPowerup(this.entityPool, playerComponent.entityId))
+                            break;
+                        case PowerupType.ColorSwap:
+                            playerComponent.powerups.push(new ColorSwapPowerUp(this.entityPool, playerComponent.entityId))
                             break;
 
                     }

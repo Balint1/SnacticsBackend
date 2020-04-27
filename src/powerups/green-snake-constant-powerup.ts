@@ -18,21 +18,19 @@ export class GreenSnakePowerup implements IPowerup{
         this.entityPool = entityPool
         this.playerEntityId = playerEntityId
     }
-    activate(): void {
-        console.log("ACTIVATED------------------------------------------------")
+    activate(expiration:number): void {
+        console.log("ACTIVATED GREEN------------------------------------------------")
         let colliderComponent = this.entityPool.colliderManager.get(this.playerEntityId)
         this.expiration = -1
         this.activationStatus = PowerupActivationStatusType.Activated
         colliderComponent.collideWithWalls = false
-        console.log("ACTIVATED------------------------------------------------")
-
         
     }
+    
     deactivate(): void {
-        console.log("DEACTIVATED------------------------------------------------")
+        console.log("DEACTIVATED GREEN------------------------------------------------")
         let colliderComponent = this.entityPool.colliderManager.get(this.playerEntityId)
         colliderComponent.collideWithWalls = true
         this.activationStatus = PowerupActivationStatusType.Used
-        console.log("DEACTIVATED------------------------------------------------")
     } 
 }
