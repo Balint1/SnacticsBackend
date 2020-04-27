@@ -44,7 +44,6 @@ export class SnakeFactory {
                 settings.speed,
                 isHead ? TagType.SnakeHead : TagType.SnakeBody,
                 nextSnakeComponent ? nextSnakeComponent : tail.nextSnakeComponent,
-                player.socket,
                 roomId,
                 snakeColorType,
                 entityPool);
