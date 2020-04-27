@@ -12,12 +12,9 @@ export class FoodFactory extends EntityFactory {
      * Creates new Food entity with initialized components
      */
     public create(): Entity {
-
         let positionComponent = new PositionComponent(
-            150,
-            190
-            // Math.floor(Math.random() * config.ServerSettings.fieldWidth),
-            // Math.floor(Math.random() * config.ServerSettings.fieldHeight)
+            Math.floor(Math.random() * config.ServerSettings.fieldWidth),
+            Math.floor(Math.random() * config.ServerSettings.fieldHeight)
         )
 
         let food = new Entity()

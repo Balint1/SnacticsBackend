@@ -10,13 +10,8 @@ import { MovementComponent } from "../components/movement-component";
 
 
 export class FireballFactory extends EntityFactory {
-    /**
-     * Creates new Food entity with initialized components
-     */
-
     launchPosition:Vector2
     direction:Vector2
-
 
     public setPosition(launchPosition:Vector2){
         this.launchPosition = launchPosition
@@ -28,6 +23,9 @@ export class FireballFactory extends EntityFactory {
         return this
     }
 
+    /**
+     * Creates fireball entity with initialized components
+     */
     public create(): Entity {
 
         let positionComponent = new PositionComponent(this.launchPosition.x + this.direction.x * 2, this.launchPosition.y + this.direction.y * 2) 
