@@ -15,6 +15,8 @@ import {PowerupFactory} from "./factory/PowerupFactory";
 import { PlayerSystem } from "./systems/player-system";
 import { SnakeColorType } from "./Enums/snake-color-type";
 import { randomBytes } from "crypto";
+import {IPlayerEvent, IUpdatedList} from "./interfaces/response-interfaces";
+import {PlayerComponent} from "./components/player-component";
 
 
 const logger = getLogger('game')
@@ -30,6 +32,7 @@ export class Game {
     private timer: NodeJS.Timeout
     private _inProgress: boolean = false
     private idle: number = 0
+    private originalPlayerCount = 0
         
     private playerSystem: PlayerSystem
 
@@ -54,12 +57,15 @@ export class Game {
         this.timer = null
         this._inProgress = false
         this.idle = 0
+        this.originalPlayerCount = 0
+
     }
 
     startGame(players: IPlayer[]) {
         this.resetGame()
         this._inProgress = true
         this.players = players
+        this.originalPlayerCount = players.length
 
         this.playerSystem = new PlayerSystem(this, this.entityPool)
         this.systems.push(new InputSystem(this, this.entityPool, this.players))
@@ -88,9 +94,11 @@ export class Game {
             s.calculateNextState(this.idle)
         });
 
-        if(this.entityPool.playerManager.size < 2 && this.players.length > 1){
-            this.endGame()
-        }
+        let alivePlayers: PlayerComponent[] = []
+        this.entityPool.playerManager.forEach(p => {
+            if(p.alive)
+                alivePlayers.push(p)
+        });
 
         this.state.entities = []
         this.entityPool.entities.forEach(e => {
@@ -112,6 +120,13 @@ export class Game {
             this.entityPool.deletedEntities.clear()
         }
 
+        if(alivePlayers.length < 2 && this.originalPlayerCount > 1){
+            SocketService.io().to(this.roomId).emit(SocketEvents.END_GAME, {
+                id: alivePlayers[0].playerId
+            } as IPlayerEvent)
+            this.endGame()
+            this.resetGame()
+        }
         //Sometimes we have to reset the counter, this number won't break the rest ( % ) operation 
         this.idle = this.idle == config.ServerSettings.idleReset ? 0 : this.idle + 1
         return this.state
@@ -130,7 +145,7 @@ export class Game {
 
         // Kill player if not dead
         let playerComponent = this.entityPool.playerManager.get(player.headEntityId)
-        if(playerComponent.alive)
+        if(playerComponent && playerComponent.alive)
             this.playerSystem.killPlayer(playerComponent)
         else {
             this.players = this.players.filter(player => player.id != playerId)
