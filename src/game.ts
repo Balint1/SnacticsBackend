@@ -36,9 +36,9 @@ export class Game {
     //Temporary solution:
     private spawningPlaces = [
         [10, 10],
-        [10, config.ServerSettings.fieldHeight - 10],
-        [config.ServerSettings.fieldWidth - 10, 10],
-        [config.ServerSettings.fieldWidth - 10, config.ServerSettings.fieldHeight - 10],
+        [10, 100],
+        [10, 190],
+        [10, 280],
     ]
 
     constructor(roomId: string, settings: ISettings) {
