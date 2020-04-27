@@ -8,6 +8,7 @@ import { Game } from "../game";
 import { ActivationType } from "../Enums/activation-type";
 import { PowerupActivationStatusType } from "../Enums/powerup-activation-state-type";
 import { PowerupType } from "../Enums/powerup-type";
+import { config } from "node-config-ts";
 
 export class InputSystem extends BaseSystem {
     private players: IPlayer[]
@@ -46,8 +47,8 @@ export class InputSystem extends BaseSystem {
         let powerUps = playerComponent.powerups.filter(p => p.type == powerUpEnum && p.activationType == ActivationType.User && p.activationStatus == PowerupActivationStatusType.Inactive)
         if(powerUps.length > 0)
         {
-            powerUps[0].activate(-1)
-            playerComponent.setChanged()
+            powerUps[0].activationStatus = PowerupActivationStatusType.UserTriggered
+            // playerComponent.setChanged()
         }
     }
 }

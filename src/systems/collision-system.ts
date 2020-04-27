@@ -12,6 +12,7 @@ import { ColliderComponent } from "../components/collider-component";
 import {FireballPowerup} from "../powerups/fireball-powerup";
 import { SnakeColorType } from "../Enums/snake-color-type";
 import { ColorSwapPowerUp } from "../powerups/color-swap-powerup";
+import { WallPowerup } from "../powerups/wall-powerup";
 
 
 export class CollisionSystem extends BaseSystem {
@@ -156,6 +157,9 @@ export class CollisionSystem extends BaseSystem {
                             break;
                         case PowerupType.ColorSwap:
                             playerComponent.powerups.push(new ColorSwapPowerUp(this.entityPool, playerComponent.entityId))
+                            break;
+                        case PowerupType.Wall:
+                            playerComponent.powerups.push(new WallPowerup(this.entityPool, playerComponent.entityId))
                             break;
 
                     }
