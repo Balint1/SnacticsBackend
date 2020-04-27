@@ -4,6 +4,7 @@ import { EntityPool } from "../entities/entity-pool";
 import { PowerupActivationStatusType } from "../Enums/powerup-activation-state-type";
 import { ColliderComponent } from "../components/collider-component"
 import { ActivationType } from "../Enums/activation-type";
+import { SnakeColorType } from "../Enums/snake-color-type";
 
 export class WallPowerup implements IPowerup{
     type:PowerupType
@@ -29,7 +30,9 @@ export class WallPowerup implements IPowerup{
     deactivate(): void {
         console.log("DEACTIVATED WALL------------------------------------------------")
         let colliderComponent = this.entityPool.colliderManager.get(this.playerEntityId)
-        colliderComponent.collideWithWalls = true
+        let playerComponent = this.entityPool.playerManager.get(this.playerEntityId)
+        if(playerComponent.color != SnakeColorType.GreenSnake)
+            colliderComponent.collideWithWalls = true
         this.activationStatus = PowerupActivationStatusType.Used
     } 
 }
