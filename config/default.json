@@ -4,7 +4,7 @@
     "SnakeDefaults": {
         "colliderRadius": 4,
         "headSizeFactor": 2,
-        "decayingTicks": 180
+        "decayingTicks": 125
         },
     "ServerSettings":{
         "timerInterval": 20,
@@ -25,13 +25,12 @@
         "spawningInterval": 100,
         "InstantPowerUpTimeout": 200,
         "powerUpTable": [
-            {"powerUp": "SpeedBooster", "weight": 5}, 
-            {"powerUp": "SpeedDebuff", "weight": 5},
+            {"powerUp": "SpeedBooster", "weight": 2}, 
+            {"powerUp": "SpeedDebuff", "weight": 3},
             {"powerUp": "InvisibleAbility", "weight": 3},
-            {"powerUp": "Fireball", "weight" : 3 },
-            {"powerUp": "ColorSwap", "weight" : 5 },
-            {"powerUp": "Wall", "weight" : 5 }
-            
+            {"powerUp": "Fireball", "weight" : 5 },
+            {"powerUp": "ColorSwap", "weight" : 4 },
+            {"powerUp": "Wall", "weight" : 4 }
 
         ]
     }
