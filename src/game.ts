@@ -15,6 +15,8 @@ import {PowerupFactory} from "./factory/PowerupFactory";
 import { PlayerSystem } from "./systems/player-system";
 import { SnakeColorType } from "./Enums/snake-color-type";
 import { randomBytes } from "crypto";
+import {IPlayerEvent, IUpdatedList} from "./interfaces/response-interfaces";
+import {PlayerComponent} from "./components/player-component";
 
 
 const logger = getLogger('game')
@@ -92,16 +94,11 @@ export class Game {
             s.calculateNextState(this.idle)
         });
 
-        let alivePlayers = 0
+        let alivePlayers: PlayerComponent[] = []
         this.entityPool.playerManager.forEach(p => {
             if(p.alive)
-                alivePlayers++
+                alivePlayers.push(p)
         });
-        if(alivePlayers < 2 && this.originalPlayerCount > 1){
-            console.log("endGame")
-            this.endGame()
-            this.resetGame()
-        }
 
         this.state.entities = []
         this.entityPool.entities.forEach(e => {
@@ -123,6 +120,13 @@ export class Game {
             this.entityPool.deletedEntities.clear()
         }
 
+        if(alivePlayers.length < 2 && this.originalPlayerCount > 1){
+            SocketService.io().to(this.roomId).emit(SocketEvents.END_GAME, {
+                id: alivePlayers[0].playerId
+            } as IPlayerEvent)
+            this.endGame()
+            this.resetGame()
+        }
         //Sometimes we have to reset the counter, this number won't break the rest ( % ) operation 
         this.idle = this.idle == config.ServerSettings.idleReset ? 0 : this.idle + 1
         return this.state

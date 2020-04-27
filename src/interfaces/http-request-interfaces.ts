@@ -1,5 +1,3 @@
-import {ISettings} from "./game-interfaces";
-
 export interface ICreateRoomBody {
     name: string
     password: string
