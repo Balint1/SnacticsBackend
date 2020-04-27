@@ -12,9 +12,9 @@ import {CollisionSystem} from "./systems/collision-system";
 import {SocketService} from "./socket-service";
 import {PowerupSystem} from "./systems/powerup-system";
 import {PowerupFactory} from "./factory/PowerupFactory";
-import { PlayerSystem } from "./systems/player-system";
-import { SnakeColorType } from "./Enums/snake-color-type";
-import { randomBytes } from "crypto";
+import {PlayerSystem} from "./systems/player-system";
+import {SnakeColorType} from "./Enums/snake-color-type";
+import {randomBytes} from "crypto";
 import {IPlayerEvent, IUpdatedList} from "./interfaces/response-interfaces";
 import {PlayerComponent} from "./components/player-component";
 
@@ -28,12 +28,12 @@ export class Game {
     private players: IPlayer[]
     private entityPool: EntityPool = new EntityPool()
     private systems: ISystem[] = []
-    private state: IGameState = {entities: [] }
+    private state: IGameState = {entities: []}
     private timer: NodeJS.Timeout
     private _inProgress: boolean = false
     private idle: number = 0
     private originalPlayerCount = 0
-        
+
     private playerSystem: PlayerSystem
 
     //Temporary solution:
@@ -49,10 +49,10 @@ export class Game {
         this.settings = settings
     }
 
-    resetGame(){
+    resetGame() {
         this.entityPool = new EntityPool()
         this.systems = []
-        this.state = {entities: [] }
+        this.state = {entities: []}
         clearTimeout(this.timer)
         this.timer = null
         this._inProgress = false
@@ -96,7 +96,7 @@ export class Game {
 
         let alivePlayers: PlayerComponent[] = []
         this.entityPool.playerManager.forEach(p => {
-            if(p.alive)
+            if (p.alive)
                 alivePlayers.push(p)
         });
 
@@ -110,7 +110,7 @@ export class Game {
             }
         })
 
-        if(this.state.entities.length > 0)
+        if (this.state.entities.length > 0)
             this.io.to(this.roomId).emit(SocketEvents.UPDATE, {state: this.state.entities})
 
         // Send deleted entities if necessary
@@ -120,10 +120,16 @@ export class Game {
             this.entityPool.deletedEntities.clear()
         }
 
-        if(alivePlayers.length < 2 && this.originalPlayerCount > 1){
-            SocketService.io().to(this.roomId).emit(SocketEvents.END_GAME, {
-                id: alivePlayers[0].playerId
-            } as IPlayerEvent)
+        if (alivePlayers.length < 2 && this.originalPlayerCount > 1) {
+            if (alivePlayers.length == 0) {
+                SocketService.io().to(this.roomId).emit(SocketEvents.END_GAME, {
+                    id: 'draw'
+                } as IPlayerEvent)
+            } else {
+                SocketService.io().to(this.roomId).emit(SocketEvents.END_GAME, {
+                    id: alivePlayers[0].playerId
+                } as IPlayerEvent)
+            }
             this.endGame()
             this.resetGame()
         }
@@ -140,12 +146,12 @@ export class Game {
         let player = this.getPlayer(playerId)
 
         // Check if the player was already removed
-        if(!player)
+        if (!player)
             return;
 
         // Kill player if not dead
         let playerComponent = this.entityPool.playerManager.get(player.headEntityId)
-        if(playerComponent && playerComponent.alive)
+        if (playerComponent && playerComponent.alive)
             this.playerSystem.killPlayer(playerComponent)
         else {
             this.players = this.players.filter(player => player.id != playerId)
