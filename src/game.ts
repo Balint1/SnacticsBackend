@@ -50,8 +50,8 @@ export class Game {
 
         this.playerSystem = new PlayerSystem(this, this.entityPool)
         this.systems.push(new InputSystem(this, this.entityPool, this.players))
-        this.systems.push(this.playerSystem)
         this.systems.push(new CollisionSystem(this, this.entityPool))
+        this.systems.push(this.playerSystem)
         this.systems.push(new DynamicsSystem(this, this.entityPool, this.settings))
         this.systems.push(new PowerupSystem(this, this.entityPool))
 

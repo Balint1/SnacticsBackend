@@ -51,13 +51,21 @@ export class DynamicsSystem extends BaseSystem {
                 tailPosition.position.y = position.position.y
                 tailPosition.setChanged()
 
-                //Set the head position to the proper direction
-                position.position.x = position.position.x + c.direction.x >= 0 
-                    ? (position.position.x + c.direction.x) % config.ServerSettings.fieldWidth 
-                    : config.ServerSettings.fieldWidth + position.position.x + c.direction.x
-                position.position.y = position.position.y + c.direction.y >= 0 
-                    ? (position.position.y + c.direction.y) % config.ServerSettings.fieldHeight 
-                    : config.ServerSettings.fieldHeight + position.position.y + c.direction.y
+                // Move the head position in the proper direction
+                position.position.x += c.direction.x
+                position.position.y += c.direction.y 
+                    
+                // Move to opposite side when going through a wall
+                let collider = this.entityPool.colliderManager.get(entity.id)
+                if(!collider.collideWithWalls) {
+                    if(position.position.x < 0)
+                        position.position.x += config.ServerSettings.fieldWidth
+                    if(position.position.y < 0)
+                        position.position.y += config.ServerSettings.fieldHeight
+                    position.position.x %= config.ServerSettings.fieldWidth + 1
+                    position.position.y %= config.ServerSettings.fieldHeight + 1
+                }
+
                 position.setChanged()
 
                 tailSnakeComponent.next = secondSnakeComponent

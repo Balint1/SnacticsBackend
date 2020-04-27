@@ -8,8 +8,10 @@ export class PlayerComponent extends BaseComponent {
 
     @SocketData()
     playerId: string;
+    
     @SocketData()
     powerups:IPowerup[] = []
+
     @SocketData()
     alive: boolean
 
