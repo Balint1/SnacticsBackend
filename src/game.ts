@@ -77,9 +77,6 @@ export class Game {
         // Initialize the snakes
         let i = 0;
         players.forEach(p => {
-            //TODO random position?
-
-
             let randomColor = [SnakeColorType.BlueSnake, SnakeColorType.GreenSnake][Math.floor(Math.random() * 2)]
             let snake = new SnakeFactory().create(p, this.spawningPlaces[i][0], this.spawningPlaces[i++][1], this.settings, this.roomId, randomColor, this.entityPool);
             snake.forEach(s => {
