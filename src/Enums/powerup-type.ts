@@ -4,5 +4,6 @@ export enum PowerupType {
     BlueSnake = "BlueSnake",
     GreenSnake = "GreenSnake",
     InvisibleAbility = "invisibleAbility",
-    Fireball = "Fireball"
+    Fireball = "Fireball",
+    ColorSwap= "ColorSwap"
 }

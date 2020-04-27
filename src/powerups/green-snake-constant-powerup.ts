@@ -18,7 +18,7 @@ export class GreenSnakePowerup implements IPowerup{
         this.entityPool = entityPool
         this.playerEntityId = playerEntityId
     }
-    activate(expiration:number): void {
+    activate(): void {
         console.log("ACTIVATED------------------------------------------------")
         let colliderComponent = this.entityPool.colliderManager.get(this.playerEntityId)
         this.expiration = -1

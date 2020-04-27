@@ -40,6 +40,8 @@ export class InputSystem extends BaseSystem {
 
     onPowerupUse(player:IPlayer, powerup:string){
         let playerComponent = this.entityPool.playerManager.get(player.headEntityId)
+        if(!playerComponent)
+            return
         let powerUpEnum = powerup as PowerupType
         let powerUps = playerComponent.powerups.filter(p => p.type == powerUpEnum && p.activationType == ActivationType.User && p.activationStatus == PowerupActivationStatusType.Inactive)
         if(powerUps.length > 0)
