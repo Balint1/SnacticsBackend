@@ -28,7 +28,7 @@
     "@types/winston": "^2.4.4",
     "body-parser": "^1.19.0",
     "class-transformer": "^0.2.3",
-    "class-validator": "^0.11.1",
+    "class-validator": "^0.14.0",
     "express": "^4.16.4",
     "guid-typescript": "^1.0.9",
     "node-config-ts": "^3.0.4",
